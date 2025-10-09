@@ -1,0 +1,37 @@
+
+.action-bar {
+  display: flex;
+  justify-content:flex-start;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: #f2f2f2; 
+  padding: 15px 25px;        
+  border-radius: 6px;        
+  border: 1px solid #ddd;
+}
+
+.action-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap:20px;
+}
+
+.stat-separator {
+  font-size: 36px;         
+  color: #d1d1d1;         
+  display: inline-block;  
+    transform: scaleY(1.5); 
+
+}
+/* Espaçamento customizado com margens */
+
+/* app-botao-cadastrar {
+  margin-left: 20px;
+}
+app-botao-salvar {
+  margin-left: 50px;
+} */
+
+
+
