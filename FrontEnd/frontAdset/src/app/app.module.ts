@@ -15,6 +15,9 @@ import { BotaoExportarComponent } from './componentes/botao-exportar/botao-expor
 import { BotaoCadastrarComponent } from './componentes/botao-cadastrar/botao-cadastrar.component';
 import { BotaoSalvarComponent } from './componentes/botao-salvar/botao-salvar.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { BotaoBuscarComponent } from './componentes/botao-buscar/botao-buscar.component';
+import { BotaoDeletarComponent } from './componentes/botao-deletar/botao-deletar.component';
+
 
 @NgModule({
   declarations: [
@@ -28,7 +31,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     PaginacaoComponent,
     BotaoExportarComponent,
     BotaoCadastrarComponent,
-    BotaoSalvarComponent
+    BotaoSalvarComponent,
+    BotaoBuscarComponent,
+    BotaoDeletarComponent
+
   ],
   imports: [
     BrowserModule,

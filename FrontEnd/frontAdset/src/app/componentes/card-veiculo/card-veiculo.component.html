@@ -1,7 +1,5 @@
 <article class="vehicle-card-v2">
-  <div class="delete-tab">
-    <i class="fas fa-trash-can"></i>
-  </div>
+<app-botao-deletar></app-botao-deletar>
 
   <div class="vehicle-image-container">
     <img src="../../../assets/carros/carro.jpg" alt="Foto do Veículo">
@@ -13,44 +11,51 @@
     </div>
     <div class="content-body">
       <div class="vehicle-details">
-        <p>Placa - AAA-0102</p>
-        <p>Km - 25.000</p>
-        <p>Cor - Branco</p>
+        <p>Placa - <span class="text-success">AAA-0102</span></p>
+        <p>Km - <span class="text-success">25.000</span></p>
+        <p>Cor - <span class="text-success">Branco</span></p>
       </div>
+
       <div class="vehicle-actions-price">
-        <button class="btn btn-edit">Editar Veículo</button>
-        <div class="action-icons">
-          <div class="icon-wrapper">
-            <i class="fas fa-camera"></i>
-            <span class="icon-badge">08</span>
+        <div class="action-buttons">
+          <div class="action-item">
+            <i class="fas fa-pen-to-square icon-edit" matTooltip="Editar veículo" 
+matTooltipPosition="above"
+matTooltipClass="custom-tooltip"></i>
           </div>
-          <i class="fas fa-cogs"></i>
-          <span>Opcionais</span>
+          <div class="action-item">
+            <i class="fas fa-camera"></i>
+            <span class="action-label">8 Fotos</span>
+          </div>
+          <div class="action-item">
+            <i class="fas fa-car"></i>
+            <span class="action-label">Opcionais</span>
+          </div>
         </div>
         <div class="vehicle-price">R$ 103.900,00</div>
       </div>
     </div>
   </div>
 
-  <div class="status-container">
-    <div class="status-tabs">
-      <button class="status-tab active">iCarros</button>
-      <button class="status-tab">WebMotors</button>
-    </div>
-    <div class="status-panels">
-      <div class="status-panel active">
-        <div class="status-icon-blue">i</div>
-        <div class="status-arrows">
-          <i class="fas fa-arrow-down text-success"></i>
-          <i class="fas fa-arrow-up text-danger"></i>
-        </div>
+  <!-- Container para os Portais -->
+  <div class="portals-row">
+    <!-- iCarros -->
+    <div class="portal-container">
+      <div class="portal-title">iCarros</div>
+      <div class="portal-content">
+        <label><input type="checkbox"> Opção 1</label><br>
+        <label><input type="checkbox"> Opção 2</label><br>
+        <label><input type="checkbox"> Opção 3</label>
       </div>
-      <div class="status-panel">
-        <div class="status-icon-red">H</div>
-        <div class="status-arrows">
-            <i class="fas fa-arrow-down text-success"></i>
-            <i class="fas fa-arrow-up text-danger"></i>
-        </div>
+    </div>
+
+    <!-- WebMotors -->
+    <div class="portal-container">
+      <div class="portal-title">WebMotors</div>
+      <div class="portal-content">
+        <label><input type="checkbox"> Opção 1</label><br>
+        <label><input type="checkbox"> Opção 2</label><br>
+        <label><input type="checkbox"> Opção 3</label>
       </div>
     </div>
   </div>

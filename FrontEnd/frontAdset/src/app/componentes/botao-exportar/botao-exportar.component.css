@@ -2,6 +2,10 @@
   display: inline-block;
 }
 
+p {
+  margin: 0;
+  font-weight: 100;
+}
 .btn-export {
   display: flex;
   flex-direction: column;

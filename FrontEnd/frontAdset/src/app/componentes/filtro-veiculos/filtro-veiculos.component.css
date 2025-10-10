@@ -1,34 +1,170 @@
-    .filter-panel {
-            background-color: #e9e9e9;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        
-        .filter-form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: flex-end;
-        }
+.filter-panel {
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .form-group label {
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
+  padding: 0; 
+  margin-bottom: 20px;
 
-        .form-group input, .form-group select {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        
-        .btn-green {
-            background-color: #27ae60;
-            color: white;
-        }
+  overflow: hidden; 
+}
+
+
+.filter-form {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;   
+  gap: 0; 
+}
+
+
+.fields-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 15px;
+  border: 1px solid #ccc;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: 100%; 
+  padding: 10px; 
+  box-sizing: border-box; 
+  background-color: #ffffff;
+  border-radius: 0px 0px 15px 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+}
+
+.form-group label {
+  font-size: 12px;
+}
+
+.form-group input{
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 10px;
+}
+
+.form-group select {
+  padding: 4px;
+  border: 1px solid #ccc;
+  font-size: 10px;
+}
+
+app-botao-buscar {
+  width: 100%; 
+  display: block; 
+}
+
+
+.form-group.small-select {
+  min-width: 80px;
+
+}
+.form-group.small-select2 {
+  min-width: 80px;
+
+}
+
+.select-ano{
+  margin-left: 0px;
+}
+
+.filter-form app-botao-buscar {
+  width: auto; 
+  display: block;
+}
+
+
+.filter-form app-botao-buscar .btn-green {
+  width: 150px; 
+  border-radius: 8px; 
+  padding: 10px 16px;
+}
+
+
+
+
+.small-select select {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 20px 0px 0px 20px;
+  padding: 4px;
+  font-size: 10px;
+  color: #333;
+  cursor: pointer;
+  position: relative;
+}
+.small-select2 select {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 0px 0px 0px 0px;
+  padding: 0px 30px 4px 10px; 
+  font-size: 10px;
+  padding: 4px;
+  color: #333;
+  cursor: pointer;
+  position: relative;
+}
+
+
+.form-group {
+  position: relative;
+}
+
+
+.small-select::after {
+  content: "▼";
+  font-size: 10px;
+  color: white;             
+  background-color: #aaa;   
+  border-radius: 0;
+  width: 10px;              
+  height: 30px;             
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0px;               
+  top: 70%;
+  transform: translateY(-50%);
+  pointer-events: none;     
+
+}
+.small-select2::after {
+  content: "▼";
+  font-size: 10px;
+  color: white;            
+  background-color: #aaa;    
+  border-radius: 0;
+  width: 10px;              
+  height: 30px;             
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0px;               
+ top: 70%;
+  transform: translateY(-50%);
+  pointer-events: none;     
+
+}
+
+.small-select,
+.small-select2 {
+  flex: 1; 
+}
+
+
+.anos-container {
+  display: flex;
+  gap: 0; 
+}
