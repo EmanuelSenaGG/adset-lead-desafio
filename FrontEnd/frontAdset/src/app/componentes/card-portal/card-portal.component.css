@@ -1,0 +1,36 @@
+.portal-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.portal-title {
+  background: #fff;
+  border-radius: 15px 15px 0px 0px;
+  padding: 5px 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  font-weight: bold;
+  border: 1px solid #ddd;
+  text-align: center;
+      position: absolute;
+    top: -47%;
+    left: 5%;
+}
+
+.portal-content {
+  background: #e7e7e7;
+  padding: 10px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 5px; 
+}
+
+.portal-content label {
+  display: flex;
+  align-items: center;
+  gap: 4px; 
+  font-size: 10px;
+  color: #333;
+}

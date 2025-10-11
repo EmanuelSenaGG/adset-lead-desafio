@@ -1,0 +1,63 @@
+<div class="form-container">
+        <form action="#" method="post" enctype="multipart/form-data">
+            <h2>Cadastro de Veículo</h2>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="marca">Marca *</label>
+                    <input type="text" id="marca" name="marca" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="modelo">Modelo *</label>
+                    <input type="text" id="modelo" name="modelo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="ano">Ano *</label>
+                    <input type="number" id="ano" name="ano" min="1900" max="2099" step="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="placa">Placa *</label>
+                    <input type="text" id="placa" name="placa" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="km">Km</label>
+                    <input type="number" id="km" name="km">
+                </div>
+
+                <div class="form-group">
+                    <label for="cor">Cor *</label>
+                    <input type="text" id="cor" name="cor" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="preco">Preço *</label>
+                    <input type="text" id="preco" name="preco" placeholder="R$" required>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <h3>Opcionais</h3>
+                <label for="opcional-input">Adicionar Opcional</label>
+                <div class="add-opcional-container">
+                    <input type="text" id="opcional-input" name="opcional-input" placeholder="Ex: Teto Solar">
+                    <button type="button" id="add-opcional-btn" title="Adicionar Opcional">+</button>
+                </div>
+                
+                <div id="lista-opcionais" class="lista-opcionais-container">
+                    </div>
+
+                <input type="hidden" name="opcionais_lista" id="opcionais_lista">
+            </div>
+
+            <div class="form-group">
+                <label for="fotos">Fotos do Veículo (até 15 arquivos)</label>
+                <input type="file" id="fotos" name="fotos[]" multiple accept="image/*">
+            </div>
+
+            <button type="submit">Cadastrar Veículo</button>
+        </form>
+    </div>

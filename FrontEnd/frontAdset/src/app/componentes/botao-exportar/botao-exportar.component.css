@@ -14,6 +14,11 @@ p {
   font-weight: 500;
   color: #333;
   cursor: pointer;
+ 
+}
+.icon-combo:hover {
+  transform: scale(1.2);
+ 
 }
 
 .icon-combo {
@@ -22,6 +27,7 @@ p {
   justify-content: center;
   align-items: center;
   padding: 8px;
+     transition: transform 0.4s;
 }
 
 .svg-icon-container {

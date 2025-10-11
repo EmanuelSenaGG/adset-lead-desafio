@@ -17,6 +17,11 @@ import { BotaoSalvarComponent } from './componentes/botao-salvar/botao-salvar.co
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BotaoBuscarComponent } from './componentes/botao-buscar/botao-buscar.component';
 import { BotaoDeletarComponent } from './componentes/botao-deletar/botao-deletar.component';
+import { CardPortalComponent } from './componentes/card-portal/card-portal.component';
+import { FormCadastrarComponent } from './componentes/form-cadastrar/form-cadastrar.component';
+import { FormEditarComponent } from './componentes/form-editar/form-editar.component';
+import { TelaCadastroComponent } from './componentes/tela-cadastro/tela-cadastro.component';
+import { HomeComponent } from './componentes/home/home.component';
 
 
 @NgModule({
@@ -33,7 +38,12 @@ import { BotaoDeletarComponent } from './componentes/botao-deletar/botao-deletar
     BotaoCadastrarComponent,
     BotaoSalvarComponent,
     BotaoBuscarComponent,
-    BotaoDeletarComponent
+    BotaoDeletarComponent,
+    CardPortalComponent,
+    FormCadastrarComponent,
+    FormEditarComponent,
+    TelaCadastroComponent,
+    HomeComponent
 
   ],
   imports: [
