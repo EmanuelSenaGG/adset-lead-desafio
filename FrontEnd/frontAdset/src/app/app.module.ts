@@ -22,6 +22,8 @@ import { FormCadastrarComponent } from './componentes/form-cadastrar/form-cadast
 import { FormEditarComponent } from './componentes/form-editar/form-editar.component';
 import { TelaCadastroComponent } from './componentes/tela-cadastro/tela-cadastro.component';
 import { HomeComponent } from './componentes/home/home.component';
+import { TelaEdicaoComponent } from './componentes/tela-edicao/tela-edicao.component';
+import { PainelFotosComponent } from './componentes/painel-fotos/painel-fotos.component';
 
 
 @NgModule({
@@ -43,7 +45,9 @@ import { HomeComponent } from './componentes/home/home.component';
     FormCadastrarComponent,
     FormEditarComponent,
     TelaCadastroComponent,
-    HomeComponent
+    HomeComponent,
+    TelaEdicaoComponent,
+    PainelFotosComponent
 
   ],
   imports: [

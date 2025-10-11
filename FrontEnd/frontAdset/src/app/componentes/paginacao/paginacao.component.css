@@ -13,7 +13,7 @@
             border-radius: 4px;
         }
         .pagination a.active, .pagination a:hover {
-            background-color: #f39c12;
+            background-color: #40a52b;
             color: white;
-            border-color: #f39c12;
+            border-color: #2c8819;
         }
