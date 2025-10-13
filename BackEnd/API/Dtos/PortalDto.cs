@@ -1,8 +1,9 @@
 ﻿namespace API.Dtos
 {
-    public record PortalDto(
-    int Id,
-    string Nome
-);
+    public class PortalDto
+    {
+        public int Id { get; set; }
+        public string Nome { get; set; } = null!;
+    }
 
 }

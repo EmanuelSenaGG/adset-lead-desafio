@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Entidades;
 
-[Table("Veiculo")]
-public  class Veiculo
+public partial class Veiculo
 {
     [Key]
     [Column("ID")]
@@ -37,8 +35,15 @@ public  class Veiculo
     public decimal Preco { get; set; }
 
     [InverseProperty("Veiculo")]
+    public virtual ICollection<Foto> Foto { get; set; } = new List<Foto>();
+
+    [InverseProperty("Veiculo")]
     public virtual ICollection<RelacaoVeiculoOpcional> RelacaoVeiculoOpcional { get; set; } = new List<RelacaoVeiculoOpcional>();
 
     [InverseProperty("Veiculo")]
     public virtual ICollection<RelacaoVeiculoPacotePortal> RelacaoVeiculoPacotePortal { get; set; } = new List<RelacaoVeiculoPacotePortal>();
+
+
+
+
 }

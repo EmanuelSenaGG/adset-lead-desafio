@@ -1,10 +1,8 @@
 ﻿namespace API.Dtos
 {
-    public record FotoDto(
-     int Id,
-     int VeiculoId,
-     string Arquivo,
-     string Path
- );
-
+    public class FotoDto
+    {
+        public int Id { get; set; }
+        public string Url { get; set; } = null!;
+    }
 }

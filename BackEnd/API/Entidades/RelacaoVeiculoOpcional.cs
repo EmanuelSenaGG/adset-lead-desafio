@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace API.Entidades;
 
-[Table("RelacaoVeiculoOpcional")]
-public  class RelacaoVeiculoOpcional
+public partial class RelacaoVeiculoOpcional
 {
     [Key]
     [Column("ID")]
@@ -23,6 +23,7 @@ public  class RelacaoVeiculoOpcional
     [InverseProperty("RelacaoVeiculoOpcional")]
     public virtual Opcional Opcional { get; set; } = null!;
 
+    [JsonIgnore]
     [ForeignKey("VeiculoId")]
     [InverseProperty("RelacaoVeiculoOpcional")]
     public virtual Veiculo Veiculo { get; set; } = null!;

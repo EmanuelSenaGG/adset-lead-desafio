@@ -1,9 +1,9 @@
 ﻿namespace API.Dtos
 {
-    public record RelacaoVeiculoOpcionalDto(
-     int Id,
-     int VeiculoId,
-     int OpcionalId
- );
+    public class RelacaoVeiculoOpcionalDto
+    {
+        public int OpcionalId { get; set; }
+        public string? Descricao { get; set; }
+    }
 
 }

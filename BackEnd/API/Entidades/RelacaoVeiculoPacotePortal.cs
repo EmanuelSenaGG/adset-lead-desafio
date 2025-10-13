@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Entidades;
 
 [Index("VeiculoId", "PortalId", Name = "UQ_Veiculo_Portal", IsUnique = true)]
-[Table("RelacaoVeiculoPacotePortal")]
-public class RelacaoVeiculoPacotePortal
+public partial class RelacaoVeiculoPacotePortal
 {
     [Key]
     [Column("ID")]
@@ -27,10 +27,12 @@ public class RelacaoVeiculoPacotePortal
     [InverseProperty("RelacaoVeiculoPacotePortal")]
     public virtual Pacote Pacote { get; set; } = null!;
 
+    [JsonIgnore]
     [ForeignKey("PortalId")]
     [InverseProperty("RelacaoVeiculoPacotePortal")]
     public virtual Portal Portal { get; set; } = null!;
 
+    [JsonIgnore]
     [ForeignKey("VeiculoId")]
     [InverseProperty("RelacaoVeiculoPacotePortal")]
     public virtual Veiculo Veiculo { get; set; } = null!;

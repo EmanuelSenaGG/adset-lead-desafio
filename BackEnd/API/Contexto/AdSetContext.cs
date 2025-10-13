@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Contexto;
 
-public partial class AdSetDbContext : DbContext
+public partial class AdSetContext : DbContext
 {
-    public AdSetDbContext()
+    public AdSetContext()
     {
     }
 
-    public AdSetDbContext(DbContextOptions<AdSetDbContext> options)
+    public AdSetContext(DbContextOptions<AdSetContext> options)
         : base(options)
     {
     }
@@ -37,6 +37,10 @@ public partial class AdSetDbContext : DbContext
         modelBuilder.Entity<Foto>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Foto__3214EC27478B8C5E");
+
+            entity.HasOne(d => d.Veiculo).WithMany(p => p.Foto)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Foto_Veiculo");
         });
 
         modelBuilder.Entity<Opcional>(entity =>

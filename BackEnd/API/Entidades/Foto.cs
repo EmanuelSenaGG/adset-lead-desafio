@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace API.Entidades;
 
-[Table("Foto")]
-public  class Foto
+public partial class Foto
 {
     [Key]
     [Column("ID")]
@@ -23,4 +23,9 @@ public  class Foto
     [StringLength(500)]
     [Unicode(false)]
     public string Path { get; set; } = null!;
+
+    [ForeignKey("VeiculoId")]
+    [InverseProperty("Foto")]
+    [JsonIgnore]
+    public virtual Veiculo Veiculo { get; set; } = null!;
 }

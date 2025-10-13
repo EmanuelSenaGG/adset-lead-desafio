@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace API.Entidades;
 
-[Table("Pacote")]
-public  class Pacote
+public partial class Pacote
 {
     [Key]
     [Column("ID")]
@@ -25,5 +25,6 @@ public  class Pacote
     public virtual Portal Portal { get; set; } = null!;
 
     [InverseProperty("Pacote")]
+    [JsonIgnore]
     public virtual ICollection<RelacaoVeiculoPacotePortal> RelacaoVeiculoPacotePortal { get; set; } = new List<RelacaoVeiculoPacotePortal>();
 }

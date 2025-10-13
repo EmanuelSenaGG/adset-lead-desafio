@@ -8,9 +8,9 @@ namespace API.Repositorios.Implementacoes
 {
     public class VeiculoRepository : IVeiculoRepository
     {
-        private readonly AdSetDbContext _context;
+        private readonly AdSetContext _context;
 
-        public VeiculoRepository(AdSetDbContext context)
+        public VeiculoRepository(AdSetContext context)
         {
             _context = context;
         }
@@ -34,14 +34,36 @@ namespace API.Repositorios.Implementacoes
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ICollection<Veiculo>> Listar()
+        public async Task<List<Veiculo>> Listar()
         {
-            return await _context.Veiculo.ToListAsync();
+            return  await _context.Veiculo
+                    .Include(v => v.RelacaoVeiculoOpcional)
+                        .ThenInclude(r => r.Opcional)
+                    .Include(v => v.Foto)
+                    .Include(v => v.RelacaoVeiculoPacotePortal)
+                    .ThenInclude(p => p.Pacote)
+                    .ThenInclude(p => p.Portal)
+                    .ToListAsync();
+
         }
 
         public async Task<Veiculo?> ObterPeloId(int id)
         {
-            return await _context.Veiculo.FindAsync(id);
+            Veiculo? veiculo = await _context.Veiculo
+                    .Include(v => v.RelacaoVeiculoOpcional)
+                        .ThenInclude(r => r.Opcional)
+                    .Include(v => v.Foto)
+                    .Include(v => v.RelacaoVeiculoPacotePortal)
+                        .ThenInclude(r => r.Pacote)
+                        .ThenInclude(r=> r.Portal)
+                    .FirstOrDefaultAsync(v => v.Id == id);
+            return veiculo;
+        }
+
+        public async Task<List<Opcional>> ListarOpcionais()
+        {
+
+            return await _context.Opcional.ToListAsync();
         }
     }
 

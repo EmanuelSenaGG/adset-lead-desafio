@@ -1,10 +1,10 @@
 ﻿namespace API.Dtos
 {
-    public record RelacaoVeiculoPacotePortalDto(
-     int Id,
-     int VeiculoId,
-     int PacoteId,
-     int PortalId
- );
+    public class RelacaoVeiculoPacotePortalDto
+    {
+        public int PacoteId { get; set; }
+        public string? NomePacote { get; set; }
+        public string? NomePortal { get; set; }
+    }
 
 }
