@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
+import { NgModule,LOCALE_ID  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { MatIconModule } from '@angular/material/icon'; 
+import { MatIconModule } from '@angular/material/icon';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CabecalhoComponent } from './componentes/cabecalho/cabecalho.component';
@@ -24,7 +24,14 @@ import { TelaCadastroComponent } from './componentes/tela-cadastro/tela-cadastro
 import { HomeComponent } from './componentes/home/home.component';
 import { TelaEdicaoComponent } from './componentes/tela-edicao/tela-edicao.component';
 import { PainelFotosComponent } from './componentes/painel-fotos/painel-fotos.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
 
+
+
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
@@ -49,15 +56,21 @@ import { PainelFotosComponent } from './componentes/painel-fotos/painel-fotos.co
     TelaEdicaoComponent,
     PainelFotosComponent
 
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatIconModule ,
-     MatTooltipModule 
+    MatIconModule,
+    MatTooltipModule,
+    HttpClientModule,
+    ReactiveFormsModule
+
   ],
-  providers: [],
+ providers: [
+  { provide: LOCALE_ID, useValue: 'pt-BR' }
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -168,3 +168,9 @@ app-botao-buscar {
   display: flex;
   gap: 0; 
 }
+
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}

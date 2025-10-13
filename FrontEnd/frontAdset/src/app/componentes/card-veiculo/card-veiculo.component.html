@@ -1,5 +1,5 @@
-<article class="all-content">
-      <app-botao-deletar></app-botao-deletar>
+<article class="all-content" *ngIf="veiculo">
+  <app-botao-deletar></app-botao-deletar>
   <div class="vehicle-card-v2">
 
     <div class="vehicle-image-container">
@@ -8,38 +8,42 @@
 
     <div class="vehicle-content">
       <div class="content-header">
-        <span class="vehicle-title">MARCA MODELO | ANO</span>
+        <span class="vehicle-title"> {{ veiculo.marca }} {{ veiculo.modelo }} | {{ veiculo.ano }}</span>
       </div>
       <div class="content-body">
         <div class="vehicle-details">
-          <p>Placa - <span class="text-green">AAA-0102</span></p>
-          <p>Km - <span class="text-green">25.000</span></p>
-          <p>Cor - <span class="text-green">Branco</span></p>
+          <p>Placa - <span class="text-green">{{veiculo.placa}}</span></p>
+          <p>Km - <span class="text-green">
+              {{ veiculo.km ? veiculo.km : 'Não informado' }}
+            </span></p>
+          <p>Cor - <span class="text-green">{{veiculo.cor}}</span></p>
         </div>
 
         <div class="vehicle-actions-price">
           <div class="action-buttons">
             <div class="action-item">
-              <i routerLink="edicao" class="fas fa-pen-to-square icon-edit" matTooltip="Editar veículo" matTooltipPosition="above"
-                matTooltipClass="custom-tooltip"></i>
+              <i routerLink="edicao" class="fas fa-pen-to-square icon-edit" matTooltip="Editar veículo"
+                matTooltipPosition="above" matTooltipClass="custom-tooltip"></i>
             </div>
             <div class="action-item">
               <i routerLink="fotos" class="fas fa-camera"></i>
               <span class="action-label">8 Fotos</span>
             </div>
-            <div class="action-item">
+            <div class="action-item" [matTooltip]="textoOpcionais" matTooltipPosition="above"
+                matTooltipClass="custom-tooltip">
               <i class="fas fa-car"></i>
-              <span class="action-label">Opcionais</span>
+              <span class="action-label" >Opcionais</span>
             </div>
           </div>
-          <div class="vehicle-price">R$ 103.900,00</div>
+        <div class="vehicle-price">R$ {{ veiculo.preco | number:'1.2-2' }}</div>
+
         </div>
       </div>
     </div>
- 
+
   </div>
-<app-card-portal></app-card-portal>
-<app-card-portal></app-card-portal>
- 
+  <app-card-portal></app-card-portal>
+  <app-card-portal></app-card-portal>
+
 
 </article>

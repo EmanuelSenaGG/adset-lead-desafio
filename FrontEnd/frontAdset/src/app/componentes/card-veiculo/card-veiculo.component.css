@@ -36,6 +36,7 @@
   display: flex;
   flex-direction: column;
    height: 100%; 
+   width: 550px;
 }
 
 .content-header .vehicle-title {
@@ -58,10 +59,18 @@
 .vehicle-details {
   font-size: 13px;
   color: #555;
+    white-space: nowrap; 
+    width: 300px;   
+
 }
+
+
 .vehicle-details p {
   margin: 2px 0;
+  color: #555; 
 }
+
+
 
 .vehicle-actions-price {
   margin-left: 200px;
@@ -131,10 +140,7 @@
 }
 
 
-.vehicle-details p {
-  margin: 2px 0;
-  color: #555; 
-}
+
 
 
 .action-item .action-label {

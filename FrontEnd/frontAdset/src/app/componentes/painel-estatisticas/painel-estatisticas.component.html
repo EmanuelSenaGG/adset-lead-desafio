@@ -1,20 +1,20 @@
-<nav class="stats-nav">
+<nav class="stats-nav" *ngIf="informacoesVeiculos">
   <div class="stat-item total">
-    <p>110 veiculos</p>
+    <p>{{ informacoesVeiculos.total | number:'3.0' }} veículos</p>
     <span>Total</span>
   </div>
 
   <span class="stat-separator">/</span>
 
   <div class="stat-item com-fotos">
-    <p>080 veículos</p>
-    <span> com fotos</span>
+    <p>{{ informacoesVeiculos.totalFotos | number:'3.0' }} veículos</p>
+    <span>com fotos</span>
   </div>
 
   <span class="stat-separator">/</span>
 
   <div class="stat-item sem-fotos">
-    <p>030 veículos</p>
-    <span> sem fotos</span>
+    <p>{{ informacoesVeiculos.totalSemFotos | number:'3.0' }} veículos</p>
+    <span>sem fotos</span>
   </div>
 </nav>
