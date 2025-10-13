@@ -5,9 +5,7 @@ using API.Repositorios.Implementacoes;
 using API.Repositorios.Interfaces;
 using API.Services.Implementacoes;
 using API.Services.Interfaces;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +31,12 @@ builder.Services.AddScoped<IVeiculoRepository, VeiculoRepository>();
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile(new VeiculoProfile());
+    cfg.AddProfile(new FotoProfile());
+    cfg.AddProfile(new OpcionalProfile());
+    cfg.AddProfile(new PacoteProfile());
+    cfg.AddProfile(new PortalProfile());
+    cfg.AddProfile(new RelacaoVeiculoOpcionalProfile());
+    cfg.AddProfile(new RelacaoVeiculoPacotePortalProfile());
 
 });
 

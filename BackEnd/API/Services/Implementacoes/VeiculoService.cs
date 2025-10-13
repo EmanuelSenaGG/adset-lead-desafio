@@ -19,10 +19,27 @@ namespace API.Services.Implementacoes
             _mapper = mapper;
         }
 
-        public async Task<AtualizarVeiculoDto> AtualizarVeiculoAsync(AtualizarVeiculoDto veiculo)
+        public async Task<AtualizarVeiculoDto> AtualizarVeiculoAsync(AtualizarVeiculoDto veiculoDto)
         {
-            throw new NotImplementedException();
+            if (!veiculoDto.Id.HasValue)
+                throw new ArgumentException("É necessário informar o ID do veículo no corpo.");
+
+            Veiculo? veiculoAtual = await _repository.ObterPeloId(veiculoDto.Id.Value);
+
+            if (veiculoAtual == null)
+                throw new NotFoundException("Veículo não encontrado.");
+
+
+            _mapper.Map(veiculoDto, veiculoAtual);
+
+            await _repository.Atualizar(veiculoAtual);
+
+    
+            AtualizarVeiculoDto veiculoAtualizadoDto = _mapper.Map<AtualizarVeiculoDto>(veiculoAtual);
+
+            return veiculoAtualizadoDto;
         }
+
 
         public async Task<CadastrarVeiculoDto> CadastrarVeiculoAsync(CadastrarVeiculoDto cadastrarVeiculoDto)
         {

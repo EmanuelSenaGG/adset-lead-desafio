@@ -28,6 +28,16 @@ namespace API.Controllers
 
         }
 
+
+        [HttpPut("atualizar")]
+        public async Task<IActionResult> AtualizarVeiculo([FromBody] AtualizarVeiculoDto veiculo)
+        {
+
+            AtualizarVeiculoDto veiculoInserido = await _service.AtualizarVeiculoAsync(veiculo);
+            return CreatedAtAction(nameof(ObterVeiculoPeloID), new { id = veiculoInserido.Id }, veiculoInserido);
+
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> ObterVeiculoPeloID(int id)
         {

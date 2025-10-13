@@ -1,4 +1,4 @@
-﻿using API.Dtos;
+﻿
 using API.Dtos.Veiculo;
 using API.Entidades;
 using AutoMapper;
@@ -9,23 +9,6 @@ namespace API.Mappings
     {
         public VeiculoProfile()
         {
-
-            CreateMap<Foto, FotoDto>().ReverseMap();
-            CreateMap<Opcional, OpcionalDto>().ReverseMap();
-            CreateMap<RelacaoVeiculoOpcional, RelacaoVeiculoOpcionalDto>()
-                .ForMember(dest => dest.OpcionalId, opt => opt.MapFrom(src => src.OpcionalId))
-                .ForMember(dest => dest.Descricao, opt => opt.MapFrom(src => src.Opcional.Descricao));
-
-            CreateMap<RelacaoVeiculoPacotePortal, RelacaoVeiculoPacotePortalDto>()
-                .ForMember(dest => dest.PacoteId, opt => opt.MapFrom(src => src.PacoteId))
-                .ForMember(dest => dest.NomePacote, opt => opt.MapFrom(src => src.Pacote.Nome))
-                .ForMember(dest => dest.NomePortal, opt => opt.MapFrom(src => src.Pacote.Portal.Nome));
-
-            CreateMap<Pacote, PacoteDto>().ReverseMap();
-            CreateMap<Portal, PortalDto>().ReverseMap();
-
-
-
 
             CreateMap<Veiculo, VeiculoDto>()
                 .ForMember(dest => dest.Fotos, opt => opt.MapFrom(src => src.Foto))
