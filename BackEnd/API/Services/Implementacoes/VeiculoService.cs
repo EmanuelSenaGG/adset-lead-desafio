@@ -1,4 +1,5 @@
 ﻿using API.Dtos;
+using API.Dtos.Portal;
 using API.Dtos.Veiculo;
 using API.Entidades;
 using API.Exceptions;
@@ -128,6 +129,27 @@ namespace API.Services.Implementacoes
                 TamanhoPagina = filtro.TamanhoPagina,
                 TotalRegistros = totalRegistros
             };
+        }
+
+        public async Task<List<PortalDto>> ListarPortaisAsync()
+        {
+            List<Portal> portais = await _repository.ListarPortais();
+            List<PortalDto> listaPortalDtos = _mapper.Map<List<PortalDto>>(portais);
+            return listaPortalDtos;
+        }
+
+        public async Task<DetalharPortalDto> ObterPortalPorIDAsync(int id)
+        {
+            Portal? portal = await _repository.ObterPortalPorId(id);
+            if (portal == null)
+            {
+                throw new NotFoundException("Portal não encontrado");
+            }
+
+            DetalharPortalDto detalharPortalDto = _mapper.Map<DetalharPortalDto>(portal);
+            return detalharPortalDto;
+ 
+
         }
     }
 }

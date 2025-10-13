@@ -1,4 +1,5 @@
 ﻿using API.Dtos;
+using API.Dtos.Portal;
 using API.Dtos.Veiculo;
 using API.Filtro;
 
@@ -13,5 +14,7 @@ namespace API.Services.Interfaces
         Task<VeiculoDto> ObterPorIdAsync(int id);
         Task<List<OpcionalDto>> ListarOpcionaisAsync();
         Task<InformacoesVeiculosDto> ObterInformacoesAsync();
+        Task<List<PortalDto>> ListarPortaisAsync();
+        Task<DetalharPortalDto> ObterPortalPorIDAsync(int id);
     }
 }

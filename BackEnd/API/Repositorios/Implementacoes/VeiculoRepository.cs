@@ -61,12 +61,6 @@ namespace API.Repositorios.Implementacoes
             return veiculo;
         }
 
-        public async Task<List<Opcional>> ListarOpcionais()
-        {
-            return await _context.Opcional.ToListAsync();
-        }
-
-
         public async Task<(IEnumerable<Veiculo>, int totalRegistros)> ListarPaginadoAsync(VeiculoFiltroDto filtro)
         {
             IQueryable<Veiculo> query = _context.Veiculo
@@ -113,7 +107,22 @@ namespace API.Repositorios.Implementacoes
             return (veiculos, totalRegistros);
         }
 
+        public async Task<List<Opcional>> ListarOpcionais()
+        {
+            return await _context.Opcional.ToListAsync();
+        }
 
+        public async Task<Portal?> ObterPortalPorId(int id)
+        {
+           Portal? portal = await _context.Portal.Include(p => p.Pacote).Where(p => p.Id.Equals(id)).FirstOrDefaultAsync();
+            return portal;
+        }
+
+        public async Task<List<Portal>> ListarPortais()
+        {
+            List<Portal> listaPortais = await _context.Portal.Include(p => p.Pacote).ToListAsync();
+            return listaPortais;
+        }
     }
 
 }

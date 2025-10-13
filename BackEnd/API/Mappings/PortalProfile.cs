@@ -1,4 +1,4 @@
-﻿using API.Dtos;
+﻿using API.Dtos.Portal;
 using API.Entidades;
 using AutoMapper;
 
@@ -9,6 +9,8 @@ namespace API.Mappings
         public PortalProfile() {
 
             CreateMap<Portal, PortalDto>().ReverseMap();
+            CreateMap<Portal, DetalharPortalDto>();
+
         }
     }
 }

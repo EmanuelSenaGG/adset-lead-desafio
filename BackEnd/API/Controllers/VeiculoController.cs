@@ -1,5 +1,6 @@
 ﻿
 using API.Dtos;
+using API.Dtos.Portal;
 using API.Dtos.Veiculo;
 using API.Filtro;
 using API.Services.Interfaces;
@@ -36,7 +37,7 @@ namespace API.Controllers
 
             if (id != veiculo.Id || id.Equals(0))
                 return BadRequest("O id fornecido não identifica o recurso");
- 
+
             AtualizarVeiculoDto veiculoAtualizado = await _service.AtualizarVeiculoAsync(veiculo);
             return Ok(veiculoAtualizado);
 
@@ -45,10 +46,10 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> ObterVeiculoPeloID(int id)
         {
-            if (id <= 0)         
+            if (id <= 0)
                 return BadRequest("O ID do veículo é inválido.");
-        
-            VeiculoDto veiculo = await _service.ObterPorIdAsync(id);        
+
+            VeiculoDto veiculo = await _service.ObterPorIdAsync(id);
             return Ok(veiculo);
         }
 
@@ -60,7 +61,7 @@ namespace API.Controllers
                 return BadRequest("O ID do veículo é inválido.");
 
             await _service.DeletarVeiculoAsync(id);
-            return NoContent(); 
+            return NoContent();
         }
 
 
@@ -86,6 +87,24 @@ namespace API.Controllers
             PaginacaoResultado<VeiculoDto> resultado = await _service.ListarVeiculosAsync(filtro);
             return Ok(resultado);
         }
+
+        [HttpGet("portal/{id}")]
+        public async Task<IActionResult> ObterDetalhesPortal(int id)
+        {
+            if (id <= 0)
+                return BadRequest("Id informado é invalido");
+
+            DetalharPortalDto portalDetalhes = await _service.ObterPortalPorIDAsync(id);
+            return Ok(portalDetalhes);
+        }
+
+        [HttpGet("portal")]
+        public async Task<IActionResult> ListarPortais()
+        { 
+            List<PortalDto> portais = await _service.ListarPortaisAsync();
+            return Ok(portais);
+        }
+
 
 
 
