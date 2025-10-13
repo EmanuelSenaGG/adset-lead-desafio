@@ -1,4 +1,5 @@
 ﻿using API.Contexto;
+using API.Dtos.Veiculo;
 using API.Entidades;
 using API.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -62,9 +63,57 @@ namespace API.Repositorios.Implementacoes
 
         public async Task<List<Opcional>> ListarOpcionais()
         {
-
             return await _context.Opcional.ToListAsync();
         }
+
+
+        public async Task<(IEnumerable<Veiculo>, int totalRegistros)> ListarPaginadoAsync(VeiculoFiltroDto filtro)
+        {
+            IQueryable<Veiculo> query = _context.Veiculo
+                .Include(v => v.Foto)
+                .Include(v => v.RelacaoVeiculoOpcional)
+                    .ThenInclude(r => r.Opcional)
+                .Include(v => v.RelacaoVeiculoPacotePortal)
+                    .ThenInclude(r => r.Pacote)
+                    .ThenInclude(r => r.Portal)
+                .AsQueryable();
+
+  
+            if (!string.IsNullOrEmpty(filtro.Marca))
+                query = query.Where(v => v.Marca.ToLower().Contains(filtro.Marca.ToLower()));
+
+            if (!string.IsNullOrEmpty(filtro.Modelo))
+                query = query.Where(v => v.Modelo.ToLower().Contains(filtro.Modelo.ToLower()));
+
+            if (filtro.AnoMin.HasValue)
+                query = query.Where(v => v.Ano >= filtro.AnoMin.Value);
+
+            if (filtro.AnoMax.HasValue)
+                query = query.Where(v => v.Ano <= filtro.AnoMax.Value);
+
+            if (!string.IsNullOrEmpty(filtro.Cor))
+                query = query.Where(v => v.Cor.ToLower().Contains(filtro.Cor.ToLower()));
+
+            if (filtro.PrecoMin.HasValue)
+                query = query.Where(v => v.Preco >= filtro.PrecoMin.Value);
+
+            if (filtro.PrecoMax.HasValue)
+                query = query.Where(v => v.Preco <= filtro.PrecoMax.Value);
+
+         
+            int totalRegistros = await query.CountAsync();
+
+ 
+            List<Veiculo> veiculos = await query
+                .OrderBy(v => v.Id)
+                .Skip((filtro.Pagina - 1) * filtro.TamanhoPagina)
+                .Take(filtro.TamanhoPagina)
+                .ToListAsync();
+
+            return (veiculos, totalRegistros);
+        }
+
+
     }
 
 }

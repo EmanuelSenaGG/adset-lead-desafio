@@ -1,6 +1,7 @@
 ﻿
 using API.Dtos;
 using API.Dtos.Veiculo;
+using API.Filtro;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,32 +20,49 @@ namespace API.Controllers
             _service = service;
         }
 
-        [HttpPost("cadastrar")]
+        [HttpPost]
         public async Task<IActionResult> CadastrarVeiculo([FromForm] CadastrarVeiculoDto veiculo)
         {
-
             CadastrarVeiculoDto veiculoInserido = await _service.CadastrarVeiculoAsync(veiculo);
             return CreatedAtAction(nameof(ObterVeiculoPeloID), new { id = veiculoInserido.Id }, veiculoInserido);
-
         }
 
 
-        [HttpPut("atualizar")]
-        public async Task<IActionResult> AtualizarVeiculo([FromBody] AtualizarVeiculoDto veiculo)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AtualizarVeiculo(int id, [FromBody] AtualizarVeiculoDto veiculo)
         {
+            if (!veiculo.Id.HasValue)
+                return BadRequest("O id do veiculo não foi fornecido em seu corpo");
 
-            AtualizarVeiculoDto veiculoInserido = await _service.AtualizarVeiculoAsync(veiculo);
-            return CreatedAtAction(nameof(ObterVeiculoPeloID), new { id = veiculoInserido.Id }, veiculoInserido);
+            if (id != veiculo.Id || id.Equals(0))
+                return BadRequest("O id fornecido não identifica o recurso");
+ 
+            AtualizarVeiculoDto veiculoAtualizado = await _service.AtualizarVeiculoAsync(veiculo);
+            return Ok(veiculoAtualizado);
 
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> ObterVeiculoPeloID(int id)
         {
-            VeiculoDto veiculo = await _service.ObterPorIdAsync(id);
+            if (id <= 0)         
+                return BadRequest("O ID do veículo é inválido.");
+        
+            VeiculoDto veiculo = await _service.ObterPorIdAsync(id);        
             return Ok(veiculo);
-
         }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletarVeiculo(int id)
+        {
+            if ((id <= 0))
+                return BadRequest("O ID do veículo é inválido.");
+
+            await _service.DeletarVeiculoAsync(id);
+            return NoContent(); 
+        }
+
 
         [HttpGet("opcionais")]
         public async Task<IActionResult> ListarOpcionais()
@@ -62,14 +80,13 @@ namespace API.Controllers
 
         }
 
-
-        [HttpGet("")]
-        public async Task<IActionResult> ListarVeiculos()
+        [HttpGet]
+        public async Task<IActionResult> ListarVeiculos([FromQuery] VeiculoFiltroDto filtro)
         {
-            List<VeiculoDto> opcionais = await _service.ListarVeiculosAsync();
-            return Ok(opcionais);
-
+            PaginacaoResultado<VeiculoDto> resultado = await _service.ListarVeiculosAsync(filtro);
+            return Ok(resultado);
         }
+
 
 
     }

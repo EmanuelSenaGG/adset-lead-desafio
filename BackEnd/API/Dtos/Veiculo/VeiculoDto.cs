@@ -1,4 +1,4 @@
-﻿using API.Entidades;
+﻿
 
 namespace API.Dtos.Veiculo
 {
@@ -19,8 +19,6 @@ namespace API.Dtos.Veiculo
         public List<RelacaoVeiculoPacotePortalDto> PacotesPortal { get; set; } = new();
 
     }
-
-
 
 
 }

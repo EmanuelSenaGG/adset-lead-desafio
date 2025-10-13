@@ -2,6 +2,7 @@
 using API.Dtos.Veiculo;
 using API.Entidades;
 using API.Exceptions;
+using API.Filtro;
 using API.Repositorios.Interfaces;
 using API.Services.Interfaces;
 using AutoMapper;
@@ -21,9 +22,7 @@ namespace API.Services.Implementacoes
 
         public async Task<AtualizarVeiculoDto> AtualizarVeiculoAsync(AtualizarVeiculoDto veiculoDto)
         {
-            if (!veiculoDto.Id.HasValue)
-                throw new ArgumentException("É necessário informar o ID do veículo no corpo.");
-
+       
             Veiculo? veiculoAtual = await _repository.ObterPeloId(veiculoDto.Id.Value);
 
             if (veiculoAtual == null)
@@ -73,12 +72,12 @@ namespace API.Services.Implementacoes
             return _mapper.Map<VeiculoDto>(veiculo);
         }
 
-        public async Task<List<VeiculoDto>> ListarVeiculosAsync()
-        {
-            List<Veiculo> veiculos = await _repository.Listar();
-            List<VeiculoDto> veiculosDto = _mapper.Map<List<VeiculoDto>>(veiculos);
-            return veiculosDto;
-        }
+        //public async Task<List<VeiculoDto>> ListarVeiculosAsync(VeiculoFiltroDto filtro)
+        //{
+        //    List<Veiculo> veiculos = await _repository.Listar();
+        //    List<VeiculoDto> veiculosDto = _mapper.Map<List<VeiculoDto>>(veiculos);
+        //    return veiculosDto;
+        //}
 
         public async Task<List<OpcionalDto>> ListarOpcionaisAsync()
         {
@@ -105,6 +104,30 @@ namespace API.Services.Implementacoes
             };
 
             return informacoes;
+        }
+
+        public async Task<PaginacaoResultado<VeiculoDto>> ListarVeiculosAsync(VeiculoFiltroDto filtro)
+        {
+            const int TAMANHO_MAXIMO_PAGINA = 10;
+            if (filtro.TamanhoPagina <= 0)
+                filtro.TamanhoPagina = 10; 
+            else if (filtro.TamanhoPagina > TAMANHO_MAXIMO_PAGINA)
+                filtro.TamanhoPagina = TAMANHO_MAXIMO_PAGINA;
+
+            if (filtro.Pagina <= 0)
+                filtro.Pagina = 1;
+
+            var (veiculos, totalRegistros) = await _repository.ListarPaginadoAsync(filtro);
+
+            List<VeiculoDto> dtos = _mapper.Map<List<VeiculoDto>>(veiculos);
+
+            return new PaginacaoResultado<VeiculoDto>
+            {
+                Itens = dtos,
+                PaginaAtual = filtro.Pagina,
+                TamanhoPagina = filtro.TamanhoPagina,
+                TotalRegistros = totalRegistros
+            };
         }
     }
 }
