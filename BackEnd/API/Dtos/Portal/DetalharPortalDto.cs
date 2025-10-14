@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public string Nome { get; set; } = null!;
 
-        public List<PacoteDto>? Pacote { get; set; }
+        public List<PacoteDto>? Pacotes { get; set; }
     }
 }

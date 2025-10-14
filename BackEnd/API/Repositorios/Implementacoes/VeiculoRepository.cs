@@ -37,7 +37,7 @@ namespace API.Repositorios.Implementacoes
 
         public async Task<List<Veiculo>> Listar()
         {
-            return  await _context.Veiculo
+            return await _context.Veiculo
                     .Include(v => v.RelacaoVeiculoOpcional)
                         .ThenInclude(r => r.Opcional)
                     .Include(v => v.Foto)
@@ -56,7 +56,7 @@ namespace API.Repositorios.Implementacoes
                     .Include(v => v.Foto)
                     .Include(v => v.RelacaoVeiculoPacotePortal)
                         .ThenInclude(r => r.Pacote)
-                        .ThenInclude(r=> r.Portal)
+                        .ThenInclude(r => r.Portal)
                     .FirstOrDefaultAsync(v => v.Id == id);
             return veiculo;
         }
@@ -72,7 +72,7 @@ namespace API.Repositorios.Implementacoes
                     .ThenInclude(r => r.Portal)
                 .AsQueryable();
 
-  
+
             if (!string.IsNullOrEmpty(filtro.Marca))
                 query = query.Where(v => v.Marca.ToLower().Contains(filtro.Marca.ToLower()));
 
@@ -94,10 +94,10 @@ namespace API.Repositorios.Implementacoes
             if (filtro.PrecoMax.HasValue)
                 query = query.Where(v => v.Preco <= filtro.PrecoMax.Value);
 
-         
+
             int totalRegistros = await query.CountAsync();
 
- 
+
             List<Veiculo> veiculos = await query
                 .OrderBy(v => v.Id)
                 .Skip((filtro.Pagina - 1) * filtro.TamanhoPagina)
@@ -114,7 +114,7 @@ namespace API.Repositorios.Implementacoes
 
         public async Task<Portal?> ObterPortalPorId(int id)
         {
-           Portal? portal = await _context.Portal.Include(p => p.Pacote).Where(p => p.Id.Equals(id)).FirstOrDefaultAsync();
+            Portal? portal = await _context.Portal.Include(p => p.Pacote).Where(p => p.Id.Equals(id)).FirstOrDefaultAsync();
             return portal;
         }
 
@@ -122,6 +122,15 @@ namespace API.Repositorios.Implementacoes
         {
             List<Portal> listaPortais = await _context.Portal.Include(p => p.Pacote).ToListAsync();
             return listaPortais;
+        }
+
+        public async Task<List<string>> ObterCoresDisponiveis()
+        {
+            List<string> cores = await _context.Veiculo
+                                    .Select(v => v.Cor)
+                                    .Distinct()
+                                    .ToListAsync();
+            return cores;
         }
     }
 

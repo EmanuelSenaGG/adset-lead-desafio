@@ -16,5 +16,6 @@ namespace API.Services.Interfaces
         Task<InformacoesVeiculosDto> ObterInformacoesAsync();
         Task<List<PortalDto>> ListarPortaisAsync();
         Task<DetalharPortalDto> ObterPortalPorIDAsync(int id);
+        Task<List<string>> ObterCoresAsync();
     }
 }

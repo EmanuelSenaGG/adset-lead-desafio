@@ -1,53 +1,60 @@
 <section class="filter-panel">
-  <form class="filter-form">
+  <form class="filter-form" >
     <div class="fields-container">
       <div class="form-group">
         <label for="placa">Placa</label>
-        <input type="text" id="placa">
+        <input type="text" id="placa" #placa>
       </div>
       <div class="form-group">
         <label for="marca">Marca</label>
-        <input type="text" id="marca">
+        <input type="text" id="marca" #marca>
       </div>
       <div class="form-group">
         <label for="modelo">Modelo</label>
-        <input type="text" id="modelo">
+        <input type="text" id="modelo" #modelo>
       </div>
-      <div class="anos-container">
-        <div class="form-group small-select">
-          <label for="ano-min">Ano Mín</label>
-          <select id="ano-min">
-            <option>Todos</option>
-          </select>
-        </div>
-        <div class="form-group small-select2">
-          <label for="ano-max">Ano Máx</label>
-          <select id="ano-max">
-            <option>Todos</option>
-          </select>
-        </div>
-      </div>
+    <div class="anos-container">
+  <div class="form-group small-select">
+    <label for="ano-min">Ano Mín</label>
+    <select id="ano-min" #anoMin>
+      <option value="">Selecione</option>
+      <option *ngFor="let ano of anos" [value]="ano">{{ ano }}</option>
+    </select>
+  </div>
 
-      <div class="form-group small-select">
-        <label for="preco">Preço</label>
-        <select id="preco">
-          <option>Todos</option>
-        </select>
-      </div>
+  <div class="form-group small-select2">
+    <label for="ano-max">Ano Máx</label>
+    <select id="ano-max" #anoMax>
+      <option value="">Selecione</option>
+      <option *ngFor="let ano of anos" [value]="ano">{{ ano }}</option>
+    </select>
+  </div>
+</div>
+
+<div class="form-group small-select">
+  <label for="preco">Preço</label>
+  <select id="preco" #preco>
+    <option *ngFor="let faixa of faixasPreco" [value]="faixa.valorMin">{{ faixa.label }}</option>
+  </select>
+</div>
+
       <div class="form-group small-select">
         <label for="fotos">Fotos</label>
         <select id="fotos">
-          <option>Todos</option>
+          <option value="">Selecione</option>
+           <option value="1">Com Fotos</option>
+            <option value="0">Sem Fotos</option>
         </select>
       </div>
       <div class="form-group">
         <label for="opcionais">Opcionais</label>
-        <input type="text" id="opcionais">
+        <input type="text" id="opcionais" #opcionais>
       </div>
       <div class="form-group small-select">
         <label for="cor">Cor</label>
-        <select id="cor">
-          <option>Todos</option>
+        <select id="cor" #cor>
+          <option value="">Selecione</option>
+          <option *ngFor="let cor of cores" [value]="cor">{{cor}}</option>
         </select>
       </div>
     </div>
@@ -59,26 +66,30 @@
 <section class="results-list">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div class="d-flex gap-3">
-        <a href="#" class="btn btn-sm btn-outline-secondary"><i class="fas fa-sort me-1"></i> Marca / Modelo</a>
-        <a href="#" class="btn btn-sm btn-outline-secondary"><i class="fas fa-sort me-1"></i> Ano</a>
-        <a href="#" class="btn btn-sm btn-outline-secondary">Preço</a>
+      <a href="#" (click)="ordenar('marcaModelo')"><i class="fas fa-sort me-1"></i> Marca / Modelo</a>
+      <a href="#" (click)="ordenar('ano')"><i class="fas fa-sort me-1"></i> Ano</a>
+      <a href="#" (click)="ordenar('preco')">Preço</a>
+
     </div>
     <div class="d-flex align-items-center gap-2">
-        <label for="exibir" class="form-label mb-0">Exibir:</label>
-        <select id="exibir" class="form-select form-select-sm" style="width: auto;">
-            <option>100</option>
-            <option>50</option>
-            <option>20</option>
-        </select>
+      <label for="exibir" class="form-label mb-0">Exibir:</label>
+      <select id="exibir" class="form-select form-select-sm" style="width: auto;"
+        (change)="onTamanhoPaginaChange($event)">
+
+        <option value="10">10</option>
+        <option value="5">5</option>
+        <option value="2">2</option>
+      </select>
     </div>
   </div>
 
 
-<div class="cards-container">
-  <app-card-veiculo 
-    *ngFor="let veiculo of veiculos" 
-    [veiculo]="veiculo">
-  </app-card-veiculo>
-</div>
+  <div class="cards-container">
+    <app-card-veiculo *ngFor="let veiculo of paginacaoVeiculos.itens" [veiculo]="veiculo">
+    </app-card-veiculo>
+  </div>
 
 </section>
+<app-paginacao [paginaAtual]="paginacaoVeiculos.paginaAtual" [totalPaginas]="paginacaoVeiculos.totalPaginas"
+  (paginaMudou)="onPaginaMudou($event)">
+</app-paginacao>

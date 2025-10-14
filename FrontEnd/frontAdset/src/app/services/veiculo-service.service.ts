@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { VeiculoCadastrarDto } from '../interfaces/Veiculo/VeiculoCadastrarDto';
 import { OpcionalDto } from '../interfaces/Opcional/OpcionalDto';
 import { InformacoesVeiculosDto } from '../interfaces/Veiculo/InformacoesVeiculosDto';
 import { VeiculoDto } from '../interfaces/Veiculo/VeiculoDto';
+import { VeiculoFiltroDto } from '../interfaces/Veiculo/VeiculoFiltroDto';
 
 @Injectable({
   providedIn: 'root'
@@ -52,8 +53,28 @@ export class VeiculoService {
     return this.http.get<VeiculoDto>(`${this.apiUrl}/${id}`);
   }
 
-  listarVeiculos(): Observable<VeiculoDto[]> {
-    return this.http.get<VeiculoDto[]>(`${this.apiUrl}`);
+   ObterCores(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/cores`);
+  }
+
+  listarVeiculos(
+    pagina: number = 1,
+    tamanho: number = 10,
+    filtros: any = {}
+  ): Observable<VeiculoFiltroDto> {
+
+    let params = new HttpParams()
+      .set('pagina', pagina)
+      .set('tamanhoPagina', tamanho);
+
+    Object.keys(filtros || {}).forEach((key) => {
+      const valor = filtros[key];
+      if (valor !== null && valor !== undefined && valor !== '') {
+        params = params.set(key, valor);
+      }
+    });
+
+    return this.http.get<VeiculoFiltroDto>(this.apiUrl, { params });
   }
 }
 

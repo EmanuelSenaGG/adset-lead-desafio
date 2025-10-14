@@ -73,13 +73,7 @@ namespace API.Services.Implementacoes
             return _mapper.Map<VeiculoDto>(veiculo);
         }
 
-        //public async Task<List<VeiculoDto>> ListarVeiculosAsync(VeiculoFiltroDto filtro)
-        //{
-        //    List<Veiculo> veiculos = await _repository.Listar();
-        //    List<VeiculoDto> veiculosDto = _mapper.Map<List<VeiculoDto>>(veiculos);
-        //    return veiculosDto;
-        //}
-
+   
         public async Task<List<OpcionalDto>> ListarOpcionaisAsync()
         {
             List<Opcional> opcionais = await _repository.ListarOpcionais();
@@ -150,6 +144,12 @@ namespace API.Services.Implementacoes
             return detalharPortalDto;
  
 
+        }
+
+        public async Task<List<string>> ObterCoresAsync()
+        {
+            List<string> cores = await _repository.ObterCoresDisponiveis();
+            return cores;
         }
     }
 }

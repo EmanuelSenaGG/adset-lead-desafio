@@ -11,6 +11,7 @@ namespace API.Repositorios.Interfaces
         Task<(IEnumerable<Veiculo>, int totalRegistros)> ListarPaginadoAsync(VeiculoFiltroDto filtro);
         Task<List<Portal>> ListarPortais();
         Task<Portal?> ObterPortalPorId(int id);
+        Task<List<string>> ObterCoresDisponiveis();
 
 
     }

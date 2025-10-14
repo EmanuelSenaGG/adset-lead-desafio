@@ -105,6 +105,12 @@ namespace API.Controllers
             return Ok(portais);
         }
 
+        [HttpGet("cores")]
+        public async Task<IActionResult> ListarCores()
+        {
+            List<string> cores = await _service.ObterCoresAsync();
+            return Ok(cores);
+        }
 
 
 
