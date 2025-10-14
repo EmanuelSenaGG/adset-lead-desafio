@@ -18,7 +18,7 @@
     <label for="ano-min">Ano Mín</label>
     <select id="ano-min" #anoMin>
       <option value="">Selecione</option>
-      <option *ngFor="let ano of anos" [value]="ano">{{ ano }}</option>
+      <option *ngFor="let ano of anos" [value]="ano" #anomin>{{ ano }}</option>
     </select>
   </div>
 
@@ -26,7 +26,7 @@
     <label for="ano-max">Ano Máx</label>
     <select id="ano-max" #anoMax>
       <option value="">Selecione</option>
-      <option *ngFor="let ano of anos" [value]="ano">{{ ano }}</option>
+      <option *ngFor="let ano of anos" [value]="ano" #anomax>{{ ano }}</option>
     </select>
   </div>
 </div>
@@ -34,16 +34,16 @@
 <div class="form-group small-select">
   <label for="preco">Preço</label>
   <select id="preco" #preco>
-    <option *ngFor="let faixa of faixasPreco" [value]="faixa.valorMin">{{ faixa.label }}</option>
+    <option *ngFor="let faixa of faixasPreco" [value]="faixa.valorMin" >{{ faixa.label }}</option>
   </select>
 </div>
 
       <div class="form-group small-select">
         <label for="fotos">Fotos</label>
-        <select id="fotos">
+        <select id="fotos" #fotos>
           <option value="">Selecione</option>
-           <option value="1">Com Fotos</option>
-            <option value="0">Sem Fotos</option>
+           <option value="true">Com Fotos</option>
+            <option value="false">Sem Fotos</option>
         </select>
       </div>
       <div class="form-group">
@@ -58,7 +58,7 @@
         </select>
       </div>
     </div>
-    <app-botao-buscar></app-botao-buscar>
+    <app-botao-buscar (click)="buscarClick()"></app-botao-buscar>
   </form>
 
 </section>

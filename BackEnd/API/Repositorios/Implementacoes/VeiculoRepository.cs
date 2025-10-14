@@ -105,6 +105,10 @@ namespace API.Repositorios.Implementacoes
 
             if (filtro.PrecoMax.HasValue)
                 query = query.Where(v => v.Preco <= filtro.PrecoMax.Value);
+            if(filtro.Fotos)
+                query = query.Where(v => v.Foto.Any() == true);
+            if (!filtro.Fotos)
+                query = query.Where(v => v.Foto.Any() == true);
 
 
             int totalRegistros = await query.CountAsync();

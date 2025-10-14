@@ -7,6 +7,7 @@ import { OpcionalDto } from '../interfaces/Opcional/OpcionalDto';
 import { InformacoesVeiculosDto } from '../interfaces/Veiculo/InformacoesVeiculosDto';
 import { VeiculoDto } from '../interfaces/Veiculo/VeiculoDto';
 import { VeiculoFiltroDto } from '../interfaces/Veiculo/VeiculoFiltroDto';
+import { PortalDto } from '../interfaces/Portal/PortalDto';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ import { VeiculoFiltroDto } from '../interfaces/Veiculo/VeiculoFiltroDto';
 export class VeiculoService {
 
   private apiUrl = `${environment.apiUrl}`;
+  private apiRoute = "/veiculo"
 
   constructor(private http: HttpClient) { }
 
@@ -38,24 +40,29 @@ export class VeiculoService {
       veiculo.fotos.forEach(file => formData.append('Fotos[]', file, file.name));
     }
 
-    return this.http.post<VeiculoCadastrarDto>(`${this.apiUrl}/cadastrar`, formData);
+    return this.http.post<VeiculoCadastrarDto>(`${this.apiUrl}${this.apiRoute}/cadastrar`, formData);
   }
 
+
+  editarVeiculo(id: number, veiculo: VeiculoCadastrarDto): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}${this.apiRoute}/${id}`, veiculo);
+  }
+
+  deletarVeiculo(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}${this.apiRoute}/${id}`);
+  }
   ListarOpcionais(): Observable<OpcionalDto[]> {
-    return this.http.get<OpcionalDto[]>(`${this.apiUrl}/opcionais`);
+    return this.http.get<OpcionalDto[]>(`${this.apiUrl}${this.apiRoute}/opcionais`);
   }
 
   ObterInformacoesVeiculos(): Observable<InformacoesVeiculosDto> {
-    return this.http.get<InformacoesVeiculosDto>(`${this.apiUrl}/informacoes`);
+    return this.http.get<InformacoesVeiculosDto>(`${this.apiUrl}${this.apiRoute}/informacoes`);
   }
 
-  ObterDadosVeiculoCard(id:number): Observable<VeiculoDto> {
-    return this.http.get<VeiculoDto>(`${this.apiUrl}/${id}`);
+  ObterPorId(id: number): Observable<VeiculoDto> {
+    return this.http.get<VeiculoDto>(`${this.apiUrl}${this.apiRoute}/${id}`);
   }
 
-   ObterCores(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/cores`);
-  }
 
   listarVeiculos(
     pagina: number = 1,
@@ -74,8 +81,20 @@ export class VeiculoService {
       }
     });
 
-    return this.http.get<VeiculoFiltroDto>(this.apiUrl, { params });
+    return this.http.get<VeiculoFiltroDto>(this.apiUrl + this.apiRoute, { params });
   }
+
+  //segregar services especificos
+  ObterCores(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}${this.apiRoute}/cores`);
+  }
+
+
+  obterPortais(): Observable<PortalDto[]> {
+    return this.http.get<PortalDto[]>(`${this.apiUrl}${this.apiRoute}/cores`);
+  }
+
+
 }
 
 

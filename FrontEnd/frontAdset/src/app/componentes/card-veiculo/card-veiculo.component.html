@@ -1,5 +1,5 @@
 <article class="all-content" *ngIf="veiculo">
-  <app-botao-deletar></app-botao-deletar>
+  <app-botao-deletar (click)="deletarVeiculo(veiculo.id)"></app-botao-deletar>
   <div class="vehicle-card-v2">
 
     <div class="vehicle-image-container">
@@ -23,7 +23,7 @@
           <div class="action-buttons">
             <div class="action-item">
               <i routerLink="edicao" class="fas fa-pen-to-square icon-edit" matTooltip="Editar veículo"
-                matTooltipPosition="above" matTooltipClass="custom-tooltip"></i>
+                matTooltipPosition="above" matTooltipClass="custom-tooltip" (click)="editarVeiculo(veiculo.id)"></i>
             </div>
             <div class="action-item">
               <i routerLink="fotos" class="fas fa-camera"></i>
@@ -42,8 +42,8 @@
     </div>
 
   </div>
-  <app-card-portal></app-card-portal>
-  <app-card-portal></app-card-portal>
+  <app-card-portal *ngFor="let portal of portais" [portal]="portal" [pacotesVeiculoPortal]="veiculo.pacotesPortal" ></app-card-portal>
+
 
 
 </article>

@@ -10,7 +10,7 @@
         public int? AnoMin { get; set; }
         public int? AnoMax { get; set; }
         public string? Cor { get; set; }
-        public bool Fotos { get; set; }
+        public bool? Fotos { get; set; }
         public decimal? PrecoMin { get; set; }
         public decimal? PrecoMax { get; set; }
     }

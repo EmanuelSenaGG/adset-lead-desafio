@@ -8,7 +8,7 @@ namespace API.Mappings
     {
         public PortalProfile() {
 
-            CreateMap<Portal, PortalDto>().ReverseMap();
+            CreateMap<Portal, PortalDto>().ForMember(dest => dest.Pacotes, opt => opt.MapFrom(src => src.Pacote));
             CreateMap<Portal, DetalharPortalDto>().ForMember(dest => dest.Pacotes, opt => opt.MapFrom(src => src.Pacote));
 
         }

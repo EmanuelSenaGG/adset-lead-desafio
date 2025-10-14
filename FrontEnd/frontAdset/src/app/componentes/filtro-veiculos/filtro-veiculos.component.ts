@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { VeiculoService } from '../../services/veiculo-service.service';
 import { SwalHandler } from 'src/app/utils/SwalHandler';
 import { VeiculoFiltroDto } from 'src/app/interfaces/Veiculo/VeiculoFiltroDto';
+import { OpcionalDto } from 'src/app/interfaces/Opcional/OpcionalDto';
+import { PortalDto } from 'src/app/interfaces/Portal/PortalDto';
 
 @Component({
   selector: 'app-filtro-veiculos',
@@ -10,7 +12,17 @@ import { VeiculoFiltroDto } from 'src/app/interfaces/Veiculo/VeiculoFiltroDto';
 })
 export class FiltroVeiculosComponent implements OnInit {
 
+
   constructor(private _service: VeiculoService) { }
+  @ViewChild('placa') placa!: ElementRef;
+  @ViewChild('marca') marca!: ElementRef;
+  @ViewChild('modelo') modelo!: ElementRef;
+  @ViewChild('anomin') anoMin!: ElementRef;
+  @ViewChild('anomax') anoMax!: ElementRef;
+  @ViewChild('preco') preco!: ElementRef;
+  @ViewChild('fotos') fotos!: ElementRef;
+  @ViewChild('opcionais') opcional!: ElementRef;
+  @ViewChild('cor') cor!: ElementRef;
 
   paginacaoVeiculos: VeiculoFiltroDto = {
     itens: [],
@@ -26,7 +38,9 @@ export class FiltroVeiculosComponent implements OnInit {
   filtros: any = {};
   anos: number[] = [];
   faixasPreco: { label: string, valorMin: number }[] = [];
-  cores: string [] = []
+  cores: string[] = [];
+  portais: PortalDto[]=[];
+
 
 
   ngOnInit(): void {
@@ -34,6 +48,8 @@ export class FiltroVeiculosComponent implements OnInit {
     this.gerarAnos();
     this.gerarFaixasPreco();
     this.gerarCores();
+    this.obterPortais();
+
   }
 
 
@@ -56,6 +72,22 @@ export class FiltroVeiculosComponent implements OnInit {
       }
     });
   }
+
+
+   obterPortais(): void {
+    this._service.ObterCores().subscribe({
+      next: (dados) => {
+        this.portais = dados;
+      },
+      error: (err) => {
+        SwalHandler.showFalha(
+          'Erro',
+          err?.message || 'Não foi possível carregar os portais'
+        );
+      }
+    });
+  }
+
   gerarFaixasPreco(): void {
     this.faixasPreco = [
       { label: 'Selecione', valorMin: 0 },
@@ -65,6 +97,7 @@ export class FiltroVeiculosComponent implements OnInit {
 
     ];
   }
+  
   listarVeiculos(): void {
     this._service.listarVeiculos(this.paginaAtual, this.tamanhoPagina, this.filtros).subscribe({
       next: (dados) => {
@@ -79,6 +112,40 @@ export class FiltroVeiculosComponent implements OnInit {
     });
   }
 
+obterPrecoMax(valorMin: string): string {
+  switch (valorMin) {
+    case "0":
+    case "90001": return "0";
+    case "10000": return "50000";
+    case "50000": return "90000";
+    default: return "0";
+  }
+}
+
+
+
+  buscarClick(): void {
+  
+    this.filtros = {
+      placa: this.placa.nativeElement.value || null,
+      marca: this.marca.nativeElement.value || null,
+      modelo: this.modelo.nativeElement.value || null,
+      anoMin: this.anoMin.nativeElement.value || null,
+      anoMax: this.anoMax.nativeElement.value || null,
+      precoMin: this.preco.nativeElement.value || null,
+      precoMax: this.obterPrecoMax(this.preco.nativeElement.value),
+      fotos: this.fotos.nativeElement.value || null,
+      opcional: this.opcional.nativeElement.value || null,
+      cor: this.cor.nativeElement.value || null,
+    };
+
+    Object.keys(this.filtros).forEach(
+      (k) => (this.filtros[k] === null || this.filtros[k] === '') && delete this.filtros[k]
+    );
+
+
+    this.listarVeiculos();
+  }
 
   ordenar(campo: string) {
 
@@ -131,12 +198,15 @@ export class FiltroVeiculosComponent implements OnInit {
     this.paginaAtual = 1;
     this.listarVeiculos();
   }
-
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
