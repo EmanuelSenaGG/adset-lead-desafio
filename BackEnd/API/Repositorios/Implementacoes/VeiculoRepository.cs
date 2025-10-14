@@ -29,9 +29,21 @@ namespace API.Repositorios.Implementacoes
             await _context.SaveChangesAsync();
         }
 
-        public async Task Deletar(Veiculo veiculo)
+        public async Task Deletar(int id)
         {
-            _context.Veiculo.Remove(veiculo);
+            Veiculo veiculoAtual = await _context.Veiculo
+                    .Include(v => v.RelacaoVeiculoOpcional)
+                    .Include(v => v.RelacaoVeiculoPacotePortal)
+                    .FirstAsync(v => v.Id.Equals(id));
+
+            if (veiculoAtual.RelacaoVeiculoOpcional?.Any() == true)
+                _context.RelacaoVeiculoOpcional.RemoveRange(veiculoAtual.RelacaoVeiculoOpcional);
+
+            if (veiculoAtual.RelacaoVeiculoPacotePortal?.Any() == true)
+                _context.RelacaoVeiculoPacotePortal.RemoveRange(veiculoAtual.RelacaoVeiculoPacotePortal);
+
+            _context.Veiculo.Remove(veiculoAtual);
+
             await _context.SaveChangesAsync();
         }
 
@@ -112,26 +124,8 @@ namespace API.Repositorios.Implementacoes
             return await _context.Opcional.ToListAsync();
         }
 
-        public async Task<Portal?> ObterPortalPorId(int id)
-        {
-            Portal? portal = await _context.Portal.Include(p => p.Pacote).Where(p => p.Id.Equals(id)).FirstOrDefaultAsync();
-            return portal;
-        }
 
-        public async Task<List<Portal>> ListarPortais()
-        {
-            List<Portal> listaPortais = await _context.Portal.Include(p => p.Pacote).ToListAsync();
-            return listaPortais;
-        }
 
-        public async Task<List<string>> ObterCoresDisponiveis()
-        {
-            List<string> cores = await _context.Veiculo
-                                    .Select(v => v.Cor)
-                                    .Distinct()
-                                    .ToListAsync();
-            return cores;
-        }
     }
 
 }

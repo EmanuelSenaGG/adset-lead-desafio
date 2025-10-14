@@ -26,7 +26,11 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddScoped<IVeiculoService, VeiculoService>();
+builder.Services.AddScoped<ICorService, CorService>();
+builder.Services.AddScoped<IPortalService, PortalService>();
 builder.Services.AddScoped<IVeiculoRepository, VeiculoRepository>();
+builder.Services.AddScoped<ICorRepository, CorRepository>();
+builder.Services.AddScoped<IPortalRepository, PortalRepository>();
 
 builder.Services.AddAutoMapper(cfg =>
 {
@@ -40,9 +44,6 @@ builder.Services.AddAutoMapper(cfg =>
 
 });
 
-
-
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -55,7 +56,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseCors(policy =>policy.AllowAnyOrigin());
+app.UseCors(policy => policy.AllowAnyOrigin());
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthorization();

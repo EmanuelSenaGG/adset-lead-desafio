@@ -1,5 +1,4 @@
 ﻿using API.Dtos;
-using API.Dtos.Portal;
 using API.Dtos.Veiculo;
 using API.Entidades;
 using API.Exceptions;
@@ -40,7 +39,6 @@ namespace API.Services.Implementacoes
             return veiculoAtualizadoDto;
         }
 
-
         public async Task<CadastrarVeiculoDto> CadastrarVeiculoAsync(CadastrarVeiculoDto cadastrarVeiculoDto)
         {
             Veiculo veiculo = _mapper.Map<Veiculo>(cadastrarVeiculoDto);
@@ -59,7 +57,7 @@ namespace API.Services.Implementacoes
                 throw new NotFoundException("Veículo não encontrado");
             }
 
-            await _repository.Deletar(veiculo);
+            await _repository.Deletar(id);
         }
 
         public async Task<VeiculoDto> ObterPorIdAsync(int id)
@@ -73,7 +71,6 @@ namespace API.Services.Implementacoes
             return _mapper.Map<VeiculoDto>(veiculo);
         }
 
-   
         public async Task<List<OpcionalDto>> ListarOpcionaisAsync()
         {
             List<Opcional> opcionais = await _repository.ListarOpcionais();
@@ -125,31 +122,6 @@ namespace API.Services.Implementacoes
             };
         }
 
-        public async Task<List<PortalDto>> ListarPortaisAsync()
-        {
-            List<Portal> portais = await _repository.ListarPortais();
-            List<PortalDto> listaPortalDtos = _mapper.Map<List<PortalDto>>(portais);
-            return listaPortalDtos;
-        }
-
-        public async Task<DetalharPortalDto> ObterPortalPorIDAsync(int id)
-        {
-            Portal? portal = await _repository.ObterPortalPorId(id);
-            if (portal == null)
-            {
-                throw new NotFoundException("Portal não encontrado");
-            }
-
-            DetalharPortalDto detalharPortalDto = _mapper.Map<DetalharPortalDto>(portal);
-            return detalharPortalDto;
- 
-
-        }
-
-        public async Task<List<string>> ObterCoresAsync()
-        {
-            List<string> cores = await _repository.ObterCoresDisponiveis();
-            return cores;
-        }
+     
     }
 }

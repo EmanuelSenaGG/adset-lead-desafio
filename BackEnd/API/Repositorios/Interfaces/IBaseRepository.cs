@@ -6,6 +6,6 @@
         Task<List<T>> Listar();
         Task<T> Inserir(T entity);
         Task Atualizar(T entity);
-        Task Deletar(T entity);
+        Task Deletar(int id);
     }
 }

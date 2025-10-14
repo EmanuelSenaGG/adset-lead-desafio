@@ -88,29 +88,8 @@ namespace API.Controllers
             return Ok(resultado);
         }
 
-        [HttpGet("portal/{id}")]
-        public async Task<IActionResult> ObterDetalhesPortal(int id)
-        {
-            if (id <= 0)
-                return BadRequest("Id informado é invalido");
+      
 
-            DetalharPortalDto portalDetalhes = await _service.ObterPortalPorIDAsync(id);
-            return Ok(portalDetalhes);
-        }
-
-        [HttpGet("portal")]
-        public async Task<IActionResult> ListarPortais()
-        { 
-            List<PortalDto> portais = await _service.ListarPortaisAsync();
-            return Ok(portais);
-        }
-
-        [HttpGet("cores")]
-        public async Task<IActionResult> ListarCores()
-        {
-            List<string> cores = await _service.ObterCoresAsync();
-            return Ok(cores);
-        }
 
 
 
