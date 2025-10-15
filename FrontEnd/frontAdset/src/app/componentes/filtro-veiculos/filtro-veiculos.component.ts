@@ -90,7 +90,7 @@ export class FiltroVeiculosComponent implements OnInit {
 
   private gerarAnos(): void {
     const anoInicial = 2000;
-    const anoFinal = new Date().getFullYear();
+    const anoFinal = 2024;
     this.anos = Array.from({ length: anoFinal - anoInicial + 1 }, (_, i) => anoInicial + i);
   }
 
