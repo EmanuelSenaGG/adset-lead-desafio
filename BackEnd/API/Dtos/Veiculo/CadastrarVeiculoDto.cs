@@ -37,6 +37,7 @@ namespace API.Dtos.Veiculo
 
         public List<IFormFile>? Fotos { get; set; }
 
+        public string? ErrosUpload { get; set; } = null!;
 
     }
 

@@ -7,6 +7,7 @@ using API.Filtro;
 using API.Repositorios.Interfaces;
 using API.Services.Interfaces;
 using AutoMapper;
+using System.Linq.Expressions;
 
 namespace API.Services.Implementacoes
 {
@@ -25,7 +26,7 @@ namespace API.Services.Implementacoes
 
         public async Task<AtualizarVeiculoDto> AtualizarVeiculoAsync(AtualizarVeiculoDto veiculoDto)
         {
-   
+
             Veiculo? veiculoAtual = await _repository.ObterPeloId(veiculoDto.Id.Value);
 
             if (veiculoAtual == null)
@@ -34,7 +35,7 @@ namespace API.Services.Implementacoes
 
             _mapper.Map(veiculoDto, veiculoAtual);
 
-    
+
             List<int>? novosOpcionaisIds = veiculoDto.Opcionais ?? new List<int>();
 
             List<int>? opcionaisAtuaisIds = veiculoAtual.RelacaoVeiculoOpcional
@@ -44,7 +45,7 @@ namespace API.Services.Implementacoes
 
             List<RelacaoVeiculoOpcional> relacionamentosParaRemover = veiculoAtual.RelacaoVeiculoOpcional
                 .Where(r => !novosOpcionaisIds.Contains(r.OpcionalId))
-                .ToList(); 
+                .ToList();
 
 
             List<int>? idsParaAdicionar = novosOpcionaisIds
@@ -62,7 +63,7 @@ namespace API.Services.Implementacoes
                 veiculoAtual.RelacaoVeiculoOpcional.Add(new RelacaoVeiculoOpcional(opcionalId));
             }
 
-        
+
             await _repository.Atualizar(veiculoAtual);
 
             return _mapper.Map<AtualizarVeiculoDto>(veiculoAtual);
@@ -72,58 +73,72 @@ namespace API.Services.Implementacoes
 
         public async Task<CadastrarVeiculoDto> CadastrarVeiculoAsync(CadastrarVeiculoDto cadastrarVeiculoDto)
         {
-           
             Veiculo veiculo = _mapper.Map<Veiculo>(cadastrarVeiculoDto);
+            List<string> errosUpload = new List<string>();
 
-      
             await _repository.Inserir(veiculo);
 
-      
-            if (cadastrarVeiculoDto.Fotos != null && cadastrarVeiculoDto.Fotos.Any())
+
+            if (cadastrarVeiculoDto.Fotos == null || !cadastrarVeiculoDto.Fotos.Any())
             {
-               
-                string pastaRaiz = Path.Combine(_env.WebRootPath, "uploads", "veiculos");
+                return _mapper.Map<CadastrarVeiculoDto>(veiculo);
+            }
 
-        
-                string pastaVeiculo = Path.Combine(pastaRaiz, veiculo.Id.ToString());
-
-             
+            try
+            {
+                string pastaVeiculo = Path.Combine(_env.WebRootPath, "uploads", "veiculos", veiculo.Id.ToString());
                 if (!Directory.Exists(pastaVeiculo))
                 {
                     Directory.CreateDirectory(pastaVeiculo);
                 }
 
-               
-                foreach (var fotoFile in cadastrarVeiculoDto.Fotos)
+                foreach (IFormFile fotoFile in cadastrarVeiculoDto.Fotos)
                 {
-                   
-                    string nomeArquivoUnico = $"{Guid.NewGuid()}{Path.GetExtension(fotoFile.FileName)}";
-                    string caminhoCompletoArquivo = Path.Combine(pastaVeiculo, nomeArquivoUnico);
-
-                 
-                    using (FileStream stream = new FileStream(caminhoCompletoArquivo, FileMode.Create))
+      
+                    try
                     {
-                        await fotoFile.CopyToAsync(stream);
+                        string nomeArquivoUnico = $"{Guid.NewGuid()}{Path.GetExtension(fotoFile.FileName)}";
+                        string caminhoCompletoArquivo = Path.Combine(pastaVeiculo, nomeArquivoUnico);
+
+                        using (FileStream stream = new FileStream(caminhoCompletoArquivo, FileMode.Create))
+                        {
+                            await fotoFile.CopyToAsync(stream);
+                        }
+
+                        Foto fotoEntity = new Foto(
+                            veiculo.Id,
+                            nomeArquivoUnico,
+                            $"/uploads/veiculos/{veiculo.Id}/{nomeArquivoUnico}"
+                        );
+
+                    
+                        await _repository.AdicionarFoto(fotoEntity);
                     }
-
-
-                    Foto fotoEntity = new Foto(
-                         veiculo.Id,
-                         nomeArquivoUnico,
-                         $"/uploads/veiculos/{veiculo.Id}/{nomeArquivoUnico}"
-                     );
-
-
-                    await _repository.AdicionarFoto(fotoEntity);
+                    catch (Exception ex)
+                    {                    
+                        errosUpload.Add($"Falha ao salvar o arquivo: {fotoFile.FileName}");
+                    }
                 }
+
+                await _repository.SalvarAlteracoesAsync();
+            }
+            catch (Exception ex)
+            {           
+                errosUpload.Add("Erro de sistema: Não foi possível criar o diretório para as fotos.");
             }
 
+      
+            CadastrarVeiculoDto dto = _mapper.Map<CadastrarVeiculoDto>(veiculo);
 
-            await _repository.SalvarAlteracoesAsync();
+            if (errosUpload.Any())
+            {
+                dto.ErrosUpload = "O veículo foi cadastrado, mas ocorreram os seguintes problemas: " + string.Join("; ", errosUpload);
+            }
 
-
-            return _mapper.Map<CadastrarVeiculoDto>(veiculo);
+            return dto;
         }
+
+
         public async Task DeletarVeiculoAsync(int id)
         {
             Veiculo? veiculo = await _repository.ObterPeloId(id);
@@ -139,7 +154,7 @@ namespace API.Services.Implementacoes
         {
             Veiculo? veiculo = await _repository.ObterPeloId(id);
 
-            if(veiculo == null)
+            if (veiculo == null)
             {
                 throw new NotFoundException("Veículo não encontrado");
             }
@@ -177,7 +192,7 @@ namespace API.Services.Implementacoes
         {
             const int TAMANHO_MAXIMO_PAGINA = 10;
             if (filtro.TamanhoPagina <= 0)
-                filtro.TamanhoPagina = 10; 
+                filtro.TamanhoPagina = 10;
             else if (filtro.TamanhoPagina > TAMANHO_MAXIMO_PAGINA)
                 filtro.TamanhoPagina = TAMANHO_MAXIMO_PAGINA;
 
@@ -197,53 +212,53 @@ namespace API.Services.Implementacoes
             };
         }
 
-   
+
         public async Task AtualizarRelacoesPacotePortalAsync(List<AtualizarRelacaoVeiculoPacotePortalDto> relacoesDto)
         {
-          
+
             if (relacoesDto == null || !relacoesDto.Any())
             {
-                return; 
+                return;
             }
 
-           
+
             List<int> veiculoIds = relacoesDto.Select(r => r.VeiculoId).Distinct().ToList();
 
-     
+
             List<RelacaoVeiculoPacotePortal> relacoesAtuaisDoBanco = await _repository.ObterRelacoesPorVeiculoIds(veiculoIds);
 
-    
+
             List<RelacaoVeiculoPacotePortal> relacoesParaAdicionar = new List<RelacaoVeiculoPacotePortal>();
             List<RelacaoVeiculoPacotePortal> relacoesParaRemover = new List<RelacaoVeiculoPacotePortal>();
 
-      
+
             foreach (AtualizarRelacaoVeiculoPacotePortalDto dto in relacoesDto)
             {
-             
+
                 RelacaoVeiculoPacotePortal? relacaoExistente = relacoesAtuaisDoBanco.FirstOrDefault(
                     r => r.VeiculoId == dto.VeiculoId && r.PortalId == dto.PortalId
                 );
 
                 if (relacaoExistente != null)
                 {
-                   
+
                     if (dto.PacoteId == null)
                     {
-                      
+
                         relacoesParaRemover.Add(relacaoExistente);
                     }
                     else if (relacaoExistente.PacoteId != dto.PacoteId)
                     {
-                   
+
                         relacaoExistente.SetPacoteId(dto.PacoteId.Value);
                     }
                 }
                 else
                 {
-                  
+
                     if (dto.PacoteId != null)
                     {
-                   
+
                         RelacaoVeiculoPacotePortal novaRelacao = _mapper.Map<RelacaoVeiculoPacotePortal>(dto);
                         relacoesParaAdicionar.Add(novaRelacao);
                     }

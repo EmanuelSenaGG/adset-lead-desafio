@@ -165,14 +165,11 @@ namespace API.Repositorios.Implementacoes
 
         public async Task AdicionarFoto(Foto foto)
         {
-            await _context.Foto.AddAsync(foto);
-          
-
+            await _context.Foto.AddAsync(foto);   
         }
 
         public async Task SalvarAlteracoesAsync()
-        {
-            
+        {        
             await _context.SaveChangesAsync();
         }
 
