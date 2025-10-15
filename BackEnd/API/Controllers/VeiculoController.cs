@@ -65,7 +65,7 @@ namespace API.Controllers
         }
 
 
-        [HttpGet("opcionais")]
+        [HttpGet("Opcionais")]
         public async Task<IActionResult> ListarOpcionais()
         {
             List<OpcionalDto> opcionais = await _service.ListarOpcionaisAsync();
@@ -73,7 +73,7 @@ namespace API.Controllers
 
         }
 
-        [HttpGet("informacoes")]
+        [HttpGet("Informacoes")]
         public async Task<IActionResult> ObterInformacoes()
         {
             InformacoesVeiculosDto informacoes = await _service.ObterInformacoesAsync();

@@ -53,11 +53,11 @@ export class VeiculoService {
     return this.http.delete<void>(`${this.apiUrl}${this.apiRoute}/${id}`);
   }
   ListarOpcionais(): Observable<OpcionalDto[]> {
-    return this.http.get<OpcionalDto[]>(`${this.apiUrl}${this.apiRoute}/opcionais`);
+    return this.http.get<OpcionalDto[]>(`${this.apiUrl}${this.apiRoute}/Opcionais`);
   }
 
   ObterInformacoesVeiculos(): Observable<InformacoesVeiculosDto> {
-    return this.http.get<InformacoesVeiculosDto>(`${this.apiUrl}${this.apiRoute}/informacoes`);
+    return this.http.get<InformacoesVeiculosDto>(`${this.apiUrl}${this.apiRoute}/Informacoes`);
   }
 
   ObterPorId(id: number): Observable<VeiculoDto> {
@@ -87,11 +87,11 @@ export class VeiculoService {
 
 
   atualizarVinculos(dto: AtualizarRelacaoVeiculoPacotePortalDto[]) {
-    return this.http.put<void>(`${this.apiUrl}${this.apiRoute}/vinculos`, dto);
+    return this.http.put<void>(`${this.apiUrl}${this.apiRoute}/Vinculos`, dto);
   }
 
   ObterCores(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}${this.apiRoute}/cores`);
+    return this.http.get<string[]>(`${this.apiUrl}${this.apiRoute}/Cores`);
   }
 }
 
