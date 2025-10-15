@@ -1,17 +1,17 @@
 .filter-panel {
 
-  padding: 0; 
+  padding: 0;
   margin-bottom: 20px;
 
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 
 .filter-form {
   display: flex;
-  flex-direction: column; 
-  align-items: center;   
-  gap: 0; 
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
 }
 
 
@@ -23,9 +23,9 @@
   border: 1px solid #ccc;
   flex-wrap: nowrap;
   overflow-x: auto;
-  width: 100%; 
-  padding: 10px; 
-  box-sizing: border-box; 
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
   background-color: #ffffff;
   border-radius: 0px 0px 15px 15px;
 }
@@ -40,7 +40,7 @@
   font-size: 12px;
 }
 
-.form-group input{
+.form-group input {
   padding: 4px;
   border: 1px solid #ccc;
   border-radius: 20px;
@@ -54,8 +54,8 @@
 }
 
 app-botao-buscar {
-  width: 100%; 
-  display: block; 
+  width: 100%;
+  display: block;
 }
 
 
@@ -63,24 +63,25 @@ app-botao-buscar {
   min-width: 80px;
 
 }
+
 .form-group.small-select2 {
   min-width: 80px;
 
 }
 
-.select-ano{
+.select-ano {
   margin-left: 0px;
 }
 
 .filter-form app-botao-buscar {
-  width: auto; 
+  width: auto;
   display: block;
 }
 
 
 .filter-form app-botao-buscar .btn-green {
-  width: 150px; 
-  border-radius: 8px; 
+  width: 150px;
+  border-radius: 8px;
   padding: 10px 16px;
 }
 
@@ -100,6 +101,7 @@ app-botao-buscar {
   cursor: pointer;
   position: relative;
 }
+
 .small-select2 select {
   appearance: none;
   -moz-appearance: none;
@@ -107,7 +109,7 @@ app-botao-buscar {
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 0px 0px 0px 0px;
-  padding: 0px 30px 4px 10px; 
+  padding: 0px 30px 4px 10px;
   font-size: 10px;
   padding: 4px;
   color: #333;
@@ -124,53 +126,63 @@ app-botao-buscar {
 .small-select::after {
   content: "▼";
   font-size: 10px;
-  color: white;             
-  background-color: #aaa;   
+  color: white;
+  background-color: #aaa;
   border-radius: 0;
-  width: 10px;              
-  height: 30px;             
+  width: 10px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
-  right: 0px;               
+  right: 0px;
   top: 70%;
   transform: translateY(-50%);
-  pointer-events: none;     
+  pointer-events: none;
 
 }
+
 .small-select2::after {
   content: "▼";
   font-size: 10px;
-  color: white;            
-  background-color: #aaa;    
+  color: white;
+  background-color: #aaa;
   border-radius: 0;
-  width: 10px;              
-  height: 30px;             
+  width: 10px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
-  right: 0px;               
- top: 70%;
+  right: 0px;
+  top: 70%;
   transform: translateY(-50%);
-  pointer-events: none;     
+  pointer-events: none;
 
 }
 
 .small-select,
 .small-select2 {
-  flex: 1; 
+  flex: 1;
 }
 
 
 .anos-container {
   display: flex;
-  gap: 0; 
+  gap: 0;
 }
 
 .cards-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; 
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a i {
+  color: green; /* deixa apenas o ícone verde */
 }

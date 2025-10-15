@@ -26,10 +26,7 @@ export class CardVeiculoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
   }
-
-
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.veiculo) {
@@ -39,10 +36,7 @@ export class CardVeiculoComponent implements OnInit {
   }
 
 
-
-
-
-  formatarOpcionais(opcionais: OpcionalVeiculoDto[] | null | undefined): string {
+  private formatarOpcionais(opcionais: OpcionalVeiculoDto[] | null | undefined): string {
     if (opcionais && opcionais.length > 0) {
       return opcionais.map(op => op.descricao).join('\n');
     }
@@ -58,7 +52,7 @@ export class CardVeiculoComponent implements OnInit {
     this._service.deletarVeiculo(id).subscribe({
       next: () => {
         SwalHandler.showSucesso('Sucesso', 'Veículo deletado com sucesso!');
-        this.veiculoDeletado.emit(); // atualiza a lista sem navegar
+        this.veiculoDeletado.emit(); 
       },
       error: () =>
         SwalHandler.showFalha('Falha', 'Ocorreu um erro ao deletar o veículo.')
@@ -66,16 +60,11 @@ export class CardVeiculoComponent implements OnInit {
   }
 
 
-
-  /**
-   * Método público que o FiltroVeiculosComponent vai chamar.
-   * Ele coleta os dados de todos os cards de portal filhos.
-   */
   public coletarDadosDosPortais(): { veiculoId: number, portalId: number, pacoteId: number | null }[] {
     if (!this.cardPortais) {
-      return []; // Retorna array vazio se não houver cards
+      return []; 
     }
-    // Usa o método .map() para chamar 'obterDadosParaSalvar' em cada card filho e retorna um array com os resultados
+ 
     return this.cardPortais.map(card => card.obterDadosParaSalvar());
   }
 

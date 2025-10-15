@@ -36,13 +36,6 @@ namespace API.Repositorios.Implementacoes
                     .Include(v => v.RelacaoVeiculoPacotePortal)
                     .FirstAsync(v => v.Id.Equals(id));
         
-
-            //if (veiculoAtual.RelacaoVeiculoOpcional?.Any() == true)
-            //    _context.RelacaoVeiculoOpcional.RemoveRange(veiculoAtual.RelacaoVeiculoOpcional);
-
-            //if (veiculoAtual.RelacaoVeiculoPacotePortal?.Any() == true)
-            //    _context.RelacaoVeiculoPacotePortal.RemoveRange(veiculoAtual.RelacaoVeiculoPacotePortal);
-
             _context.Veiculo.Remove(veiculoAtual);
 
             await _context.SaveChangesAsync();
@@ -95,6 +88,10 @@ namespace API.Repositorios.Implementacoes
             if (!string.IsNullOrEmpty(filtro.Placa))
                 query = query.Where(v => v.Placa.Contains(filtro.Placa));
 
+            if (!string.IsNullOrEmpty(filtro.Opcional))
+                query = query.Where(v => v.RelacaoVeiculoOpcional
+                             .Any(op => op.Opcional.Descricao.Contains(filtro.Opcional)));
+
             if (filtro.AnoMin.HasValue)
                 query = query.Where(v => v.Ano >= filtro.AnoMin.Value);
 
@@ -114,6 +111,7 @@ namespace API.Repositorios.Implementacoes
             {
                 query = query.Where(v => v.Foto.Any() == filtro.Fotos.Value);
             }
+           
 
 
             int totalRegistros = await query.CountAsync();

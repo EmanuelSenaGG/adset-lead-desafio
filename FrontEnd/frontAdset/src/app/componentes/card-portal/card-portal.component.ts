@@ -21,21 +21,19 @@ export class CardPortalComponent implements OnInit {
   
   }
 
-  atribuirIdSelecionado(): void {
+  private atribuirIdSelecionado(): void {
     if (!this.pacotesVeiculoPortal || !this.portal) return;
 
     let pacote = this.pacotesVeiculoPortal.find(
       p => p.idPortal == this.portal.id
     );
-
     if (pacote) {
       this.pacoteSelecionadoId = pacote.pacoteId;
-
     }
   }
 
 
-  selecionarPacote(pacoteId: number, event: Event): void {
+  public selecionarPacote(pacoteId: number, event: Event): void {
   const checkbox = event.target as HTMLInputElement;
 
   if (checkbox.checked) {
@@ -44,6 +42,7 @@ export class CardPortalComponent implements OnInit {
     this.pacoteSelecionadoId = null; 
   }
 }
+
  public obterDadosParaSalvar(): { veiculoId: number, portalId: number, pacoteId: number | null } {
     return {
       veiculoId: this.veiculoId,

@@ -7,7 +7,7 @@ using API.Filtro;
 using API.Repositorios.Interfaces;
 using API.Services.Interfaces;
 using AutoMapper;
-using System.Linq.Expressions;
+
 
 namespace API.Services.Implementacoes
 {

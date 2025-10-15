@@ -48,7 +48,7 @@
       </div>
       <div class="form-group">
         <label for="opcionais">Opcionais</label>
-        <input type="text" id="opcionais" formControlName="opcionais">
+        <input type="text" id="opcionais" formControlName="opcional">
       </div>
       <div class="form-group small-select">
         <label for="cor">Cor</label>
@@ -66,9 +66,10 @@
 <section class="results-list">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div class="d-flex gap-3">
-      <a href="#" (click)="ordenar('marcaModelo')"><i class="fas fa-sort me-1"></i> Marca / Modelo</a>
-      <a href="#" (click)="ordenar('ano')"><i class="fas fa-sort me-1"></i> Ano</a>
-      <a href="#" (click)="ordenar('preco')">Preço</a>
+      <a  (click)="ordenar('marcaModelo')"><i class="fas fa-sort me-1"></i> Marca / Modelo</a>|
+      <a  (click)="ordenar('ano')"><i class="fas fa-sort me-1"></i> Ano</a> |
+      <a  (click)="ordenar('preco')"><i class="fas fa-sort me-1"></i>Preço</a>|
+       <a  (click)="ordenar('fotos')"><i class="fas fa-sort me-1"></i>Fotos</a>
 
     </div>
     <div class="d-flex align-items-center gap-2">

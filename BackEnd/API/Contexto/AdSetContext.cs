@@ -86,7 +86,7 @@ public partial class AdSetContext : DbContext
                 .HasConstraintName("FK_RelacaoVeiculoPacotePortal_Portal");
 
             entity.HasOne(d => d.Veiculo).WithMany(p => p.RelacaoVeiculoPacotePortal)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_RelacaoVeiculoPacotePortal_Veiculo");
         });
 

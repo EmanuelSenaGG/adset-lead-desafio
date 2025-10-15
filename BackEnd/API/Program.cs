@@ -49,7 +49,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "AdSet API v1");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "AdSet API");
         options.RoutePrefix = string.Empty;
     });
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { VeiculoService } from '../../services/veiculo/veiculo-service.service';
 import { SwalHandler } from 'src/app/utils/SwalHandler';
@@ -46,7 +46,6 @@ export class FiltroVeiculosComponent implements OnInit {
   portais: PortalDto[] = [];
 
 
-
   ngOnInit(): void {
     this.gerarAnos();
     this.inicializarFormulario();
@@ -63,7 +62,6 @@ export class FiltroVeiculosComponent implements OnInit {
     this.salvarSubscription.unsubscribe();
   }
 
-
   private inicializarFormulario(): void {
     this.filtroForm = this.fb.group({
       placa: [''],
@@ -71,36 +69,32 @@ export class FiltroVeiculosComponent implements OnInit {
       modelo: [''],
       anoMin: [''],
       anoMax: [''],
-      precoMin: [''],
+      preco: [''],
       fotos: [''],
-      opcionais: [''], // 'opcionais' foi renomeado para 'opcional' para consistência
+      opcional: [''], 
       cor: ['']
     });
   }
 
-
   private processarSalvamentoEmMassa(): void {
-    if (!this.cardVeiculos) return;
-
+    if (!this.cardVeiculos) {
+      SwalHandler.showAtencao("Atenção","Cadastre um veiculo primeiro");
+      return;
+    }
 
     const payloadFinal: AtualizarRelacaoVeiculoPacotePortalDto[] = this.cardVeiculos.toArray()
       .map(card => card.coletarDadosDosPortais())
       .reduce((acumulador, arrayAtual) => acumulador.concat(arrayAtual), []);
-
-    this.editarVinculos(payloadFinal)
-
-
-
+       this.editarVinculos(payloadFinal)
   }
 
-
-  gerarAnos(): void {
+  private gerarAnos(): void {
     const anoInicial = 2000;
     const anoFinal = new Date().getFullYear();
     this.anos = Array.from({ length: anoFinal - anoInicial + 1 }, (_, i) => anoInicial + i);
   }
 
-  gerarCores(): void {
+  private gerarCores(): void {
     this._veiculoService.ObterCores().subscribe({
       next: (dados) => {
         this.cores = dados;
@@ -126,11 +120,10 @@ export class FiltroVeiculosComponent implements OnInit {
     });
   }
 
-  obterPortais(): void {
+ private obterPortais(): void {
     this._portalService.obterPortais().subscribe({
       next: (dados) => {
         this.portais = dados;
-
       },
       error: (err) => {
         SwalHandler.showFalha(
@@ -141,7 +134,7 @@ export class FiltroVeiculosComponent implements OnInit {
     });
   }
 
-  gerarFaixasPreco(): void {
+  private gerarFaixasPreco(): void {
     this.faixasPreco = [
       { label: 'Selecione', valorMin: 0 },
       { label: '10 mil a 50 mil', valorMin: 10000 },
@@ -151,9 +144,7 @@ export class FiltroVeiculosComponent implements OnInit {
     ];
   }
 
-
-
-  obterPrecoMax(valorMin: string): string {
+  private obterPrecoMax(valorMin: string): string {
     switch (valorMin) {
       case "0":
       case "90001": return "0";
@@ -163,8 +154,7 @@ export class FiltroVeiculosComponent implements OnInit {
     }
   }
 
-  listarVeiculos(): void {
-
+ public listarVeiculos(): void {
     this._veiculoService.listarVeiculos(this.paginaAtual, this.tamanhoPagina, this.filtros).subscribe({
       next: (dados) => {
         this.paginacaoVeiculos = dados;
@@ -178,9 +168,8 @@ export class FiltroVeiculosComponent implements OnInit {
     });
   }
 
-  buscarClick(): void {
+ public buscarClick(): void {
     const formValues = this.filtroForm.value;
-
     this.filtros = {
       placa: formValues.placa || null,
       marca: formValues.marca || null,
@@ -202,11 +191,9 @@ export class FiltroVeiculosComponent implements OnInit {
     this.listarVeiculos();
   }
 
-  ordenar(campo: string) {
-
+  public ordenar(campo: string) {
     const asc = this.ordenacao === campo ? false : true;
     this.ordenacao = asc ? campo : campo + '_desc';
-
     this.paginacaoVeiculos.itens.sort((a, b) => {
       let valorA: any;
       let valorB: any;
@@ -224,30 +211,25 @@ export class FiltroVeiculosComponent implements OnInit {
           valorA = a.preco;
           valorB = b.preco;
           break;
+        case 'fotos':
+        valorA = a.fotos && a.fotos.length > 0 ? 1 : 0;
+        valorB = b.fotos && b.fotos.length > 0 ? 1 : 0;
+        break;
         default:
           return 0;
       }
-
       if (valorA < valorB) return asc ? -1 : 1;
       if (valorA > valorB) return asc ? 1 : -1;
       return 0;
     });
   }
 
-
-  onPaginaMudou(pagina: number) {
+  public onPaginaMudou(pagina: number) {
     this.paginaAtual = pagina;
     this.listarVeiculos();
   }
 
-
-  // aplicarFiltros(filtros: any) {
-  //   this.filtros = filtros;
-  //   this.paginaAtual = 1;
-  //   this.listarVeiculos();
-  // }
-
-  onTamanhoPaginaChange(event: Event): void {
+  public onTamanhoPaginaChange(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     this.tamanhoPagina = Number(selectElement.value);
     this.paginaAtual = 1;
