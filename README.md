@@ -2,6 +2,8 @@
 
 # Desafio para candidatos (AdSet Lead)
 
+# Caso seja de interesse, fiz um video rápido mostrando a realização dos requisitos, segue o link abaixo:
+  Video Explicativo - https://youtu.be/JYKrCfjGtgs
 ## Solicitação:
 - (1) Criar funcionalidade para incluir, consultar, excluir e alterar cadastro de carros e na tela de consulta dos veículos possibilitar a seleção por veículo de apenas um pacote para cada portal iCarros e WebMotors, os pacotes serão (Bronze, Diamante, Platinum ou Básico) e ao clicar em Salvar deverá registrar o pacote selecionado no veículo, conforme layout.
 - (2) O cadastro deverá possuir os campos (Marca, Modelo, Ano, Placa, Km, Cor, Preço, lista de opcionais para atribuir ao veículo ex.: (Ar Condicionado, Alarme, Airbag, Freio ABS)).
