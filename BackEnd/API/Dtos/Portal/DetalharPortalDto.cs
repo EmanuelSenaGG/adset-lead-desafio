@@ -1,4 +1,6 @@
-﻿namespace API.Dtos.Portal
+﻿using API.Dtos.Pacote;
+
+namespace API.Dtos.Portal
 {
     public class DetalharPortalDto
     {

@@ -1,4 +1,4 @@
-﻿using API.Dtos;
+﻿using API.Dtos.Pacote;
 using API.Entidades;
 using AutoMapper;
 

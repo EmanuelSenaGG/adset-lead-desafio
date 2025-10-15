@@ -1,5 +1,7 @@
 ﻿
 
+using API.Dtos.Foto;
+using API.Dtos.RelacaoVeiculoOpcional;
 using API.Dtos.RelacaoVeiculoPacotePortal;
 
 namespace API.Dtos.Veiculo
