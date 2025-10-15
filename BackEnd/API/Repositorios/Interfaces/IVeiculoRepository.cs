@@ -18,6 +18,8 @@ namespace API.Repositorios.Interfaces
         Task SalvarAlteracoesAsync();
         Task AdicionarFoto(Foto foto);
 
+        Task<List<string>> ListarCoresDisponiveis();
+
 
 
 

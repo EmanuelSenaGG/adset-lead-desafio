@@ -5,7 +5,9 @@
 export const environment = {
   production: false,
     apiUrl: 'https://localhost:44388/api',
-    apiBase: 'https://localhost:44388'
+    apiBase: 'https://localhost:44388',
+    veiculoRoute: '/Veiculo',
+    portalRoute: '/Portal'
 
 };
 

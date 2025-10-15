@@ -9,7 +9,7 @@ import { PortalDto } from '../../interfaces/Portal/PortalDto';
 })
 export class PortalService {
   private apiUrl = `${environment.apiUrl}`;
-  private apiRoute = "/Portal"
+  private apiRoute = `${environment.portalRoute}`;
 
   constructor(private http: HttpClient) { }
 

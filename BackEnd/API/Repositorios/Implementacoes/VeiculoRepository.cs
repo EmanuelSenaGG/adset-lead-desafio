@@ -35,12 +35,13 @@ namespace API.Repositorios.Implementacoes
                     .Include(v => v.RelacaoVeiculoOpcional)
                     .Include(v => v.RelacaoVeiculoPacotePortal)
                     .FirstAsync(v => v.Id.Equals(id));
+        
 
-            if (veiculoAtual.RelacaoVeiculoOpcional?.Any() == true)
-                _context.RelacaoVeiculoOpcional.RemoveRange(veiculoAtual.RelacaoVeiculoOpcional);
+            //if (veiculoAtual.RelacaoVeiculoOpcional?.Any() == true)
+            //    _context.RelacaoVeiculoOpcional.RemoveRange(veiculoAtual.RelacaoVeiculoOpcional);
 
-            if (veiculoAtual.RelacaoVeiculoPacotePortal?.Any() == true)
-                _context.RelacaoVeiculoPacotePortal.RemoveRange(veiculoAtual.RelacaoVeiculoPacotePortal);
+            //if (veiculoAtual.RelacaoVeiculoPacotePortal?.Any() == true)
+            //    _context.RelacaoVeiculoPacotePortal.RemoveRange(veiculoAtual.RelacaoVeiculoPacotePortal);
 
             _context.Veiculo.Remove(veiculoAtual);
 
@@ -86,13 +87,13 @@ namespace API.Repositorios.Implementacoes
 
 
             if (!string.IsNullOrEmpty(filtro.Marca))
-                query = query.Where(v => v.Marca.ToLower().Contains(filtro.Marca.ToLower()));
+                query = query.Where(v => v.Marca.Contains(filtro.Marca));
 
             if (!string.IsNullOrEmpty(filtro.Modelo))
-                query = query.Where(v => v.Modelo.ToLower().Contains(filtro.Modelo.ToLower()));
+                query = query.Where(v => v.Modelo.Contains(filtro.Modelo));
 
             if (!string.IsNullOrEmpty(filtro.Placa))
-                query = query.Where(v => v.Placa.ToLower().Contains(filtro.Placa.ToLower()));
+                query = query.Where(v => v.Placa.Contains(filtro.Placa));
 
             if (filtro.AnoMin.HasValue)
                 query = query.Where(v => v.Ano >= filtro.AnoMin.Value);
@@ -101,7 +102,7 @@ namespace API.Repositorios.Implementacoes
                 query = query.Where(v => v.Ano <= filtro.AnoMax.Value);
 
             if (!string.IsNullOrEmpty(filtro.Cor))
-                query = query.Where(v => v.Cor.ToLower().Contains(filtro.Cor.ToLower()));
+                query = query.Where(v => v.Cor.Contains(filtro.Cor));
 
             if (filtro.PrecoMin.HasValue)
                 query = query.Where(v => v.Preco >= filtro.PrecoMin.Value);
@@ -109,11 +110,10 @@ namespace API.Repositorios.Implementacoes
             if (filtro.PrecoMax.HasValue)
                 query = query.Where(v => v.Preco <= filtro.PrecoMax.Value);
 
-            if (filtro.Fotos == true)
-                query = query.Where(v => v.Foto.Any() == true);
-
-            if (filtro.Fotos == false)
-                query = query.Where(v => v.Foto.Any() == true);
+            if (filtro.Fotos.HasValue) 
+            {
+                query = query.Where(v => v.Foto.Any() == filtro.Fotos.Value);
+            }
 
 
             int totalRegistros = await query.CountAsync();
@@ -176,6 +176,14 @@ namespace API.Repositorios.Implementacoes
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<string>> ListarCoresDisponiveis()
+        {
+            List<string> cores = await _context.Veiculo
+                                    .Select(v => v.Cor)
+                                    .Distinct()
+                                    .ToListAsync();
+            return cores;
+        }
     }
 
 }

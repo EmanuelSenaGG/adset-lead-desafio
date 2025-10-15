@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -11,20 +8,25 @@ public partial class RelacaoVeiculoOpcional
 {
     [Key]
     [Column("ID")]
-    public int Id { get; set; }
+    public int Id { get; private set; }
 
     [Column("VeiculoID")]
-    public int VeiculoId { get; set; }
+    public int VeiculoId { get; private set; }
 
     [Column("OpcionalID")]
-    public int OpcionalId { get; set; }
+    public int OpcionalId { get; private set; }
 
     [ForeignKey("OpcionalId")]
     [InverseProperty("RelacaoVeiculoOpcional")]
-    public virtual Opcional Opcional { get; set; } = null!;
+    public virtual Opcional Opcional { get; private set; } = null!;
 
     [JsonIgnore]
     [ForeignKey("VeiculoId")]
     [InverseProperty("RelacaoVeiculoOpcional")]
-    public virtual Veiculo Veiculo { get; set; } = null!;
+    public virtual Veiculo Veiculo { get; private set; } = null!;
+
+    public RelacaoVeiculoOpcional(int opcionalId)
+    {
+        OpcionalId = opcionalId;
+    }
 }

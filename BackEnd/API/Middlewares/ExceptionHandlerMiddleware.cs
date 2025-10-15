@@ -39,25 +39,22 @@ namespace API.Middlewares
                     titulo = "Recurso não encontrado.";
                     break;
 
-                //case BadRequestException:
-                //    statusCode = HttpStatusCode.BadRequest;
-                //    title = "Requisição inválida.";
-                //    break;
-
+         
                 case UnauthorizedAccessException:
                     statusCode = HttpStatusCode.Unauthorized;
                     titulo = "Acesso não autorizado.";
                     break;
 
-                //case ForbiddenException:
-                //    statusCode = HttpStatusCode.Forbidden;
-                //    title = "Acesso negado.";
-                //    break;
+                case Microsoft.EntityFrameworkCore.DbUpdateException:
+                    statusCode = HttpStatusCode.Conflict;
+                    titulo = "Erro ao salvar alterações no banco de dados.";
+                    break;
 
-                //case ConflictException:
-                //    statusCode = HttpStatusCode.Conflict;
-                //    title = "Conflito de dados.";
-                //    break;
+
+                case IOException:
+                    statusCode = HttpStatusCode.InternalServerError;
+                    titulo = "Erro ao acessar o sistema de arquivos.";
+                    break;
 
                 case ValidationException:
                     statusCode = HttpStatusCode.UnprocessableEntity;
@@ -77,7 +74,7 @@ namespace API.Middlewares
                 instance = context.Request.Path
             };
 
-            var jsonOptions = new JsonSerializerOptions
+            JsonSerializerOptions jsonOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };

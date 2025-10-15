@@ -1,6 +1,5 @@
 ﻿
 using API.Dtos;
-using API.Dtos.Portal;
 using API.Dtos.RelacaoVeiculoPacotePortal;
 using API.Dtos.Veiculo;
 using API.Filtro;
@@ -97,7 +96,12 @@ namespace API.Controllers
             return Ok();
         }
 
-
+        [HttpGet("Cores")]
+        public async Task<IActionResult> ListarCores()
+        {
+            List<string> cores = await _service.ObterCoresAsync();
+            return Ok(cores);
+        }
 
     }
 }

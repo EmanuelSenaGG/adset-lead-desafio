@@ -59,11 +59,7 @@ namespace API.Services.Implementacoes
 
             foreach (int opcionalId in idsParaAdicionar)
             {
-                veiculoAtual.RelacaoVeiculoOpcional.Add(new RelacaoVeiculoOpcional
-                {
-                    
-                    OpcionalId = opcionalId
-                });
+                veiculoAtual.RelacaoVeiculoOpcional.Add(new RelacaoVeiculoOpcional(opcionalId));
             }
 
         
@@ -110,15 +106,14 @@ namespace API.Services.Implementacoes
                         await fotoFile.CopyToAsync(stream);
                     }
 
-                    
-                    Foto fotoEntity = new Foto
-                    {              
-                        VeiculoId = veiculo.Id,
-                        Arquivo = nomeArquivoUnico, 
-                        Path = $"/uploads/veiculos/{veiculo.Id}/{nomeArquivoUnico}" 
-                    };
 
-               
+                    Foto fotoEntity = new Foto(
+                         veiculo.Id,
+                         nomeArquivoUnico,
+                         $"/uploads/veiculos/{veiculo.Id}/{nomeArquivoUnico}"
+                     );
+
+
                     await _repository.AdicionarFoto(fotoEntity);
                 }
             }
@@ -240,7 +235,7 @@ namespace API.Services.Implementacoes
                     else if (relacaoExistente.PacoteId != dto.PacoteId)
                     {
                    
-                        relacaoExistente.PacoteId = dto.PacoteId.Value;
+                        relacaoExistente.SetPacoteId(dto.PacoteId.Value);
                     }
                 }
                 else
@@ -257,6 +252,13 @@ namespace API.Services.Implementacoes
 
 
             await _repository.AtualizarRelacoesEmMassa(relacoesParaAdicionar, relacoesParaRemover);
+        }
+
+
+        public async Task<List<string>> ObterCoresAsync()
+        {
+            List<string> cores = await _repository.ListarCoresDisponiveis();
+            return cores;
         }
     }
 }

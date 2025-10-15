@@ -4,7 +4,6 @@ import { SwalHandler } from 'src/app/utils/SwalHandler';
 import { VeiculoFiltroDto } from 'src/app/interfaces/Veiculo/VeiculoFiltroDto';
 import { AtualizarRelacaoVeiculoPacotePortalDto } from 'src/app/interfaces/Veiculo/AtualizarRelacaoVeiculoPacotePortalDto';
 import { PortalDto } from 'src/app/interfaces/Portal/PortalDto';
-import { CorService } from 'src/app/services/cor/cor.service';
 import { EdicaoService } from 'src/app/services/Triggers/edicao.service';
 import { PortalService } from 'src/app/services/portal/portal.service';
 import { CardVeiculoComponent } from '../card-veiculo/card-veiculo.component';
@@ -20,7 +19,6 @@ export class FiltroVeiculosComponent implements OnInit {
   private salvarSubscription!: Subscription;
   constructor(
     private _veiculoService: VeiculoService,
-    private _corService: CorService,
     private _portalService: PortalService,
     private edicaoService: EdicaoService) { }
 
@@ -78,7 +76,7 @@ export class FiltroVeiculosComponent implements OnInit {
       .reduce((acumulador, arrayAtual) => acumulador.concat(arrayAtual), []);
 
       this.editarVinculos(payloadFinal)
-    console.log('PAYLOAD FINAL PARA A API:', payloadFinal);
+    
 
 
   }
@@ -91,7 +89,7 @@ export class FiltroVeiculosComponent implements OnInit {
   }
 
   gerarCores(): void {
-    this._corService.ObterCores().subscribe({
+    this._veiculoService.ObterCores().subscribe({
       next: (dados) => {
         this.cores = dados;
       },

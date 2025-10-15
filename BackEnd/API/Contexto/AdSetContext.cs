@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using API.Entidades;
+﻿using API.Entidades;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Contexto;
@@ -97,29 +95,38 @@ public partial class AdSetContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Veiculo__3214EC27C8994EF0");
         });
 
-        // SEED DATA PARA OPCIONAIS
-        modelBuilder.Entity<Opcional>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Opcional__3214EC27101B7AB8");
-            entity.HasData(
-                new Opcional { Id = 1, Descricao = "Ar Condicionado" },
-                new Opcional { Id = 2, Descricao = "Airbag" },
-                new Opcional { Id = 3, Descricao = "Freios ABS" },
-                new Opcional { Id = 4, Descricao = "Alarme" }
-            );
-        });
+        modelBuilder.Entity<Veiculo>()
+            .HasMany(v => v.RelacaoVeiculoOpcional)
+            .WithOne(r => r.Veiculo)
+            .OnDelete(DeleteBehavior.Cascade);
 
-        // SEED DATA PARA PORTAIS (precisa vir antes de Pacote)
+        modelBuilder.Entity<Veiculo>()
+            .HasMany(v => v.Foto)
+            .WithOne(f => f.Veiculo)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Opcional>(entity =>
+{
+    entity.HasKey(e => e.Id).HasName("PK__Opcional__3214EC27101B7AB8");
+    entity.HasData(
+         new { Id = 1, Descricao = "Ar Condicionado" },
+        new { Id = 2, Descricao = "Airbag" },
+        new { Id = 3, Descricao = "Freios ABS" },
+        new { Id = 4, Descricao = "Alarme" }
+    );
+});
+
+
         modelBuilder.Entity<Portal>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Portal__3214EC27AF26D932");
             entity.HasData(
-                new Portal { Id = 1, Nome = "iCarros" },
-                new Portal { Id = 2, Nome = "Webmotors" }
+                new { Id = 1, Nome = "iCarros" },
+                new { Id = 2, Nome = "Webmotors" }
             );
         });
 
-        // SEED DATA PARA PACOTES (com a chave estrangeira PortalId)
+
         modelBuilder.Entity<Pacote>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Pacote__3214EC278F1A74BF");
@@ -128,16 +135,16 @@ public partial class AdSetContext : DbContext
                 .HasConstraintName("FK_Pacote_Portal");
 
             entity.HasData(
-    
-                new Pacote { Id = 1, Nome = "Básico", PortalId = 1 },
-                new Pacote { Id = 2, Nome = "Bronze", PortalId = 1 },
-                new Pacote { Id = 3, Nome = "Platinum", PortalId = 1 },
-                new Pacote { Id = 4, Nome = "Diamante", PortalId = 1 },
 
-                new Pacote { Id = 5, Nome = "Básico", PortalId = 2 },
-                new Pacote { Id = 6, Nome = "Bronze", PortalId = 2 },
-                new Pacote { Id = 7, Nome = "Platinum", PortalId = 2 },
-                new Pacote { Id = 8, Nome = "Diamante", PortalId = 2 }
+                new { Id = 1, Nome = "Básico", PortalId = 1 },
+                new { Id = 2, Nome = "Bronze", PortalId = 1 },
+                new { Id = 3, Nome = "Platinum", PortalId = 1 },
+                new { Id = 4, Nome = "Diamante", PortalId = 1 },
+
+                new { Id = 5, Nome = "Básico", PortalId = 2 },
+                new { Id = 6, Nome = "Bronze", PortalId = 2 },
+                new { Id = 7, Nome = "Platinum", PortalId = 2 },
+                new { Id = 8, Nome = "Diamante", PortalId = 2 }
 
 
             );

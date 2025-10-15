@@ -16,7 +16,7 @@ import { AtualizarRelacaoVeiculoPacotePortalDto } from 'src/app/interfaces/Veicu
 export class VeiculoService {
 
   private apiUrl = `${environment.apiUrl}`;
-  private apiRoute = "/Veiculo"
+  private apiRoute = `${environment.veiculoRoute}`;
 
   constructor(private http: HttpClient) { }
 
@@ -37,8 +37,8 @@ export class VeiculoService {
       veiculo.opcionais.forEach(opId => formData.append('Opcionais[]', opId));
     }
 
-  if (veiculo.fotos && veiculo.fotos.length > 0) {
-        veiculo.fotos.forEach(file => formData.append('fotos', file, file.name));
+    if (veiculo.fotos && veiculo.fotos.length > 0) {
+      veiculo.fotos.forEach(file => formData.append('fotos', file, file.name));
     }
 
     return this.http.post<VeiculoCadastrarDto>(`${this.apiUrl}${this.apiRoute}`, formData);
@@ -86,10 +86,13 @@ export class VeiculoService {
   }
 
 
-  atualizarVinculos(dto:AtualizarRelacaoVeiculoPacotePortalDto[]){
-       return this.http.put<void>(`${this.apiUrl}${this.apiRoute}/vinculos`, dto);
+  atualizarVinculos(dto: AtualizarRelacaoVeiculoPacotePortalDto[]) {
+    return this.http.put<void>(`${this.apiUrl}${this.apiRoute}/vinculos`, dto);
   }
 
+  ObterCores(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}${this.apiRoute}/cores`);
+  }
 }
 
 

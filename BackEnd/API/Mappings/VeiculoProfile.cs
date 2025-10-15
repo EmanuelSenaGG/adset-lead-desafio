@@ -18,7 +18,7 @@ namespace API.Mappings
             CreateMap<CadastrarVeiculoDto, Veiculo>()
                 .ForMember(dest => dest.RelacaoVeiculoOpcional,
                  opt => opt.MapFrom(src => src.Opcionais != null
-                     ? src.Opcionais.Select(id => new RelacaoVeiculoOpcional { OpcionalId = id }).ToList()
+                     ? src.Opcionais.Select(id => new RelacaoVeiculoOpcional (id)).ToList()
                      : new List<RelacaoVeiculoOpcional>()));
 
          

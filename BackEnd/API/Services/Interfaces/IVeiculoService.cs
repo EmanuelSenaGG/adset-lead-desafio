@@ -15,7 +15,7 @@ namespace API.Services.Interfaces
         Task<List<OpcionalDto>> ListarOpcionaisAsync();
         Task<InformacoesVeiculosDto> ObterInformacoesAsync();
         Task AtualizarRelacoesPacotePortalAsync(List<AtualizarRelacaoVeiculoPacotePortalDto> relacoes);
+        Task<List<string>> ObterCoresAsync();
 
-      
     }
 }
