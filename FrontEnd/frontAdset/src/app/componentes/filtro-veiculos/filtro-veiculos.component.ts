@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { VeiculoService } from '../../services/veiculo/veiculo-service.service';
 import { SwalHandler } from 'src/app/utils/SwalHandler';
 import { VeiculoFiltroDto } from 'src/app/interfaces/Veiculo/VeiculoFiltroDto';
@@ -17,21 +18,15 @@ import { Subscription } from 'rxjs';
 export class FiltroVeiculosComponent implements OnInit {
 
   private salvarSubscription!: Subscription;
+  filtroForm!: FormGroup;
   constructor(
     private _veiculoService: VeiculoService,
     private _portalService: PortalService,
-    private edicaoService: EdicaoService) { }
+    private edicaoService: EdicaoService,
+    private fb: FormBuilder) { }
 
   @ViewChildren('cardveiculo') cardVeiculos!: QueryList<CardVeiculoComponent>;
-  @ViewChild('placa') placa!: ElementRef;
-  @ViewChild('marca') marca!: ElementRef;
-  @ViewChild('modelo') modelo!: ElementRef;
-  @ViewChild('anoMin') anoMin!: ElementRef;
-  @ViewChild('anoMax') anoMax!: ElementRef;
-  @ViewChild('preco') preco!: ElementRef;
-  @ViewChild('fotos') fotos!: ElementRef;
-  @ViewChild('opcionais') opcional!: ElementRef;
-  @ViewChild('cor') cor!: ElementRef;
+
 
   paginacaoVeiculos: VeiculoFiltroDto = {
     itens: [],
@@ -54,6 +49,7 @@ export class FiltroVeiculosComponent implements OnInit {
 
   ngOnInit(): void {
     this.gerarAnos();
+    this.inicializarFormulario();
     this.gerarFaixasPreco();
     this.gerarCores();
     this.obterPortais();
@@ -67,6 +63,22 @@ export class FiltroVeiculosComponent implements OnInit {
     this.salvarSubscription.unsubscribe();
   }
 
+
+  private inicializarFormulario(): void {
+    this.filtroForm = this.fb.group({
+      placa: [''],
+      marca: [''],
+      modelo: [''],
+      anoMin: [''],
+      anoMax: [''],
+      precoMin: [''],
+      fotos: [''],
+      opcionais: [''], // 'opcionais' foi renomeado para 'opcional' para consistência
+      cor: ['']
+    });
+  }
+
+
   private processarSalvamentoEmMassa(): void {
     if (!this.cardVeiculos) return;
 
@@ -75,8 +87,8 @@ export class FiltroVeiculosComponent implements OnInit {
       .map(card => card.coletarDadosDosPortais())
       .reduce((acumulador, arrayAtual) => acumulador.concat(arrayAtual), []);
 
-      this.editarVinculos(payloadFinal)
-    
+    this.editarVinculos(payloadFinal)
+
 
 
   }
@@ -102,17 +114,17 @@ export class FiltroVeiculosComponent implements OnInit {
     });
   }
 
-private editarVinculos(dto: AtualizarRelacaoVeiculoPacotePortalDto[]) {
+  private editarVinculos(dto: AtualizarRelacaoVeiculoPacotePortalDto[]) {
     this._veiculoService.atualizarVinculos(dto).subscribe({
-        next: () => {
-            SwalHandler.showSucesso('Sucesso', 'Vínculos editados com sucesso!');
-            this.listarVeiculos(); 
-        },
-        error: () => {
-            SwalHandler.showFalha('Falha', 'Ocorreu um erro ao processar os vínculos.');
-        }
+      next: () => {
+        SwalHandler.showSucesso('Sucesso', 'Vínculos editados com sucesso!');
+        this.listarVeiculos();
+      },
+      error: () => {
+        SwalHandler.showFalha('Falha', 'Ocorreu um erro ao processar os vínculos.');
+      }
     });
-}
+  }
 
   obterPortais(): void {
     this._portalService.obterPortais().subscribe({
@@ -167,22 +179,23 @@ private editarVinculos(dto: AtualizarRelacaoVeiculoPacotePortalDto[]) {
   }
 
   buscarClick(): void {
+    const formValues = this.filtroForm.value;
 
     this.filtros = {
-      placa: this.placa.nativeElement.value || null,
-      marca: this.marca.nativeElement.value || null,
-      modelo: this.modelo.nativeElement.value || null,
-      anoMin: this.anoMin.nativeElement.value || null,
-      anoMax: this.anoMax.nativeElement.value || null,
-      precoMin: this.preco.nativeElement.value || null,
-      precoMax: this.obterPrecoMax(this.preco.nativeElement.value),
-      fotos: this.fotos.nativeElement.value || null,
-      opcional: this.opcional.nativeElement.value || null,
-      cor: this.cor.nativeElement.value || null,
+      placa: formValues.placa || null,
+      marca: formValues.marca || null,
+      modelo: formValues.modelo || null,
+      anoMin: formValues.anoMin || null,
+      anoMax: formValues.anoMax || null,
+      precoMin: formValues.preco || null,
+      precoMax: this.obterPrecoMax(formValues.preco),
+      fotos: formValues.fotos || null,
+      opcional: formValues.opcional || null,
+      cor: formValues.cor || null,
     };
 
     Object.keys(this.filtros).forEach(
-      (k) => (this.filtros[k] === null || this.filtros[k] === '') && delete this.filtros[k]
+      (k) => (this.filtros[k] === null || this.filtros[k] === '' || this.filtros[k] === '0') && delete this.filtros[k]
     );
 
     this.paginaAtual = 1;

@@ -1,22 +1,22 @@
 <section class="filter-panel">
-  <form class="filter-form" >
+  <form class="filter-form" [formGroup]="filtroForm" (ngSubmit)="buscarClick()" >
     <div class="fields-container">
       <div class="form-group">
         <label for="placa">Placa</label>
-        <input type="text" id="placa" #placa>
+        <input type="text" id="placa" formControlName="placa">
       </div>
       <div class="form-group">
         <label for="marca">Marca</label>
-        <input type="text" id="marca" #marca>
+        <input type="text" id="marca" formControlName="marca">
       </div>
       <div class="form-group">
         <label for="modelo">Modelo</label>
-        <input type="text" id="modelo" #modelo>
+        <input type="text" id="modelo" formControlName="modelo">
       </div>
     <div class="anos-container">
   <div class="form-group small-select">
     <label for="ano-min">Ano Mín</label>
-    <select id="ano-min" #anoMin>
+    <select id="ano-min" formControlName="anoMin">
       <option value="">Selecione</option>
       <option *ngFor="let ano of anos" [value]="ano" #anoMin>{{ ano }}</option>
     </select>
@@ -24,7 +24,7 @@
 
   <div class="form-group small-select2">
     <label for="ano-max">Ano Máx</label>
-    <select id="ano-max" #anoMax>
+    <select id="ano-max" formControlName="anoMax">
       <option value="">Selecione</option>
       <option *ngFor="let ano of anos" [value]="ano" #anoMax>{{ ano }}</option>
     </select>
@@ -33,14 +33,14 @@
 
 <div class="form-group small-select">
   <label for="preco">Preço</label>
-  <select id="preco" #preco>
+  <select id="preco" formControlName="preco">
     <option *ngFor="let faixa of faixasPreco" [value]="faixa.valorMin" >{{ faixa.label }}</option>
   </select>
 </div>
 
       <div class="form-group small-select">
         <label for="fotos">Fotos</label>
-        <select id="fotos" #fotos>
+        <select id="fotos" formControlName="fotos">
           <option value="">Selecione</option>
            <option value="true">Com Fotos</option>
             <option value="false">Sem Fotos</option>
@@ -48,17 +48,17 @@
       </div>
       <div class="form-group">
         <label for="opcionais">Opcionais</label>
-        <input type="text" id="opcionais" #opcionais>
+        <input type="text" id="opcionais" formControlName="opcionais">
       </div>
       <div class="form-group small-select">
         <label for="cor">Cor</label>
-        <select id="cor" #cor>
+        <select id="cor" formControlName="cor">
           <option value="">Selecione</option>
           <option *ngFor="let cor of cores" [value]="cor">{{cor}}</option>
         </select>
       </div>
     </div>
-    <app-botao-buscar (click)="buscarClick()"></app-botao-buscar>
+    <app-botao-buscar ></app-botao-buscar>
   </form>
 
 </section>
