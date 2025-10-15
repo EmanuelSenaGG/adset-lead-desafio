@@ -1,4 +1,4 @@
 export interface OpcionalVeiculoDto {
-  opcionalId: number;
+  id: number;
   descricao: string;
 }

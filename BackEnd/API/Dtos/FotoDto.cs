@@ -3,6 +3,7 @@
     public class FotoDto
     {
         public int Id { get; set; }
-        public string Url { get; set; } = null!;
+        public string Path { get; set; } = null!;
+        public string Arquivo { get; set; } = null!;
     }
 }

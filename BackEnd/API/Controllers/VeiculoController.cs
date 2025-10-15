@@ -1,6 +1,7 @@
 ﻿
 using API.Dtos;
 using API.Dtos.Portal;
+using API.Dtos.RelacaoVeiculoPacotePortal;
 using API.Dtos.Veiculo;
 using API.Filtro;
 using API.Services.Interfaces;
@@ -88,8 +89,13 @@ namespace API.Controllers
             return Ok(resultado);
         }
 
-      
 
+        [HttpPut("Vinculos")]
+        public async Task<IActionResult> AlterarVinculoVeiculoPacotePortal([FromBody] List<AtualizarRelacaoVeiculoPacotePortalDto> relacoes)
+        {
+            await _service.AtualizarRelacoesPacotePortalAsync(relacoes);
+            return Ok();
+        }
 
 
 

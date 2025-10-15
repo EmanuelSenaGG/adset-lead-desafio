@@ -18,7 +18,7 @@
     <label for="ano-min">Ano Mín</label>
     <select id="ano-min" #anoMin>
       <option value="">Selecione</option>
-      <option *ngFor="let ano of anos" [value]="ano" #anomin>{{ ano }}</option>
+      <option *ngFor="let ano of anos" [value]="ano" #anoMin>{{ ano }}</option>
     </select>
   </div>
 
@@ -26,7 +26,7 @@
     <label for="ano-max">Ano Máx</label>
     <select id="ano-max" #anoMax>
       <option value="">Selecione</option>
-      <option *ngFor="let ano of anos" [value]="ano" #anomax>{{ ano }}</option>
+      <option *ngFor="let ano of anos" [value]="ano" #anoMax>{{ ano }}</option>
     </select>
   </div>
 </div>
@@ -85,7 +85,7 @@
 
 
   <div class="cards-container">
-    <app-card-veiculo *ngFor="let veiculo of paginacaoVeiculos.itens" [veiculo]="veiculo">
+    <app-card-veiculo *ngFor="let veiculo of paginacaoVeiculos.itens" [veiculo]="veiculo" [portais]="portais" (veiculoDeletado)="listarVeiculos()" #cardveiculo>
     </app-card-veiculo>
   </div>
 

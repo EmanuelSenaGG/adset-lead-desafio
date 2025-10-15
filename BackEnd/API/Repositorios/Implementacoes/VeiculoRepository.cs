@@ -91,6 +91,9 @@ namespace API.Repositorios.Implementacoes
             if (!string.IsNullOrEmpty(filtro.Modelo))
                 query = query.Where(v => v.Modelo.ToLower().Contains(filtro.Modelo.ToLower()));
 
+            if (!string.IsNullOrEmpty(filtro.Placa))
+                query = query.Where(v => v.Placa.ToLower().Contains(filtro.Placa.ToLower()));
+
             if (filtro.AnoMin.HasValue)
                 query = query.Where(v => v.Ano >= filtro.AnoMin.Value);
 
@@ -105,9 +108,11 @@ namespace API.Repositorios.Implementacoes
 
             if (filtro.PrecoMax.HasValue)
                 query = query.Where(v => v.Preco <= filtro.PrecoMax.Value);
-            if(filtro.Fotos)
+
+            if (filtro.Fotos == true)
                 query = query.Where(v => v.Foto.Any() == true);
-            if (!filtro.Fotos)
+
+            if (filtro.Fotos == false)
                 query = query.Where(v => v.Foto.Any() == true);
 
 
@@ -128,7 +133,48 @@ namespace API.Repositorios.Implementacoes
             return await _context.Opcional.ToListAsync();
         }
 
+        public Task AtualizarRelacaoVeiculoPacotePortal(RelacaoVeiculoPacotePortal relacao)
+        {
+            throw new NotImplementedException();
+        }
 
+        public async Task<List<RelacaoVeiculoPacotePortal>> ObterRelacoesPorVeiculoIds(List<int> veiculoIds)
+        {
+            return await _context.RelacaoVeiculoPacotePortal
+                .Where(r => veiculoIds.Contains(r.VeiculoId))
+                .ToListAsync();
+        }
+
+   
+        public async Task AtualizarRelacoesEmMassa(
+            List<RelacaoVeiculoPacotePortal> paraAdicionar,
+            List<RelacaoVeiculoPacotePortal> paraRemover)
+        {
+            if (paraAdicionar.Any())
+            {
+                await _context.RelacaoVeiculoPacotePortal.AddRangeAsync(paraAdicionar);
+            }
+
+            if (paraRemover.Any())
+            {
+                _context.RelacaoVeiculoPacotePortal.RemoveRange(paraRemover);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AdicionarFoto(Foto foto)
+        {
+            await _context.Foto.AddAsync(foto);
+          
+
+        }
+
+        public async Task SalvarAlteracoesAsync()
+        {
+            
+            await _context.SaveChangesAsync();
+        }
 
     }
 

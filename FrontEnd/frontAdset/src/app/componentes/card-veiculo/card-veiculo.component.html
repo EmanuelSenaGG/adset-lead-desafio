@@ -42,7 +42,7 @@
     </div>
 
   </div>
-  <app-card-portal *ngFor="let portal of portais" [portal]="portal" [pacotesVeiculoPortal]="veiculo.pacotesPortal" ></app-card-portal>
+  <app-card-portal *ngFor="let portal of portais" [portal]="portal" [pacotesVeiculoPortal]="veiculo.pacotesPortal" [veiculoId]="veiculo.id" #cardportal></app-card-portal>
 
 
 

@@ -69,7 +69,7 @@
       <h3>Opcionais</h3>
       <label for="opcional-select">Adicionar Opcional</label>
       <select id="opcional-select" (change)="adicionarOpcional($event)">
-        <option [value]="" disabled selected>Selecione um opcional...</option>
+        <option [value]="" selected disabled selected>Selecione um opcional...</option>
         <option *ngFor="let opcional of opcionaisDisponiveis" [value]="opcional.id">
           {{ opcional.descricao }}
         </option>

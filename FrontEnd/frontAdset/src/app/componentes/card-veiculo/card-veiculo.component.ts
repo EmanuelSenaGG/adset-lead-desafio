@@ -1,10 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { VeiculoService } from '../../services/veiculo-service.service';
+import { Component, Input, OnInit, Output, EventEmitter, QueryList, ViewChildren,SimpleChanges } from '@angular/core';
+import { VeiculoService } from '../../services/veiculo/veiculo-service.service';
 import { VeiculoDto } from '../../interfaces/Veiculo/VeiculoDto';
 import { OpcionalVeiculoDto } from '../../interfaces/Veiculo/OpcionalVeiculoDto';
 import { Router } from '@angular/router';
 import { SwalHandler } from '../../utils/SwalHandler';
 import { PortalDto } from 'src/app/interfaces/Portal/PortalDto';
+import { CardPortalComponent } from '../card-portal/card-portal.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-card-veiculo',
@@ -12,10 +14,10 @@ import { PortalDto } from 'src/app/interfaces/Portal/PortalDto';
   styleUrls: ['./card-veiculo.component.css']
 })
 export class CardVeiculoComponent implements OnInit {
-
   @Input() veiculo!: VeiculoDto;
   @Input() portais!: PortalDto[];
-
+  @Output() veiculoDeletado = new EventEmitter<void>();
+  @ViewChildren('cardportal') cardPortais!: QueryList<CardPortalComponent>;
 
   textoOpcionais!: string;
 
@@ -24,16 +26,19 @@ export class CardVeiculoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-   
+
   }
 
 
 
-  ngOnChanges(): void {
+  ngOnChanges(changes: SimpleChanges): void {
     if (this.veiculo) {
       this.textoOpcionais = this.formatarOpcionais(this.veiculo.opcionais);
+
     }
   }
+
+
 
 
 
@@ -50,17 +55,28 @@ export class CardVeiculoComponent implements OnInit {
   }
 
   deletarVeiculo(id: number): void {
-
     this._service.deletarVeiculo(id).subscribe({
-      next: () =>
-        SwalHandler.showSucessoRedirecionamento(
-          this.router,
-          'Sucesso',
-          'Veículo deletado com sucesso!',
-          '/veiculos'
-        ),
+      next: () => {
+        SwalHandler.showSucesso('Sucesso', 'Veículo deletado com sucesso!');
+        this.veiculoDeletado.emit(); // atualiza a lista sem navegar
+      },
       error: () =>
         SwalHandler.showFalha('Falha', 'Ocorreu um erro ao deletar o veículo.')
     });
   }
+
+
+
+  /**
+   * Método público que o FiltroVeiculosComponent vai chamar.
+   * Ele coleta os dados de todos os cards de portal filhos.
+   */
+  public coletarDadosDosPortais(): { veiculoId: number, portalId: number, pacoteId: number | null }[] {
+    if (!this.cardPortais) {
+      return []; // Retorna array vazio se não houver cards
+    }
+    // Usa o método .map() para chamar 'obterDadosParaSalvar' em cada card filho e retorna um array com os resultados
+    return this.cardPortais.map(card => card.obterDadosParaSalvar());
+  }
+
 }

@@ -10,7 +10,7 @@ import {PainelFotosComponent} from './componentes/painel-fotos/painel-fotos.comp
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'cadastro', component: TelaCadastroComponent },
-   { path: 'edicao', component: TelaEdicaoComponent },
+   { path: 'veiculo/editar/:id', component: TelaEdicaoComponent },
     { path: 'fotos', component: PainelFotosComponent },
 
 ];

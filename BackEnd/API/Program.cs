@@ -56,7 +56,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseCors(policy => policy.AllowAnyOrigin());
+app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthorization();

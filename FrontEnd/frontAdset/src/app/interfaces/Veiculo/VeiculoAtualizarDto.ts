@@ -1,5 +1,4 @@
-import { FotoDto } from "../Foto/FotoDto";
-export interface VeiculoCadastrarDto {
+export interface VeiculoAtualizarDto {
   id?: number;              
   marca: string;            
   modelo: string;           
@@ -9,7 +8,6 @@ export interface VeiculoCadastrarDto {
   cor: string;              
   preco: number;            
   opcionais?: string[];     
-  fotos?: File[]; 
-  FotosCadastro? : FotoDto[]         
+  fotos?: File[];          
 }
 

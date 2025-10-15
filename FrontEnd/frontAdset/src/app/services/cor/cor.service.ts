@@ -1,0 +1,20 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CorService {
+  private apiUrl = `${environment.apiUrl}`;
+  private apiRoute = "/Cor"
+  
+  constructor(private http: HttpClient) { }
+
+
+    ObterCores(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}${this.apiRoute}`);
+  }
+}

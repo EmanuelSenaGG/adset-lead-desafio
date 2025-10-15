@@ -1,9 +1,14 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { VeiculoService } from '../../services/veiculo-service.service';
+import { Component, OnInit, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { VeiculoService } from '../../services/veiculo/veiculo-service.service';
 import { SwalHandler } from 'src/app/utils/SwalHandler';
 import { VeiculoFiltroDto } from 'src/app/interfaces/Veiculo/VeiculoFiltroDto';
-import { OpcionalDto } from 'src/app/interfaces/Opcional/OpcionalDto';
+import { AtualizarRelacaoVeiculoPacotePortalDto } from 'src/app/interfaces/Veiculo/AtualizarRelacaoVeiculoPacotePortalDto';
 import { PortalDto } from 'src/app/interfaces/Portal/PortalDto';
+import { CorService } from 'src/app/services/cor/cor.service';
+import { EdicaoService } from 'src/app/services/Triggers/edicao.service';
+import { PortalService } from 'src/app/services/portal/portal.service';
+import { CardVeiculoComponent } from '../card-veiculo/card-veiculo.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-filtro-veiculos',
@@ -12,13 +17,19 @@ import { PortalDto } from 'src/app/interfaces/Portal/PortalDto';
 })
 export class FiltroVeiculosComponent implements OnInit {
 
+  private salvarSubscription!: Subscription;
+  constructor(
+    private _veiculoService: VeiculoService,
+    private _corService: CorService,
+    private _portalService: PortalService,
+    private edicaoService: EdicaoService) { }
 
-  constructor(private _service: VeiculoService) { }
+  @ViewChildren('cardveiculo') cardVeiculos!: QueryList<CardVeiculoComponent>;
   @ViewChild('placa') placa!: ElementRef;
   @ViewChild('marca') marca!: ElementRef;
   @ViewChild('modelo') modelo!: ElementRef;
-  @ViewChild('anomin') anoMin!: ElementRef;
-  @ViewChild('anomax') anoMax!: ElementRef;
+  @ViewChild('anoMin') anoMin!: ElementRef;
+  @ViewChild('anoMax') anoMax!: ElementRef;
   @ViewChild('preco') preco!: ElementRef;
   @ViewChild('fotos') fotos!: ElementRef;
   @ViewChild('opcionais') opcional!: ElementRef;
@@ -39,16 +50,36 @@ export class FiltroVeiculosComponent implements OnInit {
   anos: number[] = [];
   faixasPreco: { label: string, valorMin: number }[] = [];
   cores: string[] = [];
-  portais: PortalDto[]=[];
+  portais: PortalDto[] = [];
 
 
 
   ngOnInit(): void {
-    this.listarVeiculos();
     this.gerarAnos();
     this.gerarFaixasPreco();
     this.gerarCores();
     this.obterPortais();
+    this.listarVeiculos();
+    this.salvarSubscription = this.edicaoService.salvarTrigger$.subscribe(() => {
+      this.processarSalvamentoEmMassa();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.salvarSubscription.unsubscribe();
+  }
+
+  private processarSalvamentoEmMassa(): void {
+    if (!this.cardVeiculos) return;
+
+
+    const payloadFinal: AtualizarRelacaoVeiculoPacotePortalDto[] = this.cardVeiculos.toArray()
+      .map(card => card.coletarDadosDosPortais())
+      .reduce((acumulador, arrayAtual) => acumulador.concat(arrayAtual), []);
+
+      this.editarVinculos(payloadFinal)
+    console.log('PAYLOAD FINAL PARA A API:', payloadFinal);
+
 
   }
 
@@ -60,7 +91,7 @@ export class FiltroVeiculosComponent implements OnInit {
   }
 
   gerarCores(): void {
-    this._service.ObterCores().subscribe({
+    this._corService.ObterCores().subscribe({
       next: (dados) => {
         this.cores = dados;
       },
@@ -73,11 +104,23 @@ export class FiltroVeiculosComponent implements OnInit {
     });
   }
 
+private editarVinculos(dto: AtualizarRelacaoVeiculoPacotePortalDto[]) {
+    this._veiculoService.atualizarVinculos(dto).subscribe({
+        next: () => {
+            SwalHandler.showSucesso('Sucesso', 'Vínculos editados com sucesso!');
+            this.listarVeiculos(); 
+        },
+        error: () => {
+            SwalHandler.showFalha('Falha', 'Ocorreu um erro ao processar os vínculos.');
+        }
+    });
+}
 
-   obterPortais(): void {
-    this._service.ObterCores().subscribe({
+  obterPortais(): void {
+    this._portalService.obterPortais().subscribe({
       next: (dados) => {
         this.portais = dados;
+
       },
       error: (err) => {
         SwalHandler.showFalha(
@@ -97,9 +140,22 @@ export class FiltroVeiculosComponent implements OnInit {
 
     ];
   }
-  
+
+
+
+  obterPrecoMax(valorMin: string): string {
+    switch (valorMin) {
+      case "0":
+      case "90001": return "0";
+      case "10000": return "50000";
+      case "50000": return "90000";
+      default: return "0";
+    }
+  }
+
   listarVeiculos(): void {
-    this._service.listarVeiculos(this.paginaAtual, this.tamanhoPagina, this.filtros).subscribe({
+
+    this._veiculoService.listarVeiculos(this.paginaAtual, this.tamanhoPagina, this.filtros).subscribe({
       next: (dados) => {
         this.paginacaoVeiculos = dados;
       },
@@ -112,20 +168,8 @@ export class FiltroVeiculosComponent implements OnInit {
     });
   }
 
-obterPrecoMax(valorMin: string): string {
-  switch (valorMin) {
-    case "0":
-    case "90001": return "0";
-    case "10000": return "50000";
-    case "50000": return "90000";
-    default: return "0";
-  }
-}
-
-
-
   buscarClick(): void {
-  
+
     this.filtros = {
       placa: this.placa.nativeElement.value || null,
       marca: this.marca.nativeElement.value || null,
@@ -143,7 +187,7 @@ obterPrecoMax(valorMin: string): string {
       (k) => (this.filtros[k] === null || this.filtros[k] === '') && delete this.filtros[k]
     );
 
-
+    this.paginaAtual = 1;
     this.listarVeiculos();
   }
 
@@ -186,11 +230,11 @@ obterPrecoMax(valorMin: string): string {
   }
 
 
-  aplicarFiltros(filtros: any) {
-    this.filtros = filtros;
-    this.paginaAtual = 1;
-    this.listarVeiculos();
-  }
+  // aplicarFiltros(filtros: any) {
+  //   this.filtros = filtros;
+  //   this.paginaAtual = 1;
+  //   this.listarVeiculos();
+  // }
 
   onTamanhoPaginaChange(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;

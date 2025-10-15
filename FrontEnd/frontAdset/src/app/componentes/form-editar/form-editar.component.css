@@ -84,68 +84,49 @@ h3 {
     padding-left: 10px;
 }
 
-
-.add-opcional-container {
-    display: flex;
-    gap: 10px;
-    margin-top: 5px;
-}
-
-.add-opcional-container input {
-    flex-grow: 1;
-}
-
-#add-opcional-btn {
-    padding: 0 15px;
-    font-size: 24px;
-    font-weight: bold;
-    background-color: #40a52b; 
-    color: #fff; 
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#add-opcional-btn:hover {
-    background-color: #358a24; 
-}
-
 .lista-opcionais-container {
-    margin-top: 15px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 10px;
+  min-height: 45px;
+  border: 1px dashed #40a52b;
 }
-
 
 .opcional-item {
-    background-color: #e7e7e7; 
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  background-color: #40a52b;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  transition: transform 0.2s;
+}
+
+.opcional-item:hover {
+  transform: scale(1.05);
+}
+
+.remove-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.remove-btn:hover {
+  color: #fcd34d;
 }
 
 
-.remover-opcional-btn {
-    background: #aaa;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 20px;
-    text-align: center;
-    transition: background-color 0.2s ease;
-}
-.remover-opcional-btn:hover{
-    background: #888;
-}
 
 
 button[type="submit"] {
@@ -165,3 +146,14 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #358a24; 
 }
+
+  input.ng-invalid.ng-touched {
+    border: 1px solid #e74c3c;
+    background-color: #fff6f6;
+  }
+
+  .erro {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 4px;
+  }

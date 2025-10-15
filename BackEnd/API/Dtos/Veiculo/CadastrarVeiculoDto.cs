@@ -35,6 +35,8 @@ namespace API.Dtos.Veiculo
 
         public List<int>? Opcionais { get; set; }
 
+        public List<IFormFile>? Fotos { get; set; }
+
 
     }
 

@@ -1,3 +1,4 @@
+import { FotoDto } from "../Foto/FotoDto";
 import { PacotePortalDto } from "../Pacote/PacotePortalDto";
 import { OpcionalVeiculoDto } from "../Veiculo/OpcionalVeiculoDto";
 export interface VeiculoDto {
@@ -9,7 +10,7 @@ export interface VeiculoDto {
   km: number | null;
   cor: string;
   preco: number;
-  fotos: string[]; 
+  fotos: FotoDto[]; 
   opcionais: OpcionalVeiculoDto[];
   pacotesPortal: PacotePortalDto[];
 }

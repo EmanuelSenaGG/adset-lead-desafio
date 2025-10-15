@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Output,EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-botao-salvar',
@@ -11,5 +11,11 @@ export class BotaoSalvarComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  @Output() salvar = new EventEmitter<void>(); 
 
+
+  onBotaoClicado(): void {
+   
+    this.salvar.emit();
+  }
 }

@@ -12,22 +12,25 @@ export class CardPortalComponent implements OnInit {
   @Input() portal!: PortalDto;
   @Input() pacotesVeiculoPortal!: PacotePortalDto[];
   pacoteSelecionadoId: number | null = null;
+  @Input() veiculoId!: number;
 
   constructor() { }
 
   ngOnInit(): void {
     this.atribuirIdSelecionado();
+  
   }
 
   atribuirIdSelecionado(): void {
     if (!this.pacotesVeiculoPortal || !this.portal) return;
 
-    const pacote = this.pacotesVeiculoPortal.find(
-      p => p.portalId === this.portal.Id
+    let pacote = this.pacotesVeiculoPortal.find(
+      p => p.idPortal == this.portal.id
     );
 
     if (pacote) {
       this.pacoteSelecionadoId = pacote.pacoteId;
+
     }
   }
 
@@ -41,5 +44,11 @@ export class CardPortalComponent implements OnInit {
     this.pacoteSelecionadoId = null; 
   }
 }
-
+ public obterDadosParaSalvar(): { veiculoId: number, portalId: number, pacoteId: number | null } {
+    return {
+      veiculoId: this.veiculoId,
+      portalId: this.portal.id,
+      pacoteId: this.pacoteSelecionadoId
+    };
+  }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OpcionalDto } from '../../interfaces/Opcional/OpcionalDto';
 import { VeiculoCadastrarDto } from '../../interfaces/Veiculo/VeiculoCadastrarDto';
-import { VeiculoService } from '../../services/veiculo-service.service';
+import { VeiculoService } from '../../services/veiculo/veiculo-service.service';
 import { SwalHandler } from '../../utils/SwalHandler';
 import { Router } from '@angular/router';
 
@@ -45,16 +45,20 @@ export class FormCadastrarComponent implements OnInit {
     });
   }
 
-  adicionarOpcional(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const idSelecionado = Number(select.value);
-    const opcional = this.opcionaisDisponiveis.find(o => o.id === idSelecionado);
+ adicionarOpcional(event: Event): void {
+  const select = event.target as HTMLSelectElement;
+  if (!select.value) return; 
 
-    if (opcional && !this.opcionaisSelecionados.some(o => o.id === opcional.id)) {
-      this.opcionaisSelecionados.push(opcional);
-    }
-    select.value = '';
+  const idSelecionado = Number(select.value);
+  const opcional = this.opcionaisDisponiveis.find(o => o.id === idSelecionado);
+
+  if (opcional && !this.opcionaisSelecionados.some(o => o.id === opcional.id)) {
+    this.opcionaisSelecionados.push(opcional);
   }
+
+  select.value = ''; 
+}
+
 
   removerOpcional(opcionalParaRemover: OpcionalDto): void {
     this.opcionaisSelecionados = this.opcionaisSelecionados.filter(o => o.id !== opcionalParaRemover.id);
@@ -85,7 +89,8 @@ export class FormCadastrarComponent implements OnInit {
       preco: Number(this.veiculoForm.value.preco),
       km: this.veiculoForm.value.km ? Number(this.veiculoForm.value.km) : undefined,
       opcionais: opcionaisIds,
-      fotos: this.selectedFiles
+      fotos: this.selectedFiles,
+      
     };
 
     this.cadastrarVeiculo(veiculoDto);

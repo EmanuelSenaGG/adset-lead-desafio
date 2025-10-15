@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EdicaoService } from 'src/app/services/Triggers/edicao.service';
 
 @Component({
   selector: 'app-barra-acoes',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BarraAcoesComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _EdicaoService:EdicaoService) { }
 
   ngOnInit(): void {
   }
-
+  onSalvarTudoClick(): void {
+    this._EdicaoService.dispararSalvar();
+  }
 }

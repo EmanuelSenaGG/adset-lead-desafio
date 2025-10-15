@@ -1,4 +1,5 @@
 ﻿using API.Dtos;
+using API.Dtos.RelacaoVeiculoPacotePortal;
 using API.Dtos.Veiculo;
 using API.Entidades;
 using API.Exceptions;
@@ -13,16 +14,18 @@ namespace API.Services.Implementacoes
     {
         private readonly IVeiculoRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _env;
 
-        public VeiculoService(IVeiculoRepository repository, IMapper mapper)
+        public VeiculoService(IVeiculoRepository repository, IMapper mapper, IWebHostEnvironment webHostEnvironment)
         {
             _repository = repository;
             _mapper = mapper;
+            _env = webHostEnvironment;
         }
 
         public async Task<AtualizarVeiculoDto> AtualizarVeiculoAsync(AtualizarVeiculoDto veiculoDto)
         {
-       
+   
             Veiculo? veiculoAtual = await _repository.ObterPeloId(veiculoDto.Id.Value);
 
             if (veiculoAtual == null)
@@ -31,24 +34,101 @@ namespace API.Services.Implementacoes
 
             _mapper.Map(veiculoDto, veiculoAtual);
 
+    
+            List<int>? novosOpcionaisIds = veiculoDto.Opcionais ?? new List<int>();
+
+            List<int>? opcionaisAtuaisIds = veiculoAtual.RelacaoVeiculoOpcional
+                                                 .Select(r => r.OpcionalId)
+                                                 .ToList();
+
+
+            List<RelacaoVeiculoOpcional> relacionamentosParaRemover = veiculoAtual.RelacaoVeiculoOpcional
+                .Where(r => !novosOpcionaisIds.Contains(r.OpcionalId))
+                .ToList(); 
+
+
+            List<int>? idsParaAdicionar = novosOpcionaisIds
+                .Where(id => !opcionaisAtuaisIds.Contains(id))
+                .ToList();
+
+
+            foreach (RelacaoVeiculoOpcional relacao in relacionamentosParaRemover)
+            {
+                veiculoAtual.RelacaoVeiculoOpcional.Remove(relacao);
+            }
+
+            foreach (int opcionalId in idsParaAdicionar)
+            {
+                veiculoAtual.RelacaoVeiculoOpcional.Add(new RelacaoVeiculoOpcional
+                {
+                    
+                    OpcionalId = opcionalId
+                });
+            }
+
+        
             await _repository.Atualizar(veiculoAtual);
 
-    
-            AtualizarVeiculoDto veiculoAtualizadoDto = _mapper.Map<AtualizarVeiculoDto>(veiculoAtual);
-
-            return veiculoAtualizadoDto;
+            return _mapper.Map<AtualizarVeiculoDto>(veiculoAtual);
         }
+
+
 
         public async Task<CadastrarVeiculoDto> CadastrarVeiculoAsync(CadastrarVeiculoDto cadastrarVeiculoDto)
         {
+           
             Veiculo veiculo = _mapper.Map<Veiculo>(cadastrarVeiculoDto);
-     
-            Veiculo veiculoInserido = await _repository.Inserir(veiculo);
-   
-            return _mapper.Map<CadastrarVeiculoDto>(veiculoInserido);
 
+      
+            await _repository.Inserir(veiculo);
+
+      
+            if (cadastrarVeiculoDto.Fotos != null && cadastrarVeiculoDto.Fotos.Any())
+            {
+               
+                string pastaRaiz = Path.Combine(_env.WebRootPath, "uploads", "veiculos");
+
+        
+                string pastaVeiculo = Path.Combine(pastaRaiz, veiculo.Id.ToString());
+
+             
+                if (!Directory.Exists(pastaVeiculo))
+                {
+                    Directory.CreateDirectory(pastaVeiculo);
+                }
+
+               
+                foreach (var fotoFile in cadastrarVeiculoDto.Fotos)
+                {
+                   
+                    string nomeArquivoUnico = $"{Guid.NewGuid()}{Path.GetExtension(fotoFile.FileName)}";
+                    string caminhoCompletoArquivo = Path.Combine(pastaVeiculo, nomeArquivoUnico);
+
+                 
+                    using (FileStream stream = new FileStream(caminhoCompletoArquivo, FileMode.Create))
+                    {
+                        await fotoFile.CopyToAsync(stream);
+                    }
+
+                    
+                    Foto fotoEntity = new Foto
+                    {              
+                        VeiculoId = veiculo.Id,
+                        Arquivo = nomeArquivoUnico, 
+                        Path = $"/uploads/veiculos/{veiculo.Id}/{nomeArquivoUnico}" 
+                    };
+
+               
+                    await _repository.AdicionarFoto(fotoEntity);
+                }
+            }
+
+
+            await _repository.SalvarAlteracoesAsync();
+
+
+            return _mapper.Map<CadastrarVeiculoDto>(veiculo);
         }
-
         public async Task DeletarVeiculoAsync(int id)
         {
             Veiculo? veiculo = await _repository.ObterPeloId(id);
@@ -122,6 +202,61 @@ namespace API.Services.Implementacoes
             };
         }
 
+   
+        public async Task AtualizarRelacoesPacotePortalAsync(List<AtualizarRelacaoVeiculoPacotePortalDto> relacoesDto)
+        {
+          
+            if (relacoesDto == null || !relacoesDto.Any())
+            {
+                return; 
+            }
+
+           
+            List<int> veiculoIds = relacoesDto.Select(r => r.VeiculoId).Distinct().ToList();
+
      
+            List<RelacaoVeiculoPacotePortal> relacoesAtuaisDoBanco = await _repository.ObterRelacoesPorVeiculoIds(veiculoIds);
+
+    
+            List<RelacaoVeiculoPacotePortal> relacoesParaAdicionar = new List<RelacaoVeiculoPacotePortal>();
+            List<RelacaoVeiculoPacotePortal> relacoesParaRemover = new List<RelacaoVeiculoPacotePortal>();
+
+      
+            foreach (AtualizarRelacaoVeiculoPacotePortalDto dto in relacoesDto)
+            {
+             
+                RelacaoVeiculoPacotePortal? relacaoExistente = relacoesAtuaisDoBanco.FirstOrDefault(
+                    r => r.VeiculoId == dto.VeiculoId && r.PortalId == dto.PortalId
+                );
+
+                if (relacaoExistente != null)
+                {
+                   
+                    if (dto.PacoteId == null)
+                    {
+                      
+                        relacoesParaRemover.Add(relacaoExistente);
+                    }
+                    else if (relacaoExistente.PacoteId != dto.PacoteId)
+                    {
+                   
+                        relacaoExistente.PacoteId = dto.PacoteId.Value;
+                    }
+                }
+                else
+                {
+                  
+                    if (dto.PacoteId != null)
+                    {
+                   
+                        RelacaoVeiculoPacotePortal novaRelacao = _mapper.Map<RelacaoVeiculoPacotePortal>(dto);
+                        relacoesParaAdicionar.Add(novaRelacao);
+                    }
+                }
+            }
+
+
+            await _repository.AtualizarRelacoesEmMassa(relacoesParaAdicionar, relacoesParaRemover);
+        }
     }
 }

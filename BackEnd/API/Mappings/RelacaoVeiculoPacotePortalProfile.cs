@@ -1,4 +1,4 @@
-﻿using API.Dtos;
+﻿using API.Dtos.RelacaoVeiculoPacotePortal;
 using API.Entidades;
 using AutoMapper;
 
@@ -14,6 +14,8 @@ namespace API.Mappings
                 .ForMember(dest => dest.NomePacote, opt => opt.MapFrom(src => src.Pacote.Nome))
                 .ForMember(dest => dest.NomePortal, opt => opt.MapFrom(src => src.Pacote.Portal.Nome))
                 .ForMember(dest => dest.IdPortal, opt => opt.MapFrom(src => src.Pacote.Portal.Id));
+
+            CreateMap<AtualizarRelacaoVeiculoPacotePortalDto, RelacaoVeiculoPacotePortal>();
 
         }
     }

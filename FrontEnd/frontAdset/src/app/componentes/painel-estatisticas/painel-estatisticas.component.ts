@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { VeiculoService } from '../../services/veiculo-service.service';
+import { VeiculoService } from '../../services/veiculo/veiculo-service.service';
 import { InformacoesVeiculosDto } from '../../interfaces/Veiculo/InformacoesVeiculosDto';
 import { SwalHandler } from 'src/app/utils/SwalHandler';
 

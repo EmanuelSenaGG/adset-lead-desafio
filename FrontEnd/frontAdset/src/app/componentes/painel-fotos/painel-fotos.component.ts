@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FotoDto } from 'src/app/interfaces/Foto/FotoDto';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-painel-fotos',
@@ -6,24 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./painel-fotos.component.css']
 })
 export class PainelFotosComponent implements OnInit {
-
+  @Input() fotos: FotoDto[] = [];
+  apiUrlBase: string = environment.apiBase;
   constructor() { }
 
   ngOnInit(): void {
   }
-  fotos: string[] = [
-    '../../assets/carros/carro.jpg',
-    '../../assets/carros/carro.jpg',
-    '../../assets/carros/carro.jpg',
-    '../../assets/carros/carro.jpg',
-      '../../assets/carros/carro.jpg',
-    '../../assets/carros/carro.jpg',
-    '../../assets/carros/carro.jpg',
-    '../../assets/carros/carro.jpg',
-      '../../assets/carros/carro.jpg',
-    '../../assets/carros/carro.jpg',
-    '../../assets/carros/carro.jpg',
-    '../../assets/carros/carro.jpg',
 
-  ];
 }

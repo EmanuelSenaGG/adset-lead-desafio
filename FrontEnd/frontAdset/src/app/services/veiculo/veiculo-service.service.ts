@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { VeiculoCadastrarDto } from '../interfaces/Veiculo/VeiculoCadastrarDto';
-import { OpcionalDto } from '../interfaces/Opcional/OpcionalDto';
-import { InformacoesVeiculosDto } from '../interfaces/Veiculo/InformacoesVeiculosDto';
-import { VeiculoDto } from '../interfaces/Veiculo/VeiculoDto';
-import { VeiculoFiltroDto } from '../interfaces/Veiculo/VeiculoFiltroDto';
-import { PortalDto } from '../interfaces/Portal/PortalDto';
+import { VeiculoCadastrarDto } from '../../interfaces/Veiculo/VeiculoCadastrarDto';
+import { OpcionalDto } from '../../interfaces/Opcional/OpcionalDto';
+import { InformacoesVeiculosDto } from '../../interfaces/Veiculo/InformacoesVeiculosDto';
+import { VeiculoDto } from '../../interfaces/Veiculo/VeiculoDto';
+import { VeiculoFiltroDto } from '../../interfaces/Veiculo/VeiculoFiltroDto';
+import { AtualizarRelacaoVeiculoPacotePortalDto } from 'src/app/interfaces/Veiculo/AtualizarRelacaoVeiculoPacotePortalDto';
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ import { PortalDto } from '../interfaces/Portal/PortalDto';
 export class VeiculoService {
 
   private apiUrl = `${environment.apiUrl}`;
-  private apiRoute = "/veiculo"
+  private apiRoute = "/Veiculo"
 
   constructor(private http: HttpClient) { }
 
@@ -36,11 +37,11 @@ export class VeiculoService {
       veiculo.opcionais.forEach(opId => formData.append('Opcionais[]', opId));
     }
 
-    if (veiculo.fotos && veiculo.fotos.length > 0) {
-      veiculo.fotos.forEach(file => formData.append('Fotos[]', file, file.name));
+  if (veiculo.fotos && veiculo.fotos.length > 0) {
+        veiculo.fotos.forEach(file => formData.append('fotos', file, file.name));
     }
 
-    return this.http.post<VeiculoCadastrarDto>(`${this.apiUrl}${this.apiRoute}/cadastrar`, formData);
+    return this.http.post<VeiculoCadastrarDto>(`${this.apiUrl}${this.apiRoute}`, formData);
   }
 
 
@@ -84,16 +85,10 @@ export class VeiculoService {
     return this.http.get<VeiculoFiltroDto>(this.apiUrl + this.apiRoute, { params });
   }
 
-  //segregar services especificos
-  ObterCores(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}${this.apiRoute}/cores`);
+
+  atualizarVinculos(dto:AtualizarRelacaoVeiculoPacotePortalDto[]){
+       return this.http.put<void>(`${this.apiUrl}${this.apiRoute}/vinculos`, dto);
   }
-
-
-  obterPortais(): Observable<PortalDto[]> {
-    return this.http.get<PortalDto[]>(`${this.apiUrl}${this.apiRoute}/cores`);
-  }
-
 
 }
 

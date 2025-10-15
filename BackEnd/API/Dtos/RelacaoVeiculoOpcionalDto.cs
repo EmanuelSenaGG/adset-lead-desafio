@@ -2,7 +2,7 @@
 {
     public class RelacaoVeiculoOpcionalDto
     {
-        public int OpcionalId { get; set; }
+        public int Id { get; set; }
         public string? Descricao { get; set; }
     }
 

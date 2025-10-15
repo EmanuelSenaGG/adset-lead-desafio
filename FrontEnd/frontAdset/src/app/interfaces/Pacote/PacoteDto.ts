@@ -1,6 +1,7 @@
 export interface PacoteDto {
-  Id: number;
-  nomePacote: string;
+  id: number;
+  nome: string;
+  portalId : number;
   
 
 }

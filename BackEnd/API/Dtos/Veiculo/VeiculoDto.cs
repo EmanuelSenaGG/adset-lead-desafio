@@ -1,5 +1,7 @@
 ﻿
 
+using API.Dtos.RelacaoVeiculoPacotePortal;
+
 namespace API.Dtos.Veiculo
 {
     public class VeiculoDto
@@ -12,7 +14,7 @@ namespace API.Dtos.Veiculo
         public string Placa { get; set; } = null!;
         public int? Km { get; set; }
         public string Cor { get; set; } = null!;
-        public decimal Preco { get; set; }
+        public decimal Preco { get; set; } 
 
         public List<FotoDto> Fotos { get; set; } = new();
         public List<RelacaoVeiculoOpcionalDto> Opcionais { get; set; } = new();

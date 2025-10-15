@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OpcionalVeiculoDto } from '../../interfaces/Veiculo/OpcionalVeiculoDto';
-import { VeiculoCadastrarDto } from '../../interfaces/Veiculo/VeiculoCadastrarDto';
+import { VeiculoAtualizarDto } from '../../interfaces/Veiculo/VeiculoAtualizarDto';
 import { VeiculoDto } from '../../interfaces/Veiculo/VeiculoDto';
-import { VeiculoService } from '../../services/veiculo-service.service';
+import { VeiculoService } from '../../services/veiculo/veiculo-service.service';
 import { SwalHandler } from '../../utils/SwalHandler';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -23,7 +23,7 @@ export class FormEditarComponent implements OnInit {
     private _service: VeiculoService,
     private router: Router,
     private fb: FormBuilder,
-      private route: ActivatedRoute
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -53,37 +53,40 @@ export class FormEditarComponent implements OnInit {
   }
 
   carregarVeiculo(id: number): void {
-  this._service.ObterPorId(id).subscribe({
-    next: (v: VeiculoDto) => {
-      this.veiculoForm.patchValue({
-        marca: v.marca,
-        modelo: v.modelo,
-        ano: v.ano,
-        placa: v.placa,
-        km: v.km,
-        cor: v.cor,
-        preco: v.preco
-      });
+    this._service.ObterPorId(id).subscribe({
+      next: (v: VeiculoDto) => {
+        this.veiculoForm.patchValue({
+          marca: v.marca,
+          modelo: v.modelo,
+          ano: v.ano,
+          placa: v.placa,
+          km: v.km,
+          cor: v.cor,
+          preco: v.preco
+        });
 
 
-      this.opcionaisSelecionados = v.opcionais ?? [];
-    },
-    error: () => SwalHandler.showFalha('Erro', 'Não foi possível carregar o veículo.')
-  });
-}
+        this.opcionaisSelecionados = [...(v.opcionais ?? [])];
+
+
+      },
+      error: () => SwalHandler.showFalha('Erro', 'Não foi possível carregar o veículo.')
+    });
+  }
   adicionarOpcional(event: Event): void {
     const select = event.target as HTMLSelectElement;
     const idSelecionado = Number(select.value);
-    const opcional = this.opcionaisDisponiveis.find(o => o.opcionalId === idSelecionado);
+    const opcional = this.opcionaisDisponiveis.find(o => o.id === idSelecionado);
 
-    if (opcional && !this.opcionaisSelecionados.some(o => o.opcionalId === opcional.opcionalId)) {
-      this.opcionaisSelecionados.push(opcional);
+    if (opcional && !this.opcionaisSelecionados.some(o => o.id === opcional.id)) {
+      this.opcionaisSelecionados.push({ ...opcional });
     }
+
     select.value = '';
   }
 
   removerOpcional(opcionalParaRemover: OpcionalVeiculoDto): void {
-    this.opcionaisSelecionados = this.opcionaisSelecionados.filter(o => o.opcionalId !== opcionalParaRemover.opcionalId);
+    this.opcionaisSelecionados = this.opcionaisSelecionados.filter(o => o.id !== opcionalParaRemover.id);
   }
 
 
@@ -93,9 +96,10 @@ export class FormEditarComponent implements OnInit {
       this.veiculoForm.markAllAsTouched();
       return;
     }
-    const opcionaisIds = this.opcionaisSelecionados.map(o => o.opcionalId.toString());
+    const opcionaisIds = this.opcionaisSelecionados.map(o => o.id.toString());
 
-    const veiculoDto: VeiculoCadastrarDto = {
+    const veiculoDto: VeiculoAtualizarDto = {
+      id: Number(this.route.snapshot.paramMap.get('id')),
       marca: this.veiculoForm.value.marca,
       modelo: this.veiculoForm.value.modelo,
       ano: Number(this.veiculoForm.value.ano),
@@ -110,21 +114,21 @@ export class FormEditarComponent implements OnInit {
     this.editarVeiculo(veiculoDto);
   }
 
-editarVeiculo(veiculoDto: VeiculoCadastrarDto): void {
-  const id = Number(this.route.snapshot.paramMap.get('id'));
+  editarVeiculo(veiculoDto: VeiculoAtualizarDto): void {
+    
 
-  this._service.editarVeiculo(id, veiculoDto).subscribe({
-    next: () =>
-      SwalHandler.showSucessoRedirecionamento(
-        this.router,
-        'Sucesso',
-        'Veículo editado com sucesso!',
-        '/veiculos' 
-      ),
-    error: () =>
-      SwalHandler.showFalha('Falha', 'Ocorreu um erro ao editar o veículo.')
-  });
-}
+    this._service.editarVeiculo(Number(veiculoDto.id), veiculoDto).subscribe({
+      next: () =>
+        SwalHandler.showSucessoRedirecionamento(
+          this.router,
+          'Sucesso',
+          'Veículo editado com sucesso!',
+          ''
+        ),
+      error: () =>
+        SwalHandler.showFalha('Falha', 'Ocorreu um erro ao editar o veículo.')
+    });
+  }
 
 
 

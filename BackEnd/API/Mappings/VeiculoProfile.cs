@@ -27,6 +27,15 @@ namespace API.Mappings
                                                        .Select(r => r.OpcionalId)
                                                        .ToList()));
 
+            CreateMap<Veiculo, AtualizarVeiculoDto>()
+               .ForMember(dest => dest.Opcionais, opt => opt.MapFrom(src => src.RelacaoVeiculoOpcional
+                                                      .Select(r => r.OpcionalId)
+                                                      .ToList()));
+
+            CreateMap<AtualizarVeiculoDto, Veiculo>()                  
+                .ForMember(dest => dest.RelacaoVeiculoOpcional, opt => opt.Ignore())
+                .ForMember(dest => dest.Foto, opt => opt.Ignore()); 
+
         }
     }
 }
