@@ -1,5 +1,5 @@
 export interface FotoDto {
-  Id: number;
-  Path: string;
-  Arquivo: string;
+  id: number;
+  path: string;
+  arquivo: string;
 }

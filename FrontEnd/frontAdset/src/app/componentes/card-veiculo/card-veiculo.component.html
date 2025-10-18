@@ -3,7 +3,7 @@
   <div class="vehicle-card-v2">
 
     <div class="vehicle-image-container">
-      <img src="../../../assets/carros/carro.jpg" alt="Foto do Veículo">
+      <img src="{{imageBaseUrl}}" alt="Foto do Veículo">
     </div>
 
     <div class="vehicle-content">
@@ -26,7 +26,7 @@
                 matTooltipPosition="above" matTooltipClass="custom-tooltip" (click)="editarVeiculo(veiculo.id)"></i>
             </div>
             <div class="action-item">
-              <i routerLink="fotos" class="fas fa-camera"></i>
+              <i routerLink="fotos" class="fas fa-camera" (click)="verFotosVeiculo(veiculo.id)"></i>
               <span class="action-label">8 Fotos</span>
             </div>
             <div class="action-item" [matTooltip]="textoOpcionais" matTooltipPosition="above"

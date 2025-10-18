@@ -6,6 +6,7 @@ using API.Repositorios.Interfaces;
 using API.Services.Implementacoes;
 using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +44,14 @@ builder.Services.AddAutoMapper(cfg =>
 });
 
 var app = builder.Build();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Uploads")
+    ),
+    RequestPath = "/uploads" 
+});
 
 if (app.Environment.IsDevelopment())
 {

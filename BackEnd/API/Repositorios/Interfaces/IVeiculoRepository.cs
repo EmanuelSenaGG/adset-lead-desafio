@@ -19,6 +19,7 @@ namespace API.Repositorios.Interfaces
         Task AdicionarFoto(Foto foto);
 
         Task<List<string>> ListarCoresDisponiveis();
+        Task<List<Foto>> ListarFotos(int idVeiculo);
 
 
 

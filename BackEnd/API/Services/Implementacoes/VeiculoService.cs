@@ -1,4 +1,5 @@
-﻿using API.Dtos.Opcional;
+﻿using API.Dtos.Foto;
+using API.Dtos.Opcional;
 using API.Dtos.RelacaoVeiculoPacotePortal;
 using API.Dtos.Veiculo;
 using API.Entidades;
@@ -15,13 +16,13 @@ namespace API.Services.Implementacoes
     {
         private readonly IVeiculoRepository _repository;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
 
-        public VeiculoService(IVeiculoRepository repository, IMapper mapper, IWebHostEnvironment webHostEnvironment)
+
+        public VeiculoService(IVeiculoRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
-            _env = webHostEnvironment;
+
         }
 
         public async Task<AtualizarVeiculoDto> AtualizarVeiculoAsync(AtualizarVeiculoDto veiculoDto)
@@ -69,8 +70,6 @@ namespace API.Services.Implementacoes
             return _mapper.Map<AtualizarVeiculoDto>(veiculoAtual);
         }
 
-
-
         public async Task<CadastrarVeiculoDto> CadastrarVeiculoAsync(CadastrarVeiculoDto cadastrarVeiculoDto)
         {
             Veiculo veiculo = _mapper.Map<Veiculo>(cadastrarVeiculoDto);
@@ -78,15 +77,14 @@ namespace API.Services.Implementacoes
 
             await _repository.Inserir(veiculo);
 
-
             if (cadastrarVeiculoDto.Fotos == null || !cadastrarVeiculoDto.Fotos.Any())
-            {
                 return _mapper.Map<CadastrarVeiculoDto>(veiculo);
-            }
 
             try
             {
-                string pastaVeiculo = Path.Combine(_env.WebRootPath, "uploads", "veiculos", veiculo.Id.ToString());
+
+                string pastaVeiculo = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "veiculos", veiculo.Id.ToString());
+
                 if (!Directory.Exists(pastaVeiculo))
                 {
                     Directory.CreateDirectory(pastaVeiculo);
@@ -94,40 +92,40 @@ namespace API.Services.Implementacoes
 
                 foreach (IFormFile fotoFile in cadastrarVeiculoDto.Fotos)
                 {
-      
                     try
                     {
-                        string nomeArquivoUnico = $"{Guid.NewGuid()}{Path.GetExtension(fotoFile.FileName)}";
-                        string caminhoCompletoArquivo = Path.Combine(pastaVeiculo, nomeArquivoUnico);
+                        string extensao = Path.GetExtension(fotoFile.FileName);
+                        string nomeArquivoFisico = $"{Guid.NewGuid()}{extensao}"; 
+                        string caminhoCompletoArquivo = Path.Combine(pastaVeiculo, nomeArquivoFisico);
+                        string pathHttp = string.Concat("veiculos/", veiculo.Id,"/", nomeArquivoFisico);
 
                         using (FileStream stream = new FileStream(caminhoCompletoArquivo, FileMode.Create))
                         {
                             await fotoFile.CopyToAsync(stream);
                         }
 
+                 
                         Foto fotoEntity = new Foto(
                             veiculo.Id,
-                            nomeArquivoUnico,
-                            $"/uploads/veiculos/{veiculo.Id}/{nomeArquivoUnico}"
+                            fotoFile.FileName,
+                            pathHttp
                         );
 
-                    
                         await _repository.AdicionarFoto(fotoEntity);
                     }
-                    catch (Exception ex)
-                    {                    
+                    catch (Exception)
+                    {
                         errosUpload.Add($"Falha ao salvar o arquivo: {fotoFile.FileName}");
                     }
                 }
 
                 await _repository.SalvarAlteracoesAsync();
             }
-            catch (Exception ex)
-            {           
+            catch (Exception)
+            {
                 errosUpload.Add("Erro de sistema: Não foi possível criar o diretório para as fotos.");
             }
 
-      
             CadastrarVeiculoDto dto = _mapper.Map<CadastrarVeiculoDto>(veiculo);
 
             if (errosUpload.Any())
@@ -137,7 +135,6 @@ namespace API.Services.Implementacoes
 
             return dto;
         }
-
 
         public async Task DeletarVeiculoAsync(int id)
         {
@@ -212,7 +209,6 @@ namespace API.Services.Implementacoes
             };
         }
 
-
         public async Task AtualizarRelacoesPacotePortalAsync(List<AtualizarRelacaoVeiculoPacotePortalDto> relacoesDto)
         {
 
@@ -269,11 +265,17 @@ namespace API.Services.Implementacoes
             await _repository.AtualizarRelacoesEmMassa(relacoesParaAdicionar, relacoesParaRemover);
         }
 
-
         public async Task<List<string>> ObterCoresAsync()
         {
             List<string> cores = await _repository.ListarCoresDisponiveis();
             return cores;
+        }
+
+        public async  Task<List<FotoDto>> ObterFotosVeiculoAsync(int idVeiculo)
+        {
+            List<Foto> fotos = await _repository.ListarFotos(idVeiculo);
+            List<FotoDto> fotosDto = _mapper.Map<List<FotoDto>>(fotos);
+            return fotosDto;
         }
     }
 }

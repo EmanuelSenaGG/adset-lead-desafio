@@ -18,6 +18,19 @@ export class SwalHandler {
     });
   }
 
+    static showFalhaRedirecionamento(router: Router, title: string, message: string, redirectUrl: string) {
+    Swal.fire({
+      icon: 'warning',
+      title: title,
+      text: message,
+      timerProgressBar: true,
+      showConfirmButton: false,
+      willClose: () => {
+        router.navigate([redirectUrl]);
+      }
+    });
+  }
+
   static showAtencaoHtml(titulo: string, mensagemHtml: string) {
   Swal.fire({
     icon: 'warning',

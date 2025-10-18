@@ -1,16 +1,32 @@
-<!-- src/app/components/painel-fotos/painel-fotos.component.html -->
-
-<!-- Usamos *ngIf para só mostrar o painel se houver fotos -->
 <div class="photo-panel" *ngIf="fotos && fotos.length > 0">
   <h2>Fotos do Veículo</h2>
   <div class="photos-grid">
-    <div class="photo-card" *ngFor="let foto of fotos">
-      <img [src]="apiUrlBase + foto.Path" [alt]="foto.Arquivo">
+    <div class="photo-card" 
+         *ngFor="let foto of fotos; trackBy: trackByFotoId"
+         [attr.data-foto-id]="foto.id"
+         (mouseenter)="previewFoto(foto.path, $event)"
+         (mouseleave)="closePreview()">
+      
+      <img [src]="foto.path" alt="Foto do veículo" class="vehicle-photo">
 
+      <div class="photo-overlay">
+        <label class="edit-btn">
+          <span>Substituir</span>
+          <input type="file" 
+                 hidden 
+                 (change)="onFotoChange($event, foto.id)" 
+                 accept="image/png, image/jpeg">
+        </label>
+      </div>
     </div>
+  </div>
+
+  <!-- Preview da imagem flutuante -->
+  <div class="preview-card" *ngIf="previewPath" [ngStyle]="{'top.px': previewTop, 'left.px': previewLeft}">
+    <img [src]="previewPath" alt="Preview">
   </div>
 </div>
 
-<div *ngIf="!fotos || fotos.length === 0">
-    <p>Nenhuma foto cadastrada para este veículo.</p>
+<div class="no-photos" *ngIf="!fotos || fotos.length === 0">
+  <p>Nenhuma foto cadastrada para este veículo.</p>
 </div>

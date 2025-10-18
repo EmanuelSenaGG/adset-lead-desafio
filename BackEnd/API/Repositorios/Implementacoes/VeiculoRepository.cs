@@ -179,6 +179,12 @@ namespace API.Repositorios.Implementacoes
                                     .ToListAsync();
             return cores;
         }
+
+        public async Task<List<Foto>> ListarFotos(int idVeiculo)
+        {
+            List<Foto> fotos = await _context.Foto.Where(foto=> foto.VeiculoId == idVeiculo).ToListAsync();
+            return fotos;
+        }
     }
 
 }

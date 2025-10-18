@@ -27,6 +27,7 @@
   <ItemGroup>
     <Folder Include="Entidades\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Uploads\veiculos\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

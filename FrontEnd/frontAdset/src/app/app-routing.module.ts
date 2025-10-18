@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'cadastro', component: TelaCadastroComponent },
    { path: 'veiculo/editar/:id', component: TelaEdicaoComponent },
-    { path: 'fotos', component: PainelFotosComponent },
+    { path: 'veiculo/fotos/:id', component: PainelFotosComponent },
 
 ];
 

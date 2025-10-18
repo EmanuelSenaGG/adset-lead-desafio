@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter, QueryList, ViewChildren,SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, QueryList, ViewChildren, SimpleChanges } from '@angular/core';
 import { VeiculoService } from '../../services/veiculo/veiculo-service.service';
 import { VeiculoDto } from '../../interfaces/Veiculo/VeiculoDto';
 import { OpcionalVeiculoDto } from '../../interfaces/Veiculo/OpcionalVeiculoDto';
@@ -21,6 +21,8 @@ export class CardVeiculoComponent implements OnInit {
 
   textoOpcionais!: string;
 
+  imageBaseUrl!: string;
+
   constructor(private _service: VeiculoService,
     private router: Router
   ) { }
@@ -30,8 +32,14 @@ export class CardVeiculoComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.veiculo) {
+
       this.textoOpcionais = this.formatarOpcionais(this.veiculo.opcionais);
 
+      if (this.veiculo.fotos.length > 0) {
+        this.imageBaseUrl = environment.imagemRoute + this.veiculo.fotos[0].path;
+      } else {
+        this.imageBaseUrl = "../../assets/imageBlank.jpg";
+      }
     }
   }
 
@@ -47,12 +55,14 @@ export class CardVeiculoComponent implements OnInit {
   editarVeiculo(id: number): void {
     this.router.navigate(['/veiculo/editar', id]);
   }
-
+ verFotosVeiculo(id: number): void {
+    this.router.navigate(['/veiculo/fotos', id]);
+  }
   deletarVeiculo(id: number): void {
     this._service.deletarVeiculo(id).subscribe({
       next: () => {
         SwalHandler.showSucesso('Sucesso', 'Veículo deletado com sucesso!');
-        this.veiculoDeletado.emit(); 
+        this.veiculoDeletado.emit();
       },
       error: () =>
         SwalHandler.showFalha('Falha', 'Ocorreu um erro ao deletar o veículo.')
@@ -62,9 +72,9 @@ export class CardVeiculoComponent implements OnInit {
 
   public coletarDadosDosPortais(): { veiculoId: number, portalId: number, pacoteId: number | null }[] {
     if (!this.cardPortais) {
-      return []; 
+      return [];
     }
- 
+
     return this.cardPortais.map(card => card.obterDadosParaSalvar());
   }
 

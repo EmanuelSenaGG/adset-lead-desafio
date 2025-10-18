@@ -1,4 +1,5 @@
-﻿using API.Dtos.Opcional;
+﻿using API.Dtos.Foto;
+using API.Dtos.Opcional;
 using API.Dtos.RelacaoVeiculoPacotePortal;
 using API.Dtos.Veiculo;
 using API.Filtro;
@@ -100,6 +101,17 @@ namespace API.Controllers
         {
             List<string> cores = await _service.ObterCoresAsync();
             return Ok(cores);
+        }
+
+
+        [HttpGet("Fotos/{id}")]
+        public async Task<IActionResult> ObterFotosPeloID(int id)
+        {
+            if (id <= 0)
+                return BadRequest("O ID do veículo é inválido.");
+
+            List<FotoDto> fotos = await _service.ObterFotosVeiculoAsync(id);
+            return Ok(fotos);
         }
 
     }

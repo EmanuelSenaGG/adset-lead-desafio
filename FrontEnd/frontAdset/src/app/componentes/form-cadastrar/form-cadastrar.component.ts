@@ -66,10 +66,19 @@ export class FormCadastrarComponent implements OnInit {
 
 
   onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files) {
-      this.selectedFiles = Array.from(input.files);
-    }
+      const input = event.target as HTMLInputElement;
+
+  if (!input.files) return;
+
+  const files = Array.from(input.files);
+
+  if (files.length > 15) {
+   SwalHandler.showAtencao("Atenção","Limite de 15 imagens para upload");
+    input.value = '';
+    return;
+  }
+
+  this.selectedFiles = files;
   }
 
   onSubmit(): void {

@@ -8,6 +8,7 @@ import { InformacoesVeiculosDto } from '../../interfaces/Veiculo/InformacoesVeic
 import { VeiculoDto } from '../../interfaces/Veiculo/VeiculoDto';
 import { VeiculoFiltroDto } from '../../interfaces/Veiculo/VeiculoFiltroDto';
 import { AtualizarRelacaoVeiculoPacotePortalDto } from 'src/app/interfaces/Veiculo/AtualizarRelacaoVeiculoPacotePortalDto';
+import { FotoDto } from 'src/app/interfaces/Foto/FotoDto';
 
 
 @Injectable({
@@ -92,6 +93,10 @@ console.log(params);
 
   ObterCores(): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}${this.apiRoute}/Cores`);
+  }
+
+  ObterFotosVeiculo(id:number){
+      return this.http.get<FotoDto[]>(`${this.apiUrl}${this.apiRoute}/Fotos/${id}`);
   }
 }
 
