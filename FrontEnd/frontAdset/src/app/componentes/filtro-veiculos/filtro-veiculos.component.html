@@ -34,6 +34,7 @@
 <div class="form-group small-select">
   <label for="preco">Preço</label>
   <select id="preco" formControlName="preco">
+    <option value="0">Selecione</option>
     <option *ngFor="let faixa of faixasPreco" [value]="faixa.valorMin" >{{ faixa.label }}</option>
   </select>
 </div>

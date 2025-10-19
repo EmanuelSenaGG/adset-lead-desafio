@@ -136,7 +136,6 @@ export class FiltroVeiculosComponent implements OnInit {
 
   private gerarFaixasPreco(): void {
     this.faixasPreco = [
-      { label: 'Selecione', valorMin: 0 },
       { label: '10 mil a 50 mil', valorMin: 10000 },
       { label: '50 mil a 90 mil', valorMin: 50000 },
       { label: '+ 90 mil', valorMin: 90001 },

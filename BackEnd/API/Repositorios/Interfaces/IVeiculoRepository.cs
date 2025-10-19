@@ -9,7 +9,6 @@ namespace API.Repositorios.Interfaces
     {
         Task<List<Opcional>> ListarOpcionais();
         Task<(IEnumerable<Veiculo>, int totalRegistros)> ListarPaginadoAsync(VeiculoFiltroDto filtro);
-        Task AtualizarRelacaoVeiculoPacotePortal(RelacaoVeiculoPacotePortal relacao);
         Task<List<RelacaoVeiculoPacotePortal>> ObterRelacoesPorVeiculoIds(List<int> veiculoIds);
         Task AtualizarRelacoesEmMassa(
             List<RelacaoVeiculoPacotePortal> paraAdicionar,
@@ -21,6 +20,7 @@ namespace API.Repositorios.Interfaces
         Task<List<string>> ListarCoresDisponiveis();
         Task<List<Foto>> ListarFotos(int idVeiculo);
 
+     
 
 
 

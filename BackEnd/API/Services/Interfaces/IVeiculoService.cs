@@ -18,5 +18,6 @@ namespace API.Services.Interfaces
         Task AtualizarRelacoesPacotePortalAsync(List<AtualizarRelacaoVeiculoPacotePortalDto> relacoes);
         Task<List<string>> ObterCoresAsync();
         Task<List<FotoDto>> ObterFotosVeiculoAsync(int idVeiculo);
+ 
     }
 }

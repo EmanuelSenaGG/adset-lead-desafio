@@ -4,11 +4,12 @@
 
 export const environment = {
   production: false,
-    apiUrl: 'https://localhost:44388/api',
-    apiBase: 'https://localhost:44388',
-    imagemRoute : "https://localhost:44388/uploads/",
-    veiculoRoute: '/Veiculo',
-    portalRoute: '/Portal'
+  apiUrl: 'https://localhost:44388/api',
+  apiBase: 'https://localhost:44388',
+  imagemRoute: "https://localhost:44388/uploads/",
+  veiculoRoute: '/Veiculo',
+  fotoRoute: '/Foto',
+  portalRoute: '/Portal'
 
 };
 

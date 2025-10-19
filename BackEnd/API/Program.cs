@@ -28,8 +28,10 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<IVeiculoService, VeiculoService>();
 builder.Services.AddScoped<IPortalService, PortalService>();
+builder.Services.AddScoped<IFotoService, FotoService>();
 builder.Services.AddScoped<IVeiculoRepository, VeiculoRepository>();
 builder.Services.AddScoped<IPortalRepository, PortalRepository>();
+builder.Services.AddScoped<IFotoRepository, FotoRepository>();
 
 builder.Services.AddAutoMapper(cfg =>
 {

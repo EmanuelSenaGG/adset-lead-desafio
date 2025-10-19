@@ -145,6 +145,14 @@ namespace API.Services.Implementacoes
             }
 
             await _repository.Deletar(id);
+
+            string caminhoFisicoFotos = Path.Combine(Directory.GetCurrentDirectory(), "Uploads","veiculos", veiculo.Id.ToString());
+
+            if (Directory.Exists(caminhoFisicoFotos))
+            {
+                Directory.Delete(caminhoFisicoFotos, true);            
+            }
+            
         }
 
         public async Task<VeiculoDto> ObterPorIdAsync(int id)
@@ -276,6 +284,11 @@ namespace API.Services.Implementacoes
             List<Foto> fotos = await _repository.ListarFotos(idVeiculo);
             List<FotoDto> fotosDto = _mapper.Map<List<FotoDto>>(fotos);
             return fotosDto;
+        }
+
+        public Task<FotoDto> EditarFotoVeiculoAsync(int idFoto, IFormFile foto)
+        {
+            throw new NotImplementedException();
         }
     }
 }

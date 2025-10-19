@@ -98,6 +98,11 @@ console.log(params);
   ObterFotosVeiculo(id:number){
       return this.http.get<FotoDto[]>(`${this.apiUrl}${this.apiRoute}/Fotos/${id}`);
   }
+
+
+
+
+
 }
 
 

@@ -20,7 +20,7 @@ export class CardVeiculoComponent implements OnInit {
   @ViewChildren('cardportal') cardPortais!: QueryList<CardPortalComponent>;
 
   textoOpcionais!: string;
-
+  labelFotos:string = "0 fotos";
   imageBaseUrl!: string;
 
   constructor(private _service: VeiculoService,
@@ -37,8 +37,9 @@ export class CardVeiculoComponent implements OnInit {
 
       if (this.veiculo.fotos.length > 0) {
         this.imageBaseUrl = environment.imagemRoute + this.veiculo.fotos[0].path;
+        this.labelFotos = this.veiculo.fotos.length > 1 ? this.veiculo.fotos.length + "  fotos" : this.veiculo.fotos.length + " foto";
       } else {
-        this.imageBaseUrl = "../../assets/imageBlank.jpg";
+        this.imageBaseUrl = "../../../assets/carros/imageBlank.jpg";
       }
     }
   }

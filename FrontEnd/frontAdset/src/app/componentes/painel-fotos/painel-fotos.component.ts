@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FotoDto } from 'src/app/interfaces/Foto/FotoDto';
 import { VeiculoService } from 'src/app/services/veiculo/veiculo-service.service';
 import { environment } from 'src/environments/environment';
 import { SwalHandler } from 'src/app/utils/SwalHandler';
 import { Router, ActivatedRoute } from '@angular/router';
+import { finalize } from 'rxjs/operators';
+import { FotoService } from 'src/app/services/foto/foto.service';
 
 @Component({
   selector: 'app-painel-fotos',
@@ -12,10 +14,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class PainelFotosComponent implements OnInit {
   fotos: FotoDto[] = [];
-  previewPath: string | null = null;
-previewTop = 0;
-previewLeft = 0;
-  constructor(private _service: VeiculoService, private router: Router, private route: ActivatedRoute) { }
+
+  public carrosselAberto = false;
+  public fotoAtualIndex = 0;
+  public isLoadingFoto = false;
+  constructor(private _service: VeiculoService, private router: Router, private route: ActivatedRoute, private _fotoService: FotoService) { }
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -29,7 +32,7 @@ previewLeft = 0;
     this._service.ObterFotosVeiculo(id).subscribe({
       next: (fotos: FotoDto[]) => {
         this.fotos = fotos ?? [];
-         this.gerarUrls();
+        this.gerarUrls();
       },
       error: (err) => {
         SwalHandler.showFalha("Falha", "Algo deu errado ao consultar as fotos do veiculo");
@@ -37,40 +40,123 @@ previewLeft = 0;
     });
   }
 
-private gerarUrls() {
-this.fotos.forEach(foto=>{
-  foto.path = environment.imagemRoute + foto.path;
-})
-}
+  private applyCacheBuster(url: string): string {
+    const separador = url.includes('?') ? '&' : '?';
+    const cacheBusterQuery = `v=${new Date().getTime()}`;
+    return `${url}${separador}${cacheBusterQuery}`;
+  }
 
-onFotoChange(event: any, fotoId: number): void {
-    const fileList: FileList | null = event.target.files;
+  private gerarUrls() {
+    this.fotos.forEach(foto => {
+      const baseUrl = environment.imagemRoute + foto.path;
+      foto.path = this.applyCacheBuster(baseUrl);
+    });
+  }
 
-    if (fileList && fileList.length > 0) {
-      const file: File = fileList[0];
-      
-      console.log(`Substituir foto ID: ${fotoId}`);
-      console.log('Arquivo selecionado:', file);
-      event.target.value = null;
+  trackByFotoId(index: number, foto: FotoDto): number {
+    return foto.id;
+  }
+
+  public abrirCarrossel(index: number): void {
+    this.fotoAtualIndex = index;
+    this.carrosselAberto = true;
+  }
+
+
+  public fecharCarrossel(): void {
+    this.carrosselAberto = false;
+  }
+
+
+  public fotoAnterior(): void {
+    this.fotoAtualIndex = (this.fotoAtualIndex > 0)
+      ? this.fotoAtualIndex - 1
+      : this.fotos.length - 1;
+  }
+
+
+  public proximaFoto(): void {
+    this.fotoAtualIndex = (this.fotoAtualIndex < this.fotos.length - 1)
+      ? this.fotoAtualIndex + 1
+      : 0;
+  }
+
+
+  public get fotoAtual(): FotoDto {
+    return this.fotos[this.fotoAtualIndex];
+  }
+
+
+
+  public onExcluirClick(): void {
+    const idParaExcluir = this.fotoAtual.id;
+       this._fotoService.DeletarFoto(idParaExcluir).subscribe({
+      next: () => {
+        SwalHandler.showSucesso("Feito","Foto Deletada com sucesso");
+      },
+      error: (err) => {
+        SwalHandler.showFalha("Falha", "Algo deu errado ao deletar a foto");
+      }
+    });
+
+    this.fotos.splice(this.fotoAtualIndex, 1);
+
+    if (this.fotos.length === 0) {
+      this.fecharCarrossel();
+    } else {
+
+      this.fotoAtualIndex = Math.min(this.fotoAtualIndex, this.fotos.length - 1);
     }
   }
 
 
 
-  trackByFotoId(index: number, foto: any): number {
-    return foto.id;
+
+  public onSubstituirChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const idParaSubstituir = this.fotoAtual.id;
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.fotoAtual.path = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
+      this.isLoadingFoto = true;
+      this._fotoService.EditarFoto(idParaSubstituir, file).pipe(
+        finalize(() => {
+          this.isLoadingFoto = false;
+          input.value = '';
+        })
+      ).subscribe({
+        next: (fotoDto: FotoDto) => {
+
+          const realUrl = environment.imagemRoute + fotoDto.path;
+          const separador = realUrl.includes('?') ? '&' : '?';
+          const cacheBuster = `${separador}v=${new Date().getTime()}`;
+          const finalUrl = this.applyCacheBuster(realUrl);
+
+          this.fotoAtual.path = finalUrl;
+          this.fotoAtual.arquivo = fotoDto.arquivo;
+
+          const fotoNoArray = this.fotos.find(f => f.id === idParaSubstituir);
+          if (fotoNoArray) {
+            fotoNoArray.path = finalUrl;
+            fotoNoArray.arquivo = fotoDto.arquivo;
+          }
+
+          SwalHandler.showSucesso("Feito", "Foto editada com sucesso");
+        },
+
+        error: (err) => {
+          SwalHandler.showFalha("Falhou", "Ocorreu um problema ao efetuar a edição da foto");
+
+        }
+      });
+    }
   }
 
-previewFoto(path: string, event: MouseEvent) {
-  this.previewPath = path;
 
-  const offset = 40; 
-  this.previewTop = event.clientY + offset;
-  this.previewLeft = event.clientX + offset;
-}
-
-closePreview() {
-  this.previewPath = null;
-}
 
 }

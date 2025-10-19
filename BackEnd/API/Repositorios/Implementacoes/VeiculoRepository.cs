@@ -131,10 +131,7 @@ namespace API.Repositorios.Implementacoes
             return await _context.Opcional.ToListAsync();
         }
 
-        public Task AtualizarRelacaoVeiculoPacotePortal(RelacaoVeiculoPacotePortal relacao)
-        {
-            throw new NotImplementedException();
-        }
+   
 
         public async Task<List<RelacaoVeiculoPacotePortal>> ObterRelacoesPorVeiculoIds(List<int> veiculoIds)
         {
@@ -184,6 +181,12 @@ namespace API.Repositorios.Implementacoes
         {
             List<Foto> fotos = await _context.Foto.Where(foto=> foto.VeiculoId == idVeiculo).ToListAsync();
             return fotos;
+        }
+
+        public async Task EditarFoto(Foto foto)
+        {
+            _context.Foto.Update(foto);
+            await _context.SaveChangesAsync();
         }
     }
 

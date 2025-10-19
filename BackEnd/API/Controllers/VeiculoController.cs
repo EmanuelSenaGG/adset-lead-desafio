@@ -114,5 +114,8 @@ namespace API.Controllers
             return Ok(fotos);
         }
 
+
+
+      
     }
 }

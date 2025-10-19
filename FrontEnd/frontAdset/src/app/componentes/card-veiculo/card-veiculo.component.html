@@ -27,7 +27,7 @@
             </div>
             <div class="action-item">
               <i routerLink="fotos" class="fas fa-camera" (click)="verFotosVeiculo(veiculo.id)"></i>
-              <span class="action-label">8 Fotos</span>
+              <span class="action-label">{{labelFotos}}</span>
             </div>
             <div class="action-item" [matTooltip]="textoOpcionais" matTooltipPosition="above"
                 matTooltipClass="custom-tooltip">
