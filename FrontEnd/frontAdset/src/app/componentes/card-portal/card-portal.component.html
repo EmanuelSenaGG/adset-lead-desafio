@@ -1,6 +1,7 @@
-<div class="portal-container">
+
   <div class="portal-title" matTooltip="{{portal.nome}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
-    {{portal.nome}}</div>
+    <img src="{{urlLogo}}"/>
+  </div>
   <div class="portal-content">
      <label *ngFor="let pacote of portal.pacotes">
       <input
@@ -11,4 +12,3 @@
       {{ pacote.nome }}
     </label>
   </div>
-</div>

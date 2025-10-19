@@ -16,7 +16,7 @@ namespace API.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditarFoto(int id, [FromForm] IFormFile foto)
+        public async Task<IActionResult> EditarFoto(int id,  IFormFile foto)
         {
             if (id <= 0)
                 return BadRequest("O ID da foto é inválido.");

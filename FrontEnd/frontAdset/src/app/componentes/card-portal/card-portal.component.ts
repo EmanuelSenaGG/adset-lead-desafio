@@ -14,11 +14,19 @@ export class CardPortalComponent implements OnInit {
   pacoteSelecionadoId: number | null = null;
   @Input() veiculoId!: number;
 
+  urlLogo!: string;
+
+
   constructor() { }
 
   ngOnInit(): void {
     this.atribuirIdSelecionado();
-  
+    if (this.portal.id === 1) {
+      this.urlLogo = "assets/logo/icarros-logo.png";
+    }
+    else {
+      this.urlLogo = "assets/logo/webmotors-logo.png";
+    }
   }
 
   private atribuirIdSelecionado(): void {
@@ -34,16 +42,16 @@ export class CardPortalComponent implements OnInit {
 
 
   public selecionarPacote(pacoteId: number, event: Event): void {
-  const checkbox = event.target as HTMLInputElement;
+    const checkbox = event.target as HTMLInputElement;
 
-  if (checkbox.checked) {
-    this.pacoteSelecionadoId = pacoteId; 
-  } else {
-    this.pacoteSelecionadoId = null; 
+    if (checkbox.checked) {
+      this.pacoteSelecionadoId = pacoteId;
+    } else {
+      this.pacoteSelecionadoId = null;
+    }
   }
-}
 
- public obterDadosParaSalvar(): { veiculoId: number, portalId: number, pacoteId: number | null } {
+  public obterDadosParaSalvar(): { veiculoId: number, portalId: number, pacoteId: number | null } {
     return {
       veiculoId: this.veiculoId,
       portalId: this.portal.id,
