@@ -17,6 +17,39 @@ namespace API.Services.Implementacoes
             _mapper = mapper;
         }
 
+        public async Task CadastrarFotos(int veiculoId, List<IFormFile> fotos)
+        {
+
+            string pastaVeiculo = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "veiculos", veiculoId.ToString());
+
+            if (!Directory.Exists(pastaVeiculo))
+            {
+                Directory.CreateDirectory(pastaVeiculo);
+            }
+
+            foreach (IFormFile fotoFile in fotos)
+            {
+                string extensao = Path.GetExtension(fotoFile.FileName);
+                string nomeArquivoFisico = $"{Guid.NewGuid()}{extensao}";
+                string caminhoCompletoArquivo = Path.Combine(pastaVeiculo, nomeArquivoFisico);
+                string pathHttp = string.Concat("veiculos/", veiculoId, "/", nomeArquivoFisico);
+
+                using (FileStream stream = new FileStream(caminhoCompletoArquivo, FileMode.Create))
+                {
+                    await fotoFile.CopyToAsync(stream);
+                }
+
+                Foto fotoEntity = new Foto(
+                    veiculoId,
+                    fotoFile.FileName,
+                    pathHttp
+                );
+
+                await _repository.InserirFotoAsync(fotoEntity);
+
+            }        
+        }
+
         public async Task DeletarFotoAsync(int idFoto)
         {
             Foto fotoAtual = await _repository.ObterFotoPeloIdAsync(idFoto);

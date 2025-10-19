@@ -18,6 +18,7 @@ export class PainelFotosComponent implements OnInit {
   public carrosselAberto = false;
   public fotoAtualIndex = 0;
   public isLoadingFoto = false;
+  fotosSelecionadas: File[] = [];
   constructor(private _service: VeiculoService, private router: Router, private route: ActivatedRoute, private _fotoService: FotoService) { }
 
   ngOnInit(): void {
@@ -159,4 +160,63 @@ export class PainelFotosComponent implements OnInit {
 
 
 
+abrirSeletorFotos(): void {
+  const input = document.getElementById('inputFotos') as HTMLInputElement;
+  input.click();
+}
+
+onSelecionarFotos(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (!input.files) return;
+
+  const arquivos = Array.from(input.files);
+
+  if (arquivos.length > 15) {
+    SwalHandler.showAtencao('Limite excedido', 'Você pode enviar no máximo 15 fotos.');
+    input.value = ''; 
+    return;
+  }
+
+  this.fotosSelecionadas = arquivos;
+
+  const id = Number(this.route.snapshot.paramMap.get('id'));
+
+  this._fotoService.CadastrarFotos(id, this.fotosSelecionadas).subscribe({
+    next: () => SwalHandler.showSucessoRedirecionamento(this.router,'Sucesso', 'Fotos cadastradas com sucesso!',""),
+    error: () => SwalHandler.showFalha('Erro', 'Não foi possível enviar as fotos.')
+  });
+
+  input.value = ''; 
+}
+
+abrirSeletorMaisFotos(): void {
+  const input = document.getElementById('inputMaisFotos') as HTMLInputElement;
+  input.click();
+}
+
+onSelecionarMaisFotos(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (!input.files) return;
+
+  const arquivos = Array.from(input.files);
+  const restantes = 15 - this.fotos.length;
+
+  if (arquivos.length > restantes) {
+    SwalHandler.showAtencao('Limite excedido', `Você pode enviar no máximo ${restantes} fotos.`);
+    input.value = '';
+    return;
+  }
+
+  const id = Number(this.route.snapshot.paramMap.get('id'));
+
+  this._fotoService.CadastrarFotos(id, arquivos).subscribe({
+    next: () => {
+      SwalHandler.showSucesso('Sucesso', 'Fotos adicionadas com sucesso!');
+      this.carregarFotosVeiculo(id); 
+    },
+    error: () => SwalHandler.showFalha('Erro', 'Não foi possível enviar as fotos.')
+  });
+
+  input.value = '';
+}
 }

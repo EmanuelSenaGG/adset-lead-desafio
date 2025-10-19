@@ -37,5 +37,13 @@ namespace API.Controllers
             await _service.DeletarFotoAsync(id);
             return Ok();
         }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> CadastrarFotosVeiculo(int id, [FromForm] List<IFormFile> fotos)
+        {
+            await _service.CadastrarFotos(id, fotos);
+            return Ok();
+        }
+
     }
 }

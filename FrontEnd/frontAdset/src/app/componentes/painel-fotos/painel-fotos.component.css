@@ -14,7 +14,23 @@
   font-weight: 600; 
 }
 
+.photo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
 
+.photo-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.photo-header-actions {
+  display: flex;
+  align-items: center;
+}
 .photos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -306,4 +322,36 @@
   cursor: not-allowed;
   transform: scale(1); 
 }
+
+.photo-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-cadastrar-fotos {
+  background-color: #40a52b;
+  color: #fff;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-cadastrar-fotos:hover {
+  background-color: #338221;
+}
+
+.btn-cadastrar-fotos svg {
+  width: 18px;
+  height: 18px;
+}
+
+
+
 

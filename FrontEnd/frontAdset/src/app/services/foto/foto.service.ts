@@ -23,6 +23,20 @@ export class FotoService {
   );
 }
 
+public CadastrarFotos(id: number, fotos: File[]): Observable<void> {
+  const formData = new FormData();
+
+  for (const foto of fotos) {
+    formData.append('fotos', foto, foto.name); 
+  }
+
+  return this.http.post<void>(
+    `${this.apiUrl}${this.apiRoute}/${id}`,
+    formData
+  );
+}
+
+
 
   public DeletarFoto(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}${this.apiRoute}/${id}`);

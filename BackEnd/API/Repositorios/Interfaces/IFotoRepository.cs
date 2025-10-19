@@ -7,5 +7,6 @@ namespace API.Repositorios.Interfaces
         Task<Foto> ObterFotoPeloIdAsync(int id);
         Task EditarFotoAsync(Foto foto);
         Task DeletarFotoAsync(Foto foto);
+        Task InserirFotoAsync(Foto foto);
     }
 }

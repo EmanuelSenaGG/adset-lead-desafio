@@ -1,5 +1,5 @@
 ﻿using API.Dtos.Foto;
-using API.Entidades;
+
 
 namespace API.Services.Interfaces
 {
@@ -7,5 +7,7 @@ namespace API.Services.Interfaces
     {
         Task<FotoDto> EditarFotoVeiculoAsync(int idFoto, IFormFile foto);
         Task DeletarFotoAsync(int idFoto);
+
+        Task CadastrarFotos(int veiucloId, List<IFormFile> fotos);
     }
 }

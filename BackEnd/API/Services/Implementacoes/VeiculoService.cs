@@ -286,9 +286,7 @@ namespace API.Services.Implementacoes
             return fotosDto;
         }
 
-        public Task<FotoDto> EditarFotoVeiculoAsync(int idFoto, IFormFile foto)
-        {
-            throw new NotImplementedException();
-        }
+
+    
     }
 }

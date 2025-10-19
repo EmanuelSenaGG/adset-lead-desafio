@@ -25,8 +25,9 @@
               <i routerLink="edicao" class="fas fa-pen-to-square icon-edit" matTooltip="Editar veículo"
                 matTooltipPosition="above" matTooltipClass="custom-tooltip" (click)="editarVeiculo(veiculo.id)"></i>
             </div>
-            <div class="action-item">
-              <i routerLink="fotos" class="fas fa-camera" (click)="verFotosVeiculo(veiculo.id)"></i>
+            <div class="action-item" (click)="verFotosVeiculo(veiculo.id)" matTooltip="Ver Fotos"
+                matTooltipPosition="above" matTooltipClass="custom-tooltip">
+              <i routerLink="fotos" class="fas fa-camera" ></i>
               <span class="action-label">{{labelFotos}}</span>
             </div>
             <div class="action-item" [matTooltip]="textoOpcionais" matTooltipPosition="above"

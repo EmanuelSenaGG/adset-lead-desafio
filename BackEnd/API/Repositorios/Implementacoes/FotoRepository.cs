@@ -26,6 +26,12 @@ namespace API.Repositorios.Implementacoes
             await _context.SaveChangesAsync();
         }
 
+        public async Task InserirFotoAsync(Foto foto)
+        {
+           await _context.Foto.AddAsync(foto);
+           await _context.SaveChangesAsync();
+        }
+
         public async Task<Foto> ObterFotoPeloIdAsync(int id)
         {
             return await _context.Foto.Where(f => f.Id == id).FirstOrDefaultAsync();

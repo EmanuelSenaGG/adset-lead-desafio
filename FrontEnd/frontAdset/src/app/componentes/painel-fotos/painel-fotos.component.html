@@ -1,5 +1,27 @@
 <div class="photo-panel" *ngIf="fotos && fotos.length > 0">
-  <h2>Fotos do Veículo</h2>
+  <div class="photo-header">
+    <h2>Fotos do Veículo</h2>
+
+    <!-- Botão só aparece se houver menos de 15 fotos -->
+    <div class="photo-header-actions" *ngIf="fotos.length < 15">
+      <input
+        type="file"
+        id="inputMaisFotos"
+        multiple
+        accept="image/*"
+        (change)="onSelecionarMaisFotos($event)"
+        hidden
+      />
+      <button class="btn-cadastrar-fotos" (click)="abrirSeletorMaisFotos()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M10.5 2a.5.5 0 0 1 .39.188l.813 1.016H13a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h1.297l.812-1.016A.5.5 0 0 1 5.5 2h5zm-2.5 3a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm0 1a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z"/>
+        </svg>
+        <span> + Fotos</span>
+      </button>
+    </div>
+  </div>
+
+  
   <div class="photos-grid">
     <div class="photo-card" 
          *ngFor="let foto of fotos; let i = index; trackBy: trackByFotoId"
@@ -14,6 +36,24 @@
 
 <div class="no-photos" *ngIf="!fotos || fotos.length === 0">
   <p>Nenhuma foto cadastrada para este veículo.</p>
+
+  <div class="photo-actions">
+    <input
+      type="file"
+      id="inputFotos"
+      multiple
+      accept="image/*"
+      (change)="onSelecionarFotos($event)"
+      hidden
+    />
+<button class="btn-cadastrar-fotos" (click)="abrirSeletorFotos()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+    <path d="M10.5 2a.5.5 0 0 1 .39.188l.813 1.016H13a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h1.297l.812-1.016A.5.5 0 0 1 5.5 2h5zm-2.5 3a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm0 1a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z"/>
+  </svg>
+  <span>Cadastrar Fotos</span>
+</button>
+
+  </div>
 </div>
 
 
