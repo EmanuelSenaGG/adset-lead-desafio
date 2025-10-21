@@ -9,6 +9,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 
+
+string wwwrootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+string uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+
+if (!Directory.Exists(wwwrootPath))
+{
+    Directory.CreateDirectory(wwwrootPath);
+}
+
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AdSetContext>(options =>
