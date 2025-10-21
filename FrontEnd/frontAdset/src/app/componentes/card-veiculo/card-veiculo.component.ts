@@ -16,7 +16,7 @@ import { environment } from 'src/environments/environment';
 export class CardVeiculoComponent implements OnInit {
   @Input() veiculo!: VeiculoDto;
   @Input() portais!: PortalDto[];
-  @Output() veiculoDeletado = new EventEmitter<void>();
+
   @ViewChildren('cardportal') cardPortais!: QueryList<CardPortalComponent>;
 
   textoOpcionais!: string;
@@ -67,8 +67,8 @@ export class CardVeiculoComponent implements OnInit {
   deletarVeiculo(id: number): void {
     this._service.deletarVeiculo(id).subscribe({
       next: () => {
-        SwalHandler.showSucesso('Sucesso', 'Veículo deletado com sucesso!');
-        this.veiculoDeletado.emit();
+        SwalHandler.SwalSucessoReload('Sucesso', 'Veículo deletado com sucesso!');
+       
       },
       error: () =>
         SwalHandler.showFalha('Falha', 'Ocorreu um erro ao deletar o veículo.')

@@ -51,6 +51,20 @@ export class SwalHandler {
     });
   }
 
+  static SwalSucessoReload(title: string, message: string) {
+  Swal.fire({
+    icon: 'success',
+    title: title,
+    text: message,
+    timer: 2000,
+    timerProgressBar: true,
+    showConfirmButton: false,
+    didClose: () => {
+      window.location.reload();
+    }
+  });
+}
+
    static showAtencao(title: string, message: string) {
     Swal.fire({
       icon: 'warning',
