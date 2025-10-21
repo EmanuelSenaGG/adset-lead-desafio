@@ -1,8 +1,6 @@
 .filter-panel {
-
   padding: 0;
   margin-bottom: 20px;
-
   overflow: hidden;
 }
 
@@ -127,7 +125,7 @@ app-botao-buscar {
   content: "▼";
   font-size: 10px;
   color: white;
-  background-color: #aaa;
+  background-color: #686868;
   border-radius: 0;
   width: 10px;
   height: 30px;
@@ -146,7 +144,7 @@ app-botao-buscar {
   content: "▼";
   font-size: 10px;
   color: white;
-  background-color: #aaa;
+  background-color: #686868;
   border-radius: 0;
   width: 10px;
   height: 30px;
@@ -184,5 +182,56 @@ a {
 }
 
 a i {
-  color: green; /* deixa apenas o ícone verde */
+  color: green; 
 }
+
+.select-custom {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: white;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg fill='white' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M1.5 5.5l6.5 6 6.5-6'/></svg>"),
+    linear-gradient(to right, white 0%, white calc(100% - 2rem), #40a52b calc(100% - 2rem), #40a52b 100%);
+  background-repeat: no-repeat, no-repeat;
+  background-position: right 0.7rem center, right top;
+  background-size: 10px 10px, 100% 100%;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  height: 28px;
+  border-radius: 10px;
+  padding-right: 3rem;
+  padding-left: 1rem;
+  cursor: pointer;
+}
+
+.select-custom:focus {
+  outline: none;
+
+}
+
+.clear-ordenacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #40a52b;
+  color: white;
+  padding: 5px 15px;
+  position: relative;
+}
+
+.clear-ordenacao::after {
+  content: '';
+  position: absolute;
+  right: -10px;      /* largura da ponta */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 10px solid #40a52b; /* cor da seta */
+}
+

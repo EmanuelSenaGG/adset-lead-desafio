@@ -79,4 +79,12 @@ export class CardVeiculoComponent implements OnInit {
     return this.cardPortais.map(card => card.obterDadosParaSalvar());
   }
 
+    desmarcarTodosOsPortais(): void {
+    if (this.cardPortais) {
+      this.cardPortais.forEach(card => {
+        // O método 'desmarcarCheckboxes' precisa ser criado no componente filho
+        card.desmarcarCheckboxes();
+      });
+    }
+  }
 }

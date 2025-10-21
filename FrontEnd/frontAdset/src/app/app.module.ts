@@ -28,6 +28,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import { BotaoAcaoComponent } from './componentes/botao-acao/botao-acao.component';
+import { BotaoAcaoVerticalComponent } from './componentes/botao-acao-vertical/botao-acao-vertical.component';
+import { BotaoLimparComponent } from './componentes/botao-limpar/botao-limpar.component';
 
 
 
@@ -54,7 +57,10 @@ registerLocaleData(localePt);
     TelaCadastroComponent,
     HomeComponent,
     TelaEdicaoComponent,
-    PainelFotosComponent
+    PainelFotosComponent,
+    BotaoAcaoComponent,
+    BotaoAcaoVerticalComponent,
+    BotaoLimparComponent
 
 
   ],

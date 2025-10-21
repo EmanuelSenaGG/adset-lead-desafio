@@ -37,12 +37,11 @@
             </div>
           </div>
         <div class="vehicle-price">R$ {{ veiculo.preco | number:'1.2-2' }}</div>
-
-        </div>
+        </div>      
       </div>
     </div>
-
   </div>
+    <app-botao-acao-vertical (click)="desmarcarTodosOsPortais()"></app-botao-acao-vertical>
   <ng-container *ngFor="let portal of portais;">
     <app-card-portal
       [portal]="portal"
@@ -50,11 +49,6 @@
       [veiculoId]="veiculo.id"
       #cardportal>
     </app-card-portal>
-
-  
     <div  class="portal-divider-vertical"></div>
   </ng-container>
-
-
-
 </article>

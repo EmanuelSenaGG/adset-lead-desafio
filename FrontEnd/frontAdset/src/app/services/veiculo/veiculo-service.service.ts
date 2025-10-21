@@ -82,7 +82,7 @@ export class VeiculoService {
         params = params.set(key, valor);
       }
     });
-console.log(params);
+
     return this.http.get<VeiculoFiltroDto>(this.apiUrl + this.apiRoute, { params });
   }
 

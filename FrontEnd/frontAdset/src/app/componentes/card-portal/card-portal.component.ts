@@ -58,4 +58,9 @@ export class CardPortalComponent implements OnInit {
       pacoteId: this.pacoteSelecionadoId
     };
   }
+
+  public desmarcarCheckboxes(): void {
+    this.pacoteSelecionadoId = null;
+
+  }
 }

@@ -18,6 +18,10 @@
   transition: background-color 0.2s;
 }
 
+i{
+  font-size: 30px;
+}
+
 .btn-save:hover {
   background-color: #e67e22; 
 }

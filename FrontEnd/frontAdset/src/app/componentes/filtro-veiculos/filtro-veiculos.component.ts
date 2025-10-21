@@ -71,21 +71,21 @@ export class FiltroVeiculosComponent implements OnInit {
       anoMax: [''],
       preco: [''],
       fotos: [''],
-      opcional: [''], 
+      opcional: [''],
       cor: ['']
     });
   }
 
   private processarSalvamentoEmMassa(): void {
     if (!this.cardVeiculos) {
-      SwalHandler.showAtencao("Atenção","Cadastre um veiculo primeiro");
+      SwalHandler.showAtencao("Atenção", "Cadastre um veiculo primeiro");
       return;
     }
 
     const payloadFinal: AtualizarRelacaoVeiculoPacotePortalDto[] = this.cardVeiculos.toArray()
       .map(card => card.coletarDadosDosPortais())
       .reduce((acumulador, arrayAtual) => acumulador.concat(arrayAtual), []);
-       this.editarVinculos(payloadFinal)
+    this.editarVinculos(payloadFinal)
   }
 
   private gerarAnos(): void {
@@ -120,7 +120,7 @@ export class FiltroVeiculosComponent implements OnInit {
     });
   }
 
- private obterPortais(): void {
+  private obterPortais(): void {
     this._portalService.obterPortais().subscribe({
       next: (dados) => {
         this.portais = dados;
@@ -153,7 +153,7 @@ export class FiltroVeiculosComponent implements OnInit {
     }
   }
 
- public listarVeiculos(): void {
+  public listarVeiculos(): void {
     this._veiculoService.listarVeiculos(this.paginaAtual, this.tamanhoPagina, this.filtros).subscribe({
       next: (dados) => {
         this.paginacaoVeiculos = dados;
@@ -167,7 +167,7 @@ export class FiltroVeiculosComponent implements OnInit {
     });
   }
 
- public buscarClick(): void {
+  public buscarClick(): void {
     const formValues = this.filtroForm.value;
     this.filtros = {
       placa: formValues.placa || null,
@@ -211,9 +211,9 @@ export class FiltroVeiculosComponent implements OnInit {
           valorB = b.preco;
           break;
         case 'fotos':
-        valorA = a.fotos && a.fotos.length > 0 ? 1 : 0;
-        valorB = b.fotos && b.fotos.length > 0 ? 1 : 0;
-        break;
+          valorA = a.fotos && a.fotos.length > 0 ? 1 : 0;
+          valorB = b.fotos && b.fotos.length > 0 ? 1 : 0;
+          break;
         default:
           return 0;
       }
@@ -234,6 +234,19 @@ export class FiltroVeiculosComponent implements OnInit {
     this.paginaAtual = 1;
     this.listarVeiculos();
   }
+
+
+public limparFiltros(): void {
+  Object.keys(this.filtroForm.controls).forEach(key => {
+    this.filtroForm.controls[key].setValue('');
+  });
+  this.filtros = {};
+  this.listarVeiculos();
+}
+
+
+
+
 }
 
 
