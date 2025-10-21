@@ -36,7 +36,7 @@ export class CardVeiculoComponent implements OnInit {
       this.textoOpcionais = this.formatarOpcionais(this.veiculo.opcionais);
 
       if (this.veiculo.fotos.length > 0) {
-        this.imageBaseUrl = environment.imagemRoute + this.veiculo.fotos[0].path;
+        this.imageBaseUrl = this.applyCacheBuster(environment.imagemRoute + this.veiculo.fotos[0].path);
         this.labelFotos = this.veiculo.fotos.length > 1 ? this.veiculo.fotos.length + "  fotos" : this.veiculo.fotos.length + " foto";
       } else {
         this.imageBaseUrl = "../../../assets/carros/imageBlank.jpg";
@@ -44,6 +44,11 @@ export class CardVeiculoComponent implements OnInit {
     }
   }
 
+  private applyCacheBuster(url: string): string {
+    const separador = url.includes('?') ? '&' : '?';
+    const cacheBusterQuery = `v=${new Date().getTime()}`;
+    return `${url}${separador}${cacheBusterQuery}`;
+  }
 
   private formatarOpcionais(opcionais: OpcionalVeiculoDto[] | null | undefined): string {
     if (opcionais && opcionais.length > 0) {
@@ -82,7 +87,6 @@ export class CardVeiculoComponent implements OnInit {
     desmarcarTodosOsPortais(): void {
     if (this.cardPortais) {
       this.cardPortais.forEach(card => {
-        // O método 'desmarcarCheckboxes' precisa ser criado no componente filho
         card.desmarcarCheckboxes();
       });
     }
