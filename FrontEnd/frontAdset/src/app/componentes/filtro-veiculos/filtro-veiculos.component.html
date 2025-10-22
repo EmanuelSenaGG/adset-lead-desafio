@@ -96,7 +96,7 @@
 
 
   <div class="cards-container">
-    <app-card-veiculo *ngFor="let veiculo of paginacaoVeiculos.itens" [veiculo]="veiculo" [portais]="portais"
+    <app-card-veiculo *ngFor="let veiculo of paginacaoVeiculos.itens" [veiculo]="veiculo" [portais]="portais"   (veiculoDeletado)="listarVeiculos()"
     #cardveiculo>
     </app-card-veiculo>
   </div>

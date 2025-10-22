@@ -7,6 +7,7 @@ import { SwalHandler } from '../../utils/SwalHandler';
 import { PortalDto } from 'src/app/interfaces/Portal/PortalDto';
 import { CardPortalComponent } from '../card-portal/card-portal.component';
 import { environment } from 'src/environments/environment';
+import { RemocaoService } from 'src/app/services/Triggers/remocao.service';
 
 @Component({
   selector: 'app-card-veiculo',
@@ -16,14 +17,16 @@ import { environment } from 'src/environments/environment';
 export class CardVeiculoComponent implements OnInit {
   @Input() veiculo!: VeiculoDto;
   @Input() portais!: PortalDto[];
-
+  @Output() veiculoDeletado = new EventEmitter<void>();
   @ViewChildren('cardportal') cardPortais!: QueryList<CardPortalComponent>;
 
   textoOpcionais!: string;
-  labelFotos:string = "0 fotos";
+  labelFotos: string = "0 fotos";
   imageBaseUrl!: string;
 
-  constructor(private _service: VeiculoService,
+  constructor(
+    private _service: VeiculoService,
+    private _RemocaoService: RemocaoService,
     private router: Router
   ) { }
 
@@ -61,14 +64,16 @@ export class CardVeiculoComponent implements OnInit {
   editarVeiculo(id: number): void {
     this.router.navigate(['/veiculo/editar', id]);
   }
- verFotosVeiculo(id: number): void {
+  verFotosVeiculo(id: number): void {
     this.router.navigate(['/veiculo/fotos', id]);
   }
   deletarVeiculo(id: number): void {
     this._service.deletarVeiculo(id).subscribe({
       next: () => {
-        SwalHandler.SwalSucessoReload('Sucesso', 'Veículo deletado com sucesso!');
-       
+        SwalHandler.showSucesso('Sucesso', 'Veículo deletado com sucesso!');
+        this._RemocaoService.emitirVeiculoDeletado();
+        this.veiculoDeletado.emit();
+
       },
       error: () =>
         SwalHandler.showFalha('Falha', 'Ocorreu um erro ao deletar o veículo.')
@@ -84,7 +89,7 @@ export class CardVeiculoComponent implements OnInit {
     return this.cardPortais.map(card => card.obterDadosParaSalvar());
   }
 
-    desmarcarTodosOsPortais(): void {
+  desmarcarTodosOsPortais(): void {
     if (this.cardPortais) {
       this.cardPortais.forEach(card => {
         card.desmarcarCheckboxes();

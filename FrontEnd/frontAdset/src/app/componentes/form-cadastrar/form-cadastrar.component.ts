@@ -29,7 +29,10 @@ export class FormCadastrarComponent implements OnInit {
       marca: ['', Validators.required],
       modelo: ['', Validators.required],
       ano: ['', [Validators.required, Validators.min(2000), Validators.max(2024)]],
-      placa: ['', Validators.required],
+      placa: ['', [
+        Validators.required,
+        Validators.pattern(/^[A-Z]{3}-?[0-9]{4}$|^[A-Z]{3}[0-9][A-Z][0-9]{2}$/)
+      ]],
       km: [''],
       cor: ['', Validators.required],
       preco: ['', Validators.required]
@@ -45,19 +48,19 @@ export class FormCadastrarComponent implements OnInit {
     });
   }
 
- adicionarOpcional(event: Event): void {
-  const select = event.target as HTMLSelectElement;
-  if (!select.value) return; 
+  adicionarOpcional(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    if (!select.value) return;
 
-  const idSelecionado = Number(select.value);
-  const opcional = this.opcionaisDisponiveis.find(o => o.id === idSelecionado);
+    const idSelecionado = Number(select.value);
+    const opcional = this.opcionaisDisponiveis.find(o => o.id === idSelecionado);
 
-  if (opcional && !this.opcionaisSelecionados.some(o => o.id === opcional.id)) {
-    this.opcionaisSelecionados.push(opcional);
+    if (opcional && !this.opcionaisSelecionados.some(o => o.id === opcional.id)) {
+      this.opcionaisSelecionados.push(opcional);
+    }
+
+    select.value = '';
   }
-
-  select.value = ''; 
-}
 
 
   removerOpcional(opcionalParaRemover: OpcionalDto): void {
@@ -66,19 +69,19 @@ export class FormCadastrarComponent implements OnInit {
 
 
   onFileSelected(event: Event): void {
-      const input = event.target as HTMLInputElement;
+    const input = event.target as HTMLInputElement;
 
-  if (!input.files) return;
+    if (!input.files) return;
 
-  const files = Array.from(input.files);
+    const files = Array.from(input.files);
 
-  if (files.length > 15) {
-   SwalHandler.showAtencao("Atenção","Limite de 15 imagens para upload");
-    input.value = '';
-    return;
-  }
+    if (files.length > 15) {
+      SwalHandler.showAtencao("Atenção", "Limite de 15 imagens para upload");
+      input.value = '';
+      return;
+    }
 
-  this.selectedFiles = files;
+    this.selectedFiles = files;
   }
 
   onSubmit(): void {
@@ -99,7 +102,7 @@ export class FormCadastrarComponent implements OnInit {
       km: this.veiculoForm.value.km ? Number(this.veiculoForm.value.km) : undefined,
       opcionais: opcionaisIds,
       fotos: this.selectedFiles,
-      
+
     };
 
     this.cadastrarVeiculo(veiculoDto);
@@ -108,7 +111,12 @@ export class FormCadastrarComponent implements OnInit {
   cadastrarVeiculo(veiculoDto: VeiculoCadastrarDto): void {
     this._service.CadastrarVeiculo(veiculoDto).subscribe({
       next: () => SwalHandler.showSucessoRedirecionamento(this.router, 'Sucesso', 'Veículo cadastrado com sucesso!', ''),
-      error: () => SwalHandler.showFalha('Falha', 'Ocorreu um erro ao cadastrar o veículo.')
+      error: (e) => {
+   
+        const titulo = e.error?.titulo || 'Falha ao cadastrar veículo';
+        const detalhes = e.error?.detalhes || 'Ocorreu um erro inesperado.';
+        SwalHandler.showFalha(titulo, detalhes);
+      }
     });
   }
 }

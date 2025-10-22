@@ -38,8 +38,12 @@ namespace API.Middlewares
                     statusCode = HttpStatusCode.NotFound;
                     titulo = "Recurso não encontrado.";
                     break;
+                case ConflictException:
+                    statusCode = HttpStatusCode.Conflict;
+                    titulo = "O Recurso atual contém dados que conflitam com outros";
+                    break;
 
-         
+
                 case UnauthorizedAccessException:
                     statusCode = HttpStatusCode.Unauthorized;
                     titulo = "Acesso não autorizado.";

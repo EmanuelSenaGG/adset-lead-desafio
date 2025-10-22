@@ -72,9 +72,16 @@ namespace API.Services.Implementacoes
 
         public async Task<CadastrarVeiculoDto> CadastrarVeiculoAsync(CadastrarVeiculoDto cadastrarVeiculoDto)
         {
+            Veiculo? veiculoComPlacaIgual = await _repository.ObterVeiculoPorPlaca(cadastrarVeiculoDto.Placa);
+
+            if (veiculoComPlacaIgual != null)
+                throw new ConflictException("Já existe um veiculo com essa placa");
+            
+            cadastrarVeiculoDto.Placa = cadastrarVeiculoDto.Placa.ToUpper();
             Veiculo veiculo = _mapper.Map<Veiculo>(cadastrarVeiculoDto);
             List<string> errosUpload = new List<string>();
 
+            
             await _repository.Inserir(veiculo);
 
             if (cadastrarVeiculoDto.Fotos == null || !cadastrarVeiculoDto.Fotos.Any())

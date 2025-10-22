@@ -188,6 +188,12 @@ namespace API.Repositorios.Implementacoes
             _context.Foto.Update(foto);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Veiculo> ObterVeiculoPorPlaca(string placa)
+        {
+            Veiculo? veiculo = await _context.Veiculo.Where(v => v.Placa.Equals(placa)).FirstOrDefaultAsync();
+            return veiculo;
+        }
     }
 
 }

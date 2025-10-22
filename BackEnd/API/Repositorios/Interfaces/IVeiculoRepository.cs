@@ -19,6 +19,7 @@ namespace API.Repositorios.Interfaces
 
         Task<List<string>> ListarCoresDisponiveis();
         Task<List<Foto>> ListarFotos(int idVeiculo);
+        Task<Veiculo> ObterVeiculoPorPlaca(string placa);
 
      
 
