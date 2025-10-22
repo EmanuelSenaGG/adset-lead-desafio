@@ -112,9 +112,14 @@ export class FormCadastrarComponent implements OnInit {
     this._service.CadastrarVeiculo(veiculoDto).subscribe({
       next: () => SwalHandler.showSucessoRedirecionamento(this.router, 'Sucesso', 'Veículo cadastrado com sucesso!', ''),
       error: (e) => {
-   
-        const titulo = e.error?.titulo || 'Falha ao cadastrar veículo';
-        const detalhes = e.error?.detalhes || 'Ocorreu um erro inesperado.';
+
+        const titulo = e.status == 409
+          ? (e.error.titulo || 'Falha ao cadastrar veículo')
+          : 'Falha ao processar a requisição';
+
+        const detalhes = e.status == 409
+          ? (e.error.detalhes || 'Ocorreu um erro inesperado.')
+          : 'Tente novamente mais tarde.';
         SwalHandler.showFalha(titulo, detalhes);
       }
     });

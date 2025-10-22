@@ -31,10 +31,10 @@ export class FormEditarComponent implements OnInit {
       marca: ['', Validators.required],
       modelo: ['', Validators.required],
       ano: ['', [Validators.required, Validators.min(2000), Validators.max(2024)]],
-      placa: ['',  [
-          Validators.required,
-          Validators.pattern(/^[A-Z]{3}-?[0-9]{4}$|^[A-Z]{3}[0-9][A-Z][0-9]{2}$/)
-        ]],
+      placa: ['', [
+        Validators.required,
+        Validators.pattern(/^[A-Z]{3}-?[0-9]{4}$|^[A-Z]{3}[0-9][A-Z][0-9]{2}$/)
+      ]],
       km: [''],
       cor: ['', Validators.required],
       preco: ['', Validators.required]
@@ -118,8 +118,6 @@ export class FormEditarComponent implements OnInit {
   }
 
   editarVeiculo(veiculoDto: VeiculoAtualizarDto): void {
-    
-
     this._service.editarVeiculo(Number(veiculoDto.id), veiculoDto).subscribe({
       next: () =>
         SwalHandler.showSucessoRedirecionamento(
@@ -128,8 +126,16 @@ export class FormEditarComponent implements OnInit {
           'Veículo editado com sucesso!',
           ''
         ),
-      error: () =>
-        SwalHandler.showFalha('Falha', 'Ocorreu um erro ao editar o veículo.')
+      error: (e) => {
+        const titulo = e.status == 409
+          ? (e.error.titulo || 'Falha ao cadastrar veículo')
+          : 'Falha ao processar a requisição';
+
+        const detalhes = e.status == 409
+          ? (e.error.detalhes || 'Ocorreu um erro inesperado.')
+          : 'Tente novamente mais tarde.';
+        SwalHandler.showFalha(titulo, detalhes);
+      }
     });
   }
 

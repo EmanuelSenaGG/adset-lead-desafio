@@ -33,6 +33,10 @@ namespace API.Services.Implementacoes
             if (veiculoAtual == null)
                 throw new NotFoundException("Veículo não encontrado.");
 
+            Veiculo? veiculoAtualPlacaExistente = await _repository.ObterVeiculoPorPlaca(veiculoDto.Placa);
+
+            if (veiculoAtualPlacaExistente != null && veiculoAtualPlacaExistente.Id != veiculoAtual.Id)
+                throw new ConflictException("Já existe um veiculo com essa placa");
 
             _mapper.Map(veiculoDto, veiculoAtual);
 
